@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { borderColor } from "../../common/styles";
 
 const GlobalSidebar = () => {
   const baseDataTestId = "GlobalSidebar";
@@ -33,8 +34,8 @@ const GlobalSidebar = () => {
   );
 };
 
-const componentStyle = `drawer-side border-r border-base-200`;
-const navStyle = `menu p-4 w-80 bg-base-100 text-base-content`;
+const componentStyle = `drawer-side bg-base-200 border-r ${borderColor}`;
+const navStyle = `menu p-4 w-80 text-base-content`;
 const navLinkStyle = (isActive: boolean) => {
   return isActive ? "active" : "";
 };

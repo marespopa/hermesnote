@@ -1,9 +1,13 @@
+import { borderColor } from "../../common/styles";
+
 const GlobalHeader = () => {
   const baseDataTestId = "ExampleComponent";
 
   return (
     <header data-testid={baseDataTestId} className={componentStyle}>
-      <div className="navbar bg-base-200">
+      <div
+        className={`navbar bg-base-100 text-base-content border-b ${borderColor}`}
+      >
         <div className="flex-1">
           <a className="btn btn-ghost normal-case text-xl">TrackFCL</a>
         </div>
@@ -44,6 +48,6 @@ const GlobalHeader = () => {
   );
 };
 
-const componentStyle = `sticky top-0 border-b border-base-100 z-40`;
+const componentStyle = `sticky top-0 border-b ${borderColor} z-40`;
 
 export default GlobalHeader;
