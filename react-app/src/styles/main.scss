@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url("./typography/_fonts.scss");
+
+body {
+  font-family: "Open Sans Regular", sans-serif !important;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
