@@ -10,6 +10,7 @@ Simplify client management for freelancing gigs
 
 ## How will it engage users?
 
+Color code each client. To/Do list for each client. Track todos.
 Easy to create PDF reports with the project status to send to the client
 
 ## What will be the app’s core features?
