@@ -5,19 +5,18 @@ import { BacklogFile } from "../types/markdown";
 
 const FILE_FOLDER = "docs";
 
-export const getPath = (folder: string) => {
-  console.log("getPath");
+const getPath = (folder: string) => {
   return path.join(process.cwd(), `/${folder}`); // Get full path
 };
 
-export const getFileContent = (filename: string) => {
+const getFileContent = (filename: string) => {
   const POSTS_PATH = getPath(FILE_FOLDER);
   return fs.readFileSync(path.join(POSTS_PATH, filename), "utf8");
 };
 
-export const getAllFiles = () => {
+const getAllFilesDescriptions = () => {
   const POSTS_PATH = getPath(FILE_FOLDER);
-  console.log("Get from folder:" + POSTS_PATH);
+
   return fs
     .readdirSync(POSTS_PATH)
     .filter((file) => file.endsWith(".md"))
@@ -33,7 +32,7 @@ export const getAllFiles = () => {
     });
 };
 
-export const getSinglePost = (slug: string, folder: string) => {
+const getFileDescription = (slug: string, folder: string) => {
   const source = getFileContent(`${slug}.md`);
   const { data: frontMatter, content } = matter(source);
   const file: BacklogFile = {
@@ -43,3 +42,10 @@ export const getSinglePost = (slug: string, folder: string) => {
 
   return file;
 };
+
+const MarkdownParser = {
+  getAllFilesDescriptions,
+  getFileDescription,
+};
+
+export default MarkdownParser;

@@ -1,0 +1,30 @@
+.container {
+  padding: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+input,
+textarea {
+  box-sizing: border-box;
+  font: 1.25rem / 1.5 sans-serif;
+  line-height: 24px;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+  border: unset;
+  border-radius: 4px;
+  outline-color: var(--primary-color);
+  background-color: rgb(255 255 255);
+  box-shadow: rgb(0 0 0 / 0%) 0 0 0 0, rgb(0 0 0 / 0%) 0 0 0 0,
+    rgb(0 0 0 / 0%) 0 0 0 0, rgb(60 66 87 / 16%) 0 0 0 1px,
+    rgb(0 0 0 / 0%) 0 0 0 0, rgb(0 0 0 / 0%) 0 0 0 0, rgb(0 0 0 / 0%) 0 0 0 0;
+}
+
+input {
+  max-width: 18.75rem;
+}
+
+label {
+  padding: 4px;
+}

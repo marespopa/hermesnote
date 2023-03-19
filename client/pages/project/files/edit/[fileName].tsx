@@ -1,8 +1,8 @@
 import { GetStaticPaths, GetStaticPropsContext } from "next";
 import { useRouter } from "next/router";
-import ProjectFileDetails from "@/components/project/File";
-import MarkdownParser from "@/utils/markdown-parser";
+import ProjectFileEditor from "@/components/project/File/Editor";
 import Layout from "@/components/layout";
+import MarkdownParser from "@/utils/markdown-parser";
 
 interface Props {
   content: string;
@@ -15,7 +15,7 @@ export default function FilePage({ content, frontMatter }: Props) {
 
   return (
     <Layout>
-      <ProjectFileDetails
+      <ProjectFileEditor
         content={content}
         frontMatter={frontMatter}
         fileName={fileName}

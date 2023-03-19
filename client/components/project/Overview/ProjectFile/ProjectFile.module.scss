@@ -1,9 +1,9 @@
 .article {
   padding: 8px;
-}
 
-.article + .article {
-  margin-top: 4px;
+  & + .article {
+    margin-top: 4px;
+  }
 }
 
 .tags {

@@ -10,11 +10,11 @@ tags:
 
 ## What is the app’s purpose?
 
-Have an overview of all the freelance clients and the status of the project in just one look. From project deadlines and deliverables to proposals and invoices, it’s all in one place.
+Have an overview of all the freelance clients and the status of the project in just one look. From project deadlines and deliverables to proposals and invoices, it is all in one place.
 
 ## What do you want to achieve by building the app?
 
-Simplify client management for freelancing gigs
+Simplify client management for freelancing gigs.
 
 ## How will it engage users?
 

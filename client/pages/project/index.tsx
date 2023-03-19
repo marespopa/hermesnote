@@ -1,30 +1,22 @@
-import Link from "next/link";
-import Layout from "../../components/layout";
-import FileEntry from "../../components/project/FileEntry";
-import { getAllFiles } from "../../markdown-parser/md";
-import { BacklogFile } from "../../types/markdown";
+import ProjectOverview from "@/components/project/Overview/ProjectOverview.component";
+import Layout from "@/components/layout";
+import { BacklogFileDescription } from "@/types/markdown";
+import MarkdownParser from "@/utils/markdown-parser";
 
 interface Props {
-  files: BacklogFile[];
+  files: BacklogFileDescription[];
 }
 
 export default function Files({ files }: Props) {
-  if (!files || files.length === 0) {
-    return "No files found.";
-  }
-
-  console.dir(files);
-  const fileContainer = files.map((file) => <FileEntry file={file} />);
-
   return (
     <Layout>
-      <div>{fileContainer}</div>
+      <ProjectOverview files={files} />
     </Layout>
   );
 }
 
 export async function getStaticProps() {
-  const files = getAllFiles();
+  const files = MarkdownParser.getAllFilesDescriptions();
 
   return {
     props: { files },

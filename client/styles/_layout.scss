@@ -1,0 +1,28 @@
+body {
+  padding: 0 1rem 1rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  background: var(--main-bg-color);
+  color: var(--main-text-color);
+}
+
+li,
+p {
+  line-height: 1.5rem;
+}
+
+a,
+a:visited {
+  font-weight: 500;
+  color: var(--link-color);
+  border: 1px solid #ddd;
+}
+
+iframe {
+  background: #ccc;
+  border: 1px solid #ccc;
+  height: 10rem;
+  width: 100%;
+  border-radius: 0.5rem;
+  filter: invert(1);
+}

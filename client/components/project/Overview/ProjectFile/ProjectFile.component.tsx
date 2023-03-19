@@ -1,13 +1,12 @@
 import Link from "next/link";
-import React from "react";
-import { type BacklogFile } from "../../types/markdown";
-import styles from "./FileEntry.module.css";
+import { type BacklogFileDescription } from "@/types/markdown";
+import styles from "./ProjectFile.module.scss";
 
 type Props = {
-  file: BacklogFile;
+  file: BacklogFileDescription;
 };
 
-const FileEntry = ({ file }: Props) => {
+const ProjectFile = ({ file }: Props) => {
   return (
     <article className={styles.article} key={file.slug}>
       <p className={styles.tags}>[ {file.frontMatter.tags.join(", ")} ]</p>
@@ -17,4 +16,4 @@ const FileEntry = ({ file }: Props) => {
   );
 };
 
-export default FileEntry;
+export default ProjectFile;

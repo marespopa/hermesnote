@@ -1,13 +1,20 @@
-import Link from "next/link"
-import { signIn, signOut, useSession } from "next-auth/react"
-import styles from "./header.module.css"
+import Link from "next/link";
+import { signIn, signOut, useSession } from "next-auth/react";
+import styles from "./Header.module.scss";
+import Button from "../Button";
+import { useRouter } from "next/router";
 
 // The approach used in this component shows how to build a sign in and sign out
 // component that works on pages which support both client and server side
 // rendering, and avoids any flash incorrect content on initial page load.
 export default function Header() {
-  const { data: session, status } = useSession()
-  const loading = status === "loading"
+  const { data: session, status } = useSession();
+  const loading = status === "loading";
+  const router = useRouter();
+
+  function goToSignIn() {
+    router.push(`/api/auth/signin`);
+  }
 
   return (
     <header>
@@ -15,7 +22,7 @@ export default function Header() {
         <style>{`.nojs-show { opacity: 1; top: 0; }`}</style>
       </noscript>
       <div className={styles.signedInStatus}>
-        <p
+        <div
           className={`nojs-show ${
             !session && loading ? styles.loading : styles.loaded
           }`}
@@ -25,16 +32,12 @@ export default function Header() {
               <span className={styles.notSignedInText}>
                 You are not signed in
               </span>
-              <a
-                href={`/api/auth/signin`}
-                className={styles.buttonPrimary}
-                onClick={(e) => {
-                  e.preventDefault()
-                  signIn()
-                }}
-              >
-                Sign in
-              </a>
+              <div className={styles.headerBtn}>
+                <Button
+                  handleClick={() => goToSignIn()}
+                  label="Sign In"
+                ></Button>
+              </div>
             </>
           )}
           {session?.user && (
@@ -50,19 +53,12 @@ export default function Header() {
                 <br />
                 <strong>{session.user.email ?? session.user.name}</strong>
               </span>
-              <a
-                href={`/api/auth/signout`}
-                className={styles.button}
-                onClick={(e) => {
-                  e.preventDefault()
-                  signOut()
-                }}
-              >
-                Sign out
-              </a>
+              <div className={styles.headerBtn}>
+                <Button handleClick={() => signOut()} label="Sign out"></Button>
+              </div>
             </>
           )}
-        </p>
+        </div>
       </div>
       <nav>
         <ul className={styles.navItems}>
@@ -70,19 +66,7 @@ export default function Header() {
             <Link href="/">Home</Link>
           </li>
           <li className={styles.navItem}>
-            <Link href="/client">Client</Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/server">Server</Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/protected">Protected</Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/api-example">API</Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/admin">Admin</Link>
+            <Link href="/project">Project Management</Link>
           </li>
           <li className={styles.navItem}>
             <Link href="/me">Me</Link>
@@ -90,5 +74,5 @@ export default function Header() {
         </ul>
       </nav>
     </header>
-  )
+  );
 }
