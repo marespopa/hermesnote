@@ -2,6 +2,8 @@ import Link from "next/link";
 import styles from "./Footer.module.scss";
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className={styles.footer}>
       <ul className={styles.items}>
@@ -11,9 +13,7 @@ export default function Footer() {
         <li className={styles.item}>
           <Link href="/policy">Policy</Link>
         </li>
-        <li className={styles.item}>
-          <em>Mares Popa</em>
-        </li>
+        <li className={styles.item}>{`©${currentYear} Mares Popa`}</li>
       </ul>
     </footer>
   );

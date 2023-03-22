@@ -1,11 +1,10 @@
 .article {
-  padding: 8px;
-
-  & + .article {
-    margin-top: 4px;
-  }
+  padding: var(--margin--md) var(--margin--xl);
+  background: var(--white-color);
+  box-shadow: var(--box-shadow--md);
+  border: 1px solid var(--border-color);
 }
 
 .tags {
-  font-size: 10px;
+  font-size: var(--text--sm);
 }

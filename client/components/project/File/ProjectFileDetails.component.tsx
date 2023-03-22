@@ -1,7 +1,9 @@
 import ProjectFilePreview from "./Preview";
-import Link from "next/link";
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
+import { Suspense } from "react";
+import Loading from "@/components/Loading";
+import styles from "./ProjectFileDetails.module.scss";
 
 type Props = {
   frontMatter: { [key: string]: any };
@@ -13,7 +15,7 @@ const ProjectFileDetails = ({ frontMatter, content, fileName }: Props) => {
   const router = useRouter();
 
   function goToOverview() {
-    router.push(`/api/auth/signin`);
+    router.push(`/project`);
   }
 
   function goToEdit(fileName: string) {
@@ -21,23 +23,35 @@ const ProjectFileDetails = ({ frontMatter, content, fileName }: Props) => {
   }
 
   return (
-    <article>
-      <h1>{frontMatter?.title}</h1>
-      <div>
-        <span>{frontMatter?.description}</span>
-        <ProjectFilePreview content={content} frontMatter={frontMatter} />
-        <Button
-          variant="primary"
-          handleClick={() => goToOverview()}
-          label="Back"
-        />
-        <Button
-          variant="primary"
-          handleClick={() => goToEdit(fileName)}
-          label="Edit"
-        />
-      </div>
-    </article>
+    <Suspense fallback={<Loading />}>
+      <article>
+        <div onDoubleClick={() => goToEdit(fileName)}>
+          <dl>
+            <dt>Title</dt>
+            <dd>{frontMatter?.title}</dd>
+            <dt>Filename</dt>
+            <dd>{fileName}.md</dd>
+            <dt>Description</dt>
+            <dd>
+              <span className="small">{frontMatter?.description}</span>
+            </dd>
+          </dl>
+          <div className={`${styles.preview} box`}>
+            <ProjectFilePreview content={content} />
+          </div>
+          <Button
+            variant="primary"
+            handleClick={() => goToOverview()}
+            label="Back"
+          />
+          <Button
+            variant="primary"
+            handleClick={() => goToEdit(fileName)}
+            label="Edit"
+          />
+        </div>
+      </article>
+    </Suspense>
   );
 };
 

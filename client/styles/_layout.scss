@@ -1,21 +1,22 @@
 body {
   padding: 0 1rem 1rem;
-  max-width: 1280px;
+  max-width: 80rem;
+  min-height: 100vh;
   margin: 0 auto;
   background: var(--main-bg-color);
-  color: var(--main-text-color);
 }
 
-li,
-p {
-  line-height: 1.5rem;
+.wrapper {
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
 }
 
-a,
-a:visited {
-  font-weight: 500;
-  color: var(--link-color);
-  border: 1px solid #ddd;
+.box {
+  border: 1px solid var(--border-color);
+  background-color: var(--white-color);
+  box-shadow: var(--box-shadow--md);
+  padding: 0.5rem 0.75rem;
 }
 
 iframe {

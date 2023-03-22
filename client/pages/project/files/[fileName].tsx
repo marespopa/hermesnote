@@ -25,13 +25,10 @@ export default function FilePage({ content, frontMatter }: Props) {
 }
 
 export async function getStaticProps({ params }: GetStaticPropsContext) {
-  const fileName = Array.isArray(params?.slug)
-    ? params?.slug.join()
-    : params?.slug;
-  const post = await MarkdownParser.getFileDescription(
-    fileName || "BACKLOG",
-    "docs"
-  );
+  const fileName = Array.isArray(params?.fileName)
+    ? params?.fileName.join()
+    : params?.fileName;
+  const post = await MarkdownParser.getFileDescription(fileName);
 
   return {
     props: { ...post },

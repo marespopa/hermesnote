@@ -1,7 +1,9 @@
 import Input from "@/components/Input";
+import Loading from "@/components/Loading";
 import { type BacklogFileDescription } from "@/types/markdown";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import ProjectFile from "./ProjectFile";
+import styles from "./ProjectOverview.module.scss";
 
 type Props = {
   files: BacklogFileDescription[];
@@ -24,20 +26,22 @@ const ProjectOverview = ({ files }: Props) => {
     : files;
 
   return (
-    <section>
-      <Input
-        name={"searchTerm"}
-        label="Search"
-        placeholder="start typing..."
-        value={searchTerm}
-        handleChange={handleSearchTermChange}
-      />
-      <div>
-        {filteredFiles.map((file) => (
-          <ProjectFile key={file.slug} file={file} />
-        ))}
-      </div>
-    </section>
+    <Suspense fallback={<Loading />}>
+      <section className={styles.container}>
+        <Input
+          name={"searchTerm"}
+          label="Search"
+          placeholder="start typing..."
+          value={searchTerm}
+          handleChange={handleSearchTermChange}
+        />
+        <div className={styles.files}>
+          {filteredFiles.map((file) => (
+            <ProjectFile key={file.slug} file={file} />
+          ))}
+        </div>
+      </section>
+    </Suspense>
   );
 
   function handleSearchTermChange(e: React.FormEvent<HTMLInputElement>) {

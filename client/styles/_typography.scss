@@ -1,0 +1,41 @@
+a,
+a:visited {
+  font-weight: 500;
+  color: var(--link-color);
+}
+
+body {
+  color: var(--main-text-color);
+  font-size: var(--text--md);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--main-heading-color);
+}
+
+h1 {
+  font-size: var(--text--3xl);
+}
+
+h2 {
+  font-size: var(--text--2xl);
+}
+
+h3 {
+  font-size: var(--text-xl);
+}
+
+li,
+p {
+  font-size: var(--text--md);
+  line-height: 1.5rem;
+}
+
+.small {
+  font-size: var(--text--sm);
+}

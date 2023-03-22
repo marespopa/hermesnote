@@ -8,7 +8,12 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <div className={inter.className}>
+    <div className={`${inter.className} wrapper`}>
+      <style jsx global>{`
+        #__next {
+          height: 100vh;
+        }
+      `}</style>
       <Header />
       <main>{children}</main>
       <Footer />

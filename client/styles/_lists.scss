@@ -1,0 +1,33 @@
+dl {
+  border: solid var(--border-color);
+  border-width: 1px 1px 0 0;
+  color: var(--main-heading-color);
+  display: flex;
+  flex-flow: column wrap;
+  margin: 0;
+}
+
+dt {
+  flex-basis: 20%;
+  padding: 0.125rem 0.25rem;
+  background: var(--primary-shade-color);
+  text-align: left;
+}
+
+dd {
+  flex-basis: 70%;
+  flex-grow: 1;
+  margin: 0;
+  padding: 0.125rem 0.25rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+@media only screen and (min-width: 768px) {
+  dl {
+    flex-flow: row wrap;
+  }
+
+  dt {
+    text-align: right;
+  }
+}

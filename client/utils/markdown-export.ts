@@ -1,19 +1,49 @@
+import { FileMetadata, FrontMatterGeneric } from "./../types/markdown";
+import { saveFile } from "./save-utils";
+
 const MarkdownExport = {
   exportMarkdown,
 };
 
-function exportMarkdown(content: string | undefined, fileName: string) {
+function formatTags(metadataTags: string) {
+  const tags = metadataTags.split(",");
+  let formattedTags = ``;
+
+  tags.forEach((tag) => {
+    formattedTags += `  - ${tag.toString().trim()}\n`;
+  });
+
+  return formattedTags;
+}
+
+function formatFrontMatter(metadata: FileMetadata) {
+  let text = ``;
+
+  text =
+    "---\n" +
+    `title: ${metadata.title}\n` +
+    `description: ${metadata.description}\n` +
+    `tags:\n` +
+    `${formatTags(metadata.tags)}` +
+    `---\n\n`;
+
+  return text;
+}
+
+function exportMarkdown(
+  content: string | undefined,
+  frontMatter: FileMetadata,
+  fileName: string
+) {
   if (!content) {
     return;
   }
 
-  const fileData = JSON.stringify(content);
-  const blob = new Blob([fileData], { type: "text/plain" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.download = `${fileName}.md`;
-  link.href = url;
-  link.click();
+  const blob = new Blob([formatFrontMatter(frontMatter), content], {
+    type: "text/markdown",
+  });
+
+  saveFile({ blob, fileName });
 }
 
 export default MarkdownExport;

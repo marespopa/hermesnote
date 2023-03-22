@@ -5,17 +5,23 @@ import { BacklogFile } from "../types/markdown";
 
 const FILE_FOLDER = "docs";
 
-const getPath = (folder: string) => {
+function getPath(folder: string) {
   return path.join(process.cwd(), `/${folder}`); // Get full path
-};
+}
 
-const getFileContent = (filename: string) => {
-  const POSTS_PATH = getPath(FILE_FOLDER);
+function getFileContent(filename: string, fileFolder = FILE_FOLDER) {
+  const POSTS_PATH = getPath(fileFolder);
   return fs.readFileSync(path.join(POSTS_PATH, filename), "utf8");
-};
+}
 
-const getAllFilesDescriptions = () => {
-  const POSTS_PATH = getPath(FILE_FOLDER);
+function getAllFolders(fileFolder: string) {
+  const POSTS_PATH = getPath(fileFolder);
+
+  return fs.readdirSync(POSTS_PATH);
+}
+
+const getAllFilesDescriptions = (fileFolder = FILE_FOLDER) => {
+  const POSTS_PATH = getPath(fileFolder);
 
   return fs
     .readdirSync(POSTS_PATH)
@@ -32,7 +38,12 @@ const getAllFilesDescriptions = () => {
     });
 };
 
-const getFileDescription = (slug: string, folder: string) => {
+const getFileDescription = (slug: string | unknown) => {
+  if (!slug) {
+    console.error("No slug" + slug);
+    return;
+  }
+
   const source = getFileContent(`${slug}.md`);
   const { data: frontMatter, content } = matter(source);
   const file: BacklogFile = {
@@ -46,6 +57,7 @@ const getFileDescription = (slug: string, folder: string) => {
 const MarkdownParser = {
   getAllFilesDescriptions,
   getFileDescription,
+  getAllFolders,
 };
 
 export default MarkdownParser;

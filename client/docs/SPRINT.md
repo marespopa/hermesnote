@@ -1,15 +1,19 @@
 ---
 title: Sprint
-description: Sprint #1
+description: Stuff that needs to be done
 tags:
   - backlog
   - sprint
 ---
 
-## TODO
+## Sprint One
+### To Do
+- Increase the size of the textarea for editing MD files
+- Add option to enter the folder from which the files need to be accessed
+- Add option to sync local .MD to github
 
-## IN PROGRESS
+### In Progress
+- 
 
-### 1. Markdown-based backlog
-
--Implement a markdown based backlog, with ability to load files from local
+### Done
+- Render markdown files and allow preview.

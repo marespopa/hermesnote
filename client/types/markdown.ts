@@ -4,7 +4,15 @@ export type BacklogFile = {
   content: string;
 };
 
+export type FrontMatterGeneric = { [key: string]: any };
+
 export type BacklogFileDescription = {
   slug?: string;
-  frontMatter: { [key: string]: any };
+  frontMatter: FrontMatterGeneric;
+};
+
+export type FileMetadata = {
+  title: string;
+  description: string;
+  tags: string;
 };
