@@ -12,15 +12,12 @@
   }
 }
 
-.textareaEditor {
-  min-height: 22rem;
-}
-
 .preview {
   border: 1px solid var(--border-color);
   background-color: var(--white-color);
   box-shadow: var(--box-shadow--md);
-  padding: 0 0.75rem;
+  padding: 0 2rem;
+  margin-bottom: 1rem;
 }
 
 @media only screen and (min-width: 768px) {
@@ -33,6 +30,11 @@
 
     > div + div {
       margin-left: var(--margin--md);
+    }
+
+    .preview {
+      padding-left: 3rem;
+      padding-right: 3rem;
     }
   }
 }

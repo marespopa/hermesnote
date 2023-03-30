@@ -1,4 +1,4 @@
-import ProjectOverview from "@/components/project/Overview/ProjectOverview.component";
+import OverviewPage from "@/components/files/Overview";
 import Layout from "@/components/layout";
 import { BacklogFileDescription } from "@/types/markdown";
 import MarkdownParser from "@/utils/markdown-parser";
@@ -10,7 +10,7 @@ interface Props {
 export default function Files({ files }: Props) {
   return (
     <Layout>
-      <ProjectOverview files={files} />
+      <OverviewPage files={files} />
     </Layout>
   );
 }

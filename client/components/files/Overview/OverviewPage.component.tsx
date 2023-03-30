@@ -1,15 +1,16 @@
-import Input from "@/components/Input";
+import Input from "@/components/Forms/Input";
 import Loading from "@/components/Loading";
 import { type BacklogFileDescription } from "@/types/markdown";
+import Link from "next/link";
 import React, { Suspense, useState } from "react";
-import ProjectFile from "./ProjectFile";
-import styles from "./ProjectOverview.module.scss";
+import OverviewFile from "./OverviewFile";
+import styles from "./OverviewPage.module.scss";
 
 type Props = {
   files: BacklogFileDescription[];
 };
 
-const ProjectOverview = ({ files }: Props) => {
+const OverviewPage = ({ files }: Props) => {
   const [searchTerm, setSearchTerm] = useState("");
   const filteredFiles = searchTerm
     ? files.filter((file) => {
@@ -37,7 +38,7 @@ const ProjectOverview = ({ files }: Props) => {
         />
         <div className={styles.files}>
           {filteredFiles.map((file) => (
-            <ProjectFile key={file.slug} file={file} />
+            <OverviewFile key={file.slug} file={file} />
           ))}
         </div>
       </section>
@@ -51,4 +52,4 @@ const ProjectOverview = ({ files }: Props) => {
   }
 };
 
-export default ProjectOverview;
+export default OverviewPage;

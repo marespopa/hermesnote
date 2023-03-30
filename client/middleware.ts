@@ -14,4 +14,4 @@ export default withAuth({
   },
 });
 
-export const config = { matcher: ["/project", "/project/:path*", "/me"] };
+export const config = { matcher: ["/files", "/files/:path*", "/me"] };

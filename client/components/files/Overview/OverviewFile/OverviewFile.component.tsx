@@ -3,14 +3,14 @@ import {
   FrontMatterGeneric,
   type BacklogFileDescription,
 } from "@/types/markdown";
-import styles from "./ProjectFile.module.scss";
-import { Router, useRouter } from "next/router";
+import styles from "./OverviewFile.module.scss";
+import { useRouter } from "next/router";
 
 type Props = {
   file: BacklogFileDescription;
 };
 
-const ProjectFile = ({ file }: Props) => {
+const OverviewFile = ({ file }: Props) => {
   const router = useRouter();
   function getFileTags(frontMatter: FrontMatterGeneric) {
     if (!frontMatter.tags) {
@@ -21,7 +21,7 @@ const ProjectFile = ({ file }: Props) => {
   }
 
   function goToFileDetails() {
-    router.push(`project/files/${file.slug}`);
+    router.push(`/files/details/${file.slug}`);
   }
 
   return (
@@ -31,7 +31,7 @@ const ProjectFile = ({ file }: Props) => {
       key={file.slug}
     >
       <p className={styles.tags}>{getFileTags(file.frontMatter)}</p>
-      <Link href={`project/files/${file.slug}`}>
+      <Link href={`/files/details/${file.slug}`}>
         {file.frontMatter.title || file.slug}
       </Link>
       <p>{file.frontMatter.description}</p>
@@ -39,4 +39,4 @@ const ProjectFile = ({ file }: Props) => {
   );
 };
 
-export default ProjectFile;
+export default OverviewFile;

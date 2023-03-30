@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import styles from "./AuthStatus.module.scss";
 import { signIn, signOut, useSession } from "next-auth/react";
-import Button from "@/components/Button";
+import Button from "@/components/Forms/Button";
 
 const AuthStatus = () => {
   const router = useRouter();

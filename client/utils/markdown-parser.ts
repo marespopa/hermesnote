@@ -10,25 +10,19 @@ function getPath(folder: string) {
 }
 
 function getFileContent(filename: string, fileFolder = FILE_FOLDER) {
-  const POSTS_PATH = getPath(fileFolder);
-  return fs.readFileSync(path.join(POSTS_PATH, filename), "utf8");
-}
-
-function getAllFolders(fileFolder: string) {
-  const POSTS_PATH = getPath(fileFolder);
-
-  return fs.readdirSync(POSTS_PATH);
+  const DOCS_PATH = getPath(fileFolder);
+  return fs.readFileSync(path.join(DOCS_PATH, filename), "utf8");
 }
 
 const getAllFilesDescriptions = (fileFolder = FILE_FOLDER) => {
-  const POSTS_PATH = getPath(fileFolder);
+  const DOCS_PATH = getPath(fileFolder);
 
   return fs
-    .readdirSync(POSTS_PATH)
+    .readdirSync(DOCS_PATH)
     .filter((file) => file.endsWith(".md"))
     .map((fileName) => {
       // map over each file
-      const source = getFileContent(fileName); // retrieve the file contents
+      const source = getFileContent(fileName, fileFolder); // retrieve the file contents
       const slug = fileName.replace(".md", ""); // get the slug from the filename
       const { data } = matter(source); // extract frontmatter
       return {
@@ -57,7 +51,6 @@ const getFileDescription = (slug: string | unknown) => {
 const MarkdownParser = {
   getAllFilesDescriptions,
   getFileDescription,
-  getAllFolders,
 };
 
 export default MarkdownParser;

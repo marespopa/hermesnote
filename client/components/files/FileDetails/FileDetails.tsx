@@ -1,11 +1,12 @@
-import Button from "@/components/Button";
-import Input from "@/components/Input";
+import Button from "@/components/Forms/Button";
+import Input from "@/components/Forms/Input";
+import TextareaResizable from "@/components/Forms/TextareaResizable";
 import { FileMetadata } from "@/types/markdown";
 import MarkdownExport from "@/utils/markdown-export";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import styles from "./ProjectFileEditor.module.scss";
+import styles from "./FileDetails.module.scss";
 
 type Props = {
   content: string;
@@ -13,15 +14,16 @@ type Props = {
   fileName: string;
 };
 
-const ProjectFileEditor = ({ content, frontMatter, fileName }: Props) => {
+const FileDetails = ({ content, frontMatter, fileName }: Props) => {
   const [value, setValue] = useState<string | undefined>(content);
-  const [finishStatus, setfinishStatus] = useState<boolean>(false);
+  const [finishStatus, setFinishStatus] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [metadata, setMetadata] = useState<FileMetadata>({
     title: frontMatter?.title || fileName,
     description: frontMatter?.description || "",
     tags: frontMatter?.tags?.join(",") || [],
   });
-  const baseDataTestId = "ProjectFileEditor";
+  const baseDataTestId = "FileDetails";
   const handleExport = () =>
     MarkdownExport.exportMarkdown(value, metadata, fileName);
   const router = useRouter();
@@ -44,18 +46,18 @@ const ProjectFileEditor = ({ content, frontMatter, fileName }: Props) => {
             "Are you sure you want to continue?"
         )
       ) {
-        setfinishStatus(true);
+        setFinishStatus(true);
         // your logic
-        goToPreview();
+        goToOverview();
       } else {
         window.history.pushState(null, "", window.location.pathname);
-        setfinishStatus(false);
+        setFinishStatus(false);
       }
     }
   }
 
-  function goToPreview() {
-    router.push(`/project/files/${fileName}`);
+  function goToOverview() {
+    router.push(`/files`);
   }
 
   //TODO - save frontmatter info
@@ -88,19 +90,27 @@ const ProjectFileEditor = ({ content, frontMatter, fileName }: Props) => {
         handleChange={handleInputChange}
       />
       <label>Content</label>
-      <div className={styles.editor}>
-        <div>
-          <textarea
-            className={styles.textareaEditor}
-            rows={4}
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-          />
-        </div>
-        <div className={styles.preview}>
-          {value && <ReactMarkdown>{value}</ReactMarkdown>}
-        </div>
-      </div>
+      <article onDoubleClick={() => setIsEditMode(!isEditMode)}>
+        {isEditMode && (
+          <div>
+            <TextareaResizable
+              name={"filecontent"}
+              label={"File"}
+              value={value}
+              handleChange={(e: React.FormEvent<HTMLTextAreaElement>) =>
+                setValue(e.currentTarget.value)
+              }
+            ></TextareaResizable>
+          </div>
+        )}
+
+        {!isEditMode && (
+          <div className={styles.preview}>
+            {value && <ReactMarkdown>{value}</ReactMarkdown>}
+          </div>
+        )}
+      </article>
+
       <div>
         <Button
           variant="primary"
@@ -117,4 +127,4 @@ const ProjectFileEditor = ({ content, frontMatter, fileName }: Props) => {
   );
 };
 
-export default ProjectFileEditor;
+export default FileDetails;
