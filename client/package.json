@@ -15,7 +15,7 @@
     "@testing-library/dom": "^9.0.1",
     "@uiw/react-md-editor": "^3.20.5",
     "gray-matter": "^4.0.3",
-    "next": "latest",
+    "next": "canary",
     "next-auth": "latest",
     "nodemailer": "^6",
     "postcss": "^8.4.21",
