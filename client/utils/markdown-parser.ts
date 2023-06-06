@@ -9,6 +9,13 @@ function getPath(folder: string) {
   return path.join(process.cwd(), `/${folder}`); // Get full path
 }
 
+function getLocalFilePath(path: string) {
+  console.log(process.cwd());
+  console.log(path);
+
+  return "";
+}
+
 function getFileContent(filename: string, fileFolder = FILE_FOLDER) {
   const DOCS_PATH = getPath(fileFolder);
   return fs.readFileSync(path.join(DOCS_PATH, filename), "utf8");
@@ -51,6 +58,7 @@ const getFileDescription = (slug: string | unknown) => {
 const MarkdownParser = {
   getAllFilesDescriptions,
   getFileDescription,
+  getLocalFilePath,
 };
 
 export default MarkdownParser;

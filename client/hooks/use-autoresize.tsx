@@ -1,19 +1,26 @@
-import { useEffect } from "react";
+import { RefObject } from "react";
+import useIsomorphicLayoutEffect from "./use-isomorphic-layout-effect";
+
+const minHeight = 150;
 
 // Updates the height of a <textarea> when the value changes.
 const useAutoResizeTextArea = (
-  textAreaRef: HTMLTextAreaElement | null,
+  textAreaRef: RefObject<HTMLTextAreaElement> | null,
   value: string
 ) => {
-  useEffect(() => {
-    if (textAreaRef) {
-      // We need to reset the height momentarily to get the correct scrollHeight for the textarea
-      textAreaRef.style.height = "auto";
-      const scrollHeight = textAreaRef.scrollHeight;
+  if (!textAreaRef) {
+    return;
+  }
 
-      // We then set the height directly, outside of the render loop
-      // Trying to set this with state or a ref will product an incorrect value.
-      textAreaRef.style.height = scrollHeight + "px";
+  function resize(textAreaRef: HTMLTextAreaElement) {
+    if (textAreaRef.scrollHeight > minHeight) {
+      textAreaRef.style.height = `${textAreaRef.scrollHeight}px`;
+    }
+  }
+
+  useIsomorphicLayoutEffect(() => {
+    if (textAreaRef?.current) {
+      resize(textAreaRef.current);
     }
   }, [textAreaRef, value]);
 };

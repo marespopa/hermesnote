@@ -1,0 +1,20 @@
+.profile {
+  &__title {
+    align-items: center;
+    display: flex;
+    gap: 16px;
+  }
+
+  &__username {
+    align-items: center;
+    color: var(--primary-color);
+    display: flex;
+    gap: 8px;
+
+    img {
+      border-radius: 50%;
+      height: 2em;
+      width: 2em;
+    }
+  }
+}

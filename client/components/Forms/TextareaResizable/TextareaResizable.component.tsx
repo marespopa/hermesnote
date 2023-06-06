@@ -18,11 +18,12 @@ const TextareaResizable = ({
 }: Props) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  if (value) {
-    useAutoResizeTextArea(textAreaRef.current, value);
+  if (value && textAreaRef) {
+    useAutoResizeTextArea(textAreaRef, value);
   }
+
   return (
-    <div className="container">
+    <div className="form-group">
       <label htmlFor={name}>{label}</label>
 
       <textarea

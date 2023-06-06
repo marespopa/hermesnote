@@ -21,6 +21,7 @@
   --margin--lg: 0.75rem;
   --margin--xl: 1rem;
 
+  --border-radius: 8px;
   --box-shadow--md: 0px 7px 29px 0px rgba(100, 100, 111, 0.1);
   --box-shadow--lg: 0px 3px 15px rgba(0, 0, 0, 0.2);
 
@@ -33,4 +34,8 @@
   --text--3xl: 2rem;
   --text--4xl: 3rem;
   --text--5xl: 4rem;
+
+  /** Breakpoints **/
+  --tablet-breakpoint: 768px;
+  --desktop-breakpoint: 1024px;
 }

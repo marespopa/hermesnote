@@ -8,7 +8,7 @@ interface Props {
 
 const Input = ({ name, label, value, placeholder, handleChange }: Props) => {
   return (
-    <div className="container">
+    <div className="form-group">
       <label htmlFor={name}>{label}</label>
       <input
         type="text"

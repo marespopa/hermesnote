@@ -5,11 +5,22 @@ type Props = {
   label: string;
   handleClick: (e: React.FormEvent<HTMLButtonElement>) => void;
   style?: string;
+  isDisabled?: boolean;
 };
 
-const Button = ({ variant = "default", label, handleClick, style }: Props) => {
+const Button = ({
+  variant = "default",
+  label,
+  handleClick,
+  isDisabled,
+  style,
+}: Props) => {
   return (
-    <button className={`button button-${variant}`} onClick={handleClick}>
+    <button
+      className={`button button-${variant}${style || ""}`}
+      disabled={isDisabled}
+      onClick={handleClick}
+    >
       {label}
     </button>
   );

@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.preview {
+  margin-top: var(--margin--lg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow--md);
+  padding: 8px 16px;
+}
+
+.fileControls {
+  margin-top: var(--margin--lg);
+}
