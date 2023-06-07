@@ -8,21 +8,17 @@ const useAutoResizeTextArea = (
   textAreaRef: RefObject<HTMLTextAreaElement> | null,
   value: string
 ) => {
-  if (!textAreaRef) {
-    return;
-  }
+  useIsomorphicLayoutEffect(() => {
+    if (textAreaRef?.current) {
+      resize(textAreaRef.current);
+    }
+  }, [textAreaRef, value]);
 
   function resize(textAreaRef: HTMLTextAreaElement) {
     if (textAreaRef.scrollHeight > minHeight) {
       textAreaRef.style.height = `${textAreaRef.scrollHeight}px`;
     }
   }
-
-  useIsomorphicLayoutEffect(() => {
-    if (textAreaRef?.current) {
-      resize(textAreaRef.current);
-    }
-  }, [textAreaRef, value]);
 };
 
 export default useAutoResizeTextArea;

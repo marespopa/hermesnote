@@ -5,13 +5,17 @@ import TextareaResizable from "../Forms/TextareaResizable";
 type Props = {
   contentEdited: string;
   setContentEdited: React.Dispatch<React.SetStateAction<string>>;
-  pdfAreaId: string;
+  pdfAreaName: string;
 };
 
-const FileEditor = ({ contentEdited, setContentEdited, pdfAreaId }: Props) => {
+const FileEditor = ({
+  contentEdited,
+  setContentEdited,
+  pdfAreaName,
+}: Props) => {
   return (
     <article className="file">
-      <div className="file__preview" id={pdfAreaId}>
+      <div className="file__preview" id={pdfAreaName}>
         <ReactMarkdown>{contentEdited}</ReactMarkdown>
       </div>
 

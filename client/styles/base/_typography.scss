@@ -1,12 +1,12 @@
+body {
+  color: var(--main-text-color);
+  font-size: var(--text--md);
+}
+
 a,
 a:visited {
   font-weight: 500;
   color: var(--link-color);
-}
-
-body {
-  color: var(--main-text-color);
-  font-size: var(--text--md);
 }
 
 h1,
@@ -37,5 +37,5 @@ p {
 }
 
 .small {
-  font-size: var(--text--sm);
+  font-size: var(--text--xs);
 }

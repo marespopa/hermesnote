@@ -4,16 +4,16 @@ import Input from "../Forms/Input";
 
 type Props = {
   fileNameEdited: string;
-  handleFileNameChange: (e: React.FormEvent<HTMLInputElement>) => void;
   metadata: FileMetadata;
-  handleInputChange: (e: React.FormEvent<HTMLInputElement>) => void;
+  handleFileNameChange: (e: React.FormEvent<HTMLInputElement>) => void;
+  handleMetadataChange: (e: React.FormEvent<HTMLInputElement>) => void;
 };
 
 const FileInfo = ({
   fileNameEdited,
-  handleFileNameChange,
   metadata,
-  handleInputChange,
+  handleFileNameChange,
+  handleMetadataChange,
 }: Props) => {
   return (
     <div>
@@ -27,19 +27,19 @@ const FileInfo = ({
         name={"title"}
         label="Title"
         value={metadata.title}
-        handleChange={handleInputChange}
+        handleChange={handleMetadataChange}
       />
       <Input
         name={"description"}
         label="Description"
         value={metadata.description}
-        handleChange={handleInputChange}
+        handleChange={handleMetadataChange}
       />
       <Input
         name={"tags"}
         label="Tags"
         value={metadata.tags}
-        handleChange={handleInputChange}
+        handleChange={handleMetadataChange}
       />
     </div>
   );

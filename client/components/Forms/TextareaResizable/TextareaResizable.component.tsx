@@ -12,15 +12,13 @@ interface Props {
 const TextareaResizable = ({
   name,
   label,
-  value,
+  value = " ",
   placeholder,
   handleChange,
 }: Props) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  if (value && textAreaRef) {
-    useAutoResizeTextArea(textAreaRef, value);
-  }
+  useAutoResizeTextArea(textAreaRef, value);
 
   return (
     <div className="form-group">

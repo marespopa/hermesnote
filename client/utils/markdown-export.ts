@@ -1,8 +1,10 @@
+import jsPDF from "jspdf";
 import { FileMetadata, FrontMatterGeneric } from "./../types/markdown";
 import { saveFile } from "./save-utils";
 
 const MarkdownExport = {
   exportMarkdown,
+  exportToPDF,
 };
 
 function formatTags(metadataTags: string) {
@@ -44,6 +46,36 @@ function exportMarkdown(
   });
 
   saveFile({ blob, fileName });
+}
+
+function exportToPDF(
+  elementId: string,
+  reportName: string,
+  metadata: FileMetadata
+) {
+  const report = new jsPDF("portrait", "pt", "a4");
+
+  const reportElement = document.querySelector(elementId) as HTMLElement;
+
+  if (!reportElement) {
+    return;
+  }
+
+  report.setProperties({
+    title: metadata.title,
+    keywords: metadata.tags,
+  });
+  report.setFont("Times");
+  report
+    .html(reportElement, {
+      margin: [2, 0, 2, 10],
+      width: reportElement.offsetWidth * 0.9,
+      windowWidth: reportElement.offsetWidth * 0.95,
+      autoPaging: "text",
+    })
+    .then(() => {
+      report.save(reportName || "File.pdf");
+    });
 }
 
 export default MarkdownExport;
