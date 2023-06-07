@@ -1,4 +1,4 @@
-# TypeScript Next.js example
+# TrackFCL FE Client
 
 This is the client in NextJS.
 
