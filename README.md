@@ -9,6 +9,9 @@ tags:
 # Reason for the app
 The app is designed to provide a seamless and efficient solution for creating Markdown files and exporting them to PDF format, catering specifically to the needs of users who frequently work with Markdown.
 
+## Status
+[![Netlify Status](https://api.netlify.com/api/v1/badges/78c585c4-15cc-4733-8da9-5b490f871de6/deploy-status)](https://app.netlify.com/sites/trackfcl/deploys)
+
 ## What is the app's purpose?
 The app aims to simplify the process of creating and managing Markdown files by offering a user-friendly interface. Users can effortlessly generate Markdown documents and effortlessly convert them into PDF format for easy sharing, collaboration, and professional presentation.
 
