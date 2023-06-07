@@ -1,12 +1,22 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../Forms/Button";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import styles from "./Dashboard.module.scss";
 import TextareaResizable from "../Forms/TextareaResizable";
 import Input from "../Forms/Input";
 import { FileMetadata } from "@/types/markdown";
 import MarkdownExport from "@/utils/markdown-export";
 import matter from "gray-matter";
+import { useRouter } from "next/router";
+import FileInfo from "../file/FileInfo";
+import FileEditor from "../file/FileEditor";
+import jsPDF from "jspdf";
+
+const TAB_LIST = [
+  { id: "info", label: "Info" },
+  { id: "editor", label: "Editor" },
+];
+
+type TabListItem = "info" | "error";
 
 const PICKER_OPTIONS = {
   types: [
@@ -23,109 +33,122 @@ const PICKER_OPTIONS = {
 
 const DashboardContainer = () => {
   const [content, setContent] = useState("");
-  const [value, setValue] = useState<string | undefined>(content);
-  const [isEditMode, setIsEditMode] = useState(false);
+  const router = useRouter();
+  const [contentEdited, setContentEdited] = useState<string>(content || "");
+  const [fileNameEdited, setFileNameEdited] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File>();
   const [isSelectedFileParsed, setIsSelectedFileParsed] = useState(false);
-  const [finishStatus, setFinishStatus] = useState(false);
   const [metadata, setMetadata] = useState<FileMetadata>({
     title: "",
     description: "",
     tags: "",
   });
+  const pdfAreaId = "pdfReport";
 
-  const hasFileSelected = !!selectedFile;
+  const [selectedTab, setSelectedTab] = useState("editor");
+
   const fileSelectorLabel = isSelectedFileParsed
     ? "Open another file"
     : "Open file";
-  const showPreview = !isEditMode && value;
 
+  const unsavedChanges = contentEdited !== content;
+
+  // prompt the user if they try and leave with unsaved changes
   useEffect(() => {
-    window.history.pushState(null, "", window.location.pathname);
-    window.addEventListener("popstate", handleBackAction);
+    const warningText =
+      "You have unsaved changes - are you sure you wish to leave this page?";
+
+    const handleWindowClose = (e: BeforeUnloadEvent) => {
+      if (!unsavedChanges) return;
+      e.preventDefault();
+      return (e.returnValue = warningText);
+    };
+
+    const handleBrowseAway = () => {
+      if (!unsavedChanges) return;
+      if (window.confirm(warningText)) return;
+      router.events.emit("routeChangeError");
+
+      throw "routeChange aborted.";
+    };
+
+    window.addEventListener("beforeunload", handleWindowClose);
+    router.events.on("routeChangeStart", handleBrowseAway);
 
     return () => {
-      window.removeEventListener("popstate", handleBackAction);
+      window.removeEventListener("beforeunload", handleWindowClose);
+      router.events.off("routeChangeStart", handleBrowseAway);
     };
-  }, []);
+  }, [unsavedChanges]);
 
   return (
-    <div className={styles.container}>
+    <div className="dashboard-container">
       <Button
         variant="primary"
         label={fileSelectorLabel}
         handleClick={openFile}
       />
-      {hasFileSelected && <h1>{selectedFile && selectedFile.name}</h1>}
-
       {isSelectedFileParsed && (
         <div>
-          <Input
-            name={"title"}
-            label="Title"
-            value={metadata.title}
-            handleChange={handleInputChange}
-          />
-          <Input
-            name={"description"}
-            label="Description"
-            value={metadata.description}
-            handleChange={handleInputChange}
-          />
-          <Input
-            name={"tags"}
-            label="Tags"
-            value={metadata.tags}
-            handleChange={handleInputChange}
-          />
-          <article
-            className={styles.preview}
-            onDoubleClick={() => setIsEditMode(!isEditMode)}
-          >
-            {isEditMode && (
-              <div>
-                <TextareaResizable
-                  name={"filecontent"}
-                  label={"File"}
-                  value={value}
-                  handleChange={(e: React.FormEvent<HTMLTextAreaElement>) =>
-                    setValue(e.currentTarget.value)
-                  }
-                ></TextareaResizable>
-              </div>
-            )}
-
-            {showPreview && <ReactMarkdown>{value}</ReactMarkdown>}
-          </article>
-
-          <div className={styles.fileControls}>
-            <Button
-              variant="primary"
-              handleClick={() => handleExport(selectedFile?.name || "file")}
-              label={"Export to .md"}
+          <nav className="tabs">
+            <ul>
+              {TAB_LIST.map((tab) => {
+                return (
+                  <li
+                    className={`tab ${
+                      tab.id === selectedTab ? "tab--is-active" : ""
+                    }`}
+                  >
+                    <button onClick={() => setSelectedTab(tab.id)}>
+                      {tab.label}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+          {selectedTab === "info" && (
+            <FileInfo
+              fileNameEdited={fileNameEdited}
+              handleFileNameChange={handleFileNameChange}
+              metadata={metadata}
+              handleInputChange={handleInputChange}
             />
-          </div>
+          )}
+
+          {selectedTab === "editor" && (
+            <FileEditor
+              contentEdited={contentEdited}
+              setContentEdited={setContentEdited}
+              pdfAreaId={pdfAreaId}
+            />
+          )}
+          {selectedTab === "editor" && (
+            <div className="dashboard-container__file-controls">
+              <Button
+                variant="primary"
+                handleClick={() =>
+                  handleExportToMD(fileNameEdited || "File.md")
+                }
+                label={"Export to .md"}
+              />
+
+              <Button
+                variant="primary"
+                handleClick={() => handleExportToPDF(`#${pdfAreaId}`)}
+                label={"Export to .pdf"}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>
   );
 
-  function handleBackAction(e: any) {
-    e.preventDefault();
-    if (!finishStatus) {
-      if (
-        window.confirm(
-          "If the file was not exported and overwritten, you will lose all your changes to the file.\n\n" +
-            "Are you sure you want to continue?"
-        )
-      ) {
-        setFinishStatus(true);
-        resetSelectedFile();
-      } else {
-        window.history.pushState(null, "", window.location.pathname);
-        setFinishStatus(false);
-      }
-    }
+  function handleFileNameChange(e: React.FormEvent<HTMLInputElement>) {
+    const newValue = e.currentTarget.value;
+
+    setFileNameEdited(newValue);
   }
 
   function handleInputChange(e: React.FormEvent<HTMLInputElement>) {
@@ -135,24 +158,47 @@ const DashboardContainer = () => {
     setMetadata({ ...metadata, [property]: newValue });
   }
 
-  function resetSelectedFile() {
-    setValue("");
-    setContent("");
-    setSelectedFile(undefined);
-    setIsSelectedFileParsed(false);
-  }
   async function openFile() {
     const [fileHandle] = await window.showOpenFilePicker(PICKER_OPTIONS);
     const file = await fileHandle.getFile();
 
-    setSelectedFile(file);
+    setFileNameEdited(file.name || "");
     setIsSelectedFileParsed(false);
     parseFile(file);
   }
 
-  function handleExport(fileName: string) {
-    MarkdownExport.exportMarkdown(value, metadata, fileName);
+  function handleExportToMD(fileName: string) {
+    MarkdownExport.exportMarkdown(contentEdited, metadata, fileName);
   }
+
+  function handleExportToPDF(elementId: string) {
+    const report = new jsPDF("portrait", "pt", "a4");
+
+    const reportElement = document.querySelector(elementId) as HTMLElement;
+    const reportName = fileNameEdited.replace(".md", ".pdf");
+
+    if (!reportElement) {
+      return;
+    }
+
+    console.dir(report.getFontList());
+    report.setProperties({
+      title: metadata.title,
+      keywords: metadata.tags,
+    });
+    report.setFont("Times");
+    report
+      .html(reportElement, {
+        margin: [2, 0, 2, 10],
+        width: reportElement.offsetWidth * 0.9,
+        windowWidth: reportElement.offsetWidth * 0.95,
+        autoPaging: "text",
+      })
+      .then(() => {
+        report.save(reportName);
+      });
+  }
+
   async function parseFile(file: File) {
     if (!file) {
       return;
@@ -170,7 +216,7 @@ const DashboardContainer = () => {
           tags: frontMatter?.tags.join(","),
         });
         setContent(content);
-        setValue(content);
+        setContentEdited(content);
         setIsSelectedFileParsed(true);
       }
     };

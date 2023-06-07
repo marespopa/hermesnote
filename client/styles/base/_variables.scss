@@ -1,11 +1,15 @@
+/** Breakpoints **/
+$tablet-breakpoint: 768px;
+$desktop-breakpoint: 1024px;
+
 :root {
   --primary-color: #457b9d;
   --white-color: #fff;
   --primary-shade-color: #daedee;
   --secondary-color: #3c153b;
-  --main-bg-color: #f7ffff;
+  --main-bg-color: #f7f5ff;
   --main-text-color: #4f4f4f;
-  --main-heading-color: #333;
+  --main-heading-color: #131313;
 
   --link-color: #457b9d;
   --border-color: #dfdfdf;
@@ -21,6 +25,7 @@
   --margin--lg: 0.75rem;
   --margin--xl: 1rem;
 
+  --box-padding: 8px 16px;
   --border-radius: 8px;
   --box-shadow--md: 0px 7px 29px 0px rgba(100, 100, 111, 0.1);
   --box-shadow--lg: 0px 3px 15px rgba(0, 0, 0, 0.2);
@@ -35,7 +40,6 @@
   --text--4xl: 3rem;
   --text--5xl: 4rem;
 
-  /** Breakpoints **/
-  --tablet-breakpoint: 768px;
-  --desktop-breakpoint: 1024px;
+  /** Transition **/
+  --transition: 250ms cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }

@@ -22,7 +22,7 @@
 
   &:hover {
     text-decoration: none;
-    transition-duration: 0.1s;
+    transition: background-color var(--transition);
   }
 
   &:focus {

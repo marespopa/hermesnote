@@ -29,6 +29,8 @@ const TextareaResizable = ({
       <textarea
         ref={textAreaRef}
         rows={4}
+        id={name}
+        name={name}
         value={value}
         placeholder={placeholder}
         onChange={handleChange}

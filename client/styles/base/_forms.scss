@@ -30,3 +30,8 @@ label {
   padding: 0.25rem 0;
   margin-left: 0.25rem;
 }
+
+textarea {
+  overflow-y: hidden;
+  resize: vertical;
+}

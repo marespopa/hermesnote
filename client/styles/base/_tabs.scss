@@ -1,0 +1,25 @@
+.tabs ul {
+  display: flex;
+  gap: 16px;
+  list-style-type: none;
+  padding-inline: 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tab button {
+  appearance: none;
+  outline: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: var(--box-padding);
+}
+
+.tab {
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--transition);
+
+  &--is-active {
+    border-bottom-color: var(--primary-color);
+  }
+}
