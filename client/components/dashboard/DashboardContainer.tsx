@@ -34,7 +34,9 @@ const DashboardContainer = () => {
     ? "Open another file"
     : "Open file";
 
-  useLeavePageConfirmation(contentEdited !== content, warningText);
+  const hasUnsavedChanges = contentEdited !== content;
+
+  useLeavePageConfirmation(hasUnsavedChanges, warningText);
 
   const props = {
     fileSelectorLabel,
@@ -79,7 +81,25 @@ const DashboardContainer = () => {
     parseFile(file);
   }
 
-  function handleCreateFile() {
+  async function handleCreateFile() {
+    if (!hasUnsavedChanges) {
+      createFile();
+
+      return;
+    }
+
+    let confirmed = window.confirm(
+      "You have unsaved changes. Do you want to create a new file?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    createFile();
+  }
+
+  function createFile() {
     setFileNameEdited("File");
     setMetadata({
       title: "File",
