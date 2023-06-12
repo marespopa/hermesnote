@@ -55,6 +55,67 @@
   .file__pdf-export-window {
     flex: 1;
     align-items: center;
+
+    input,
+    textarea {
+      width: fit-content;
+    }
+
+    ul {
+      line-height: 1.5em;
+      margin: 5px 0 15px;
+      padding: 0;
+
+      li {
+        list-style: none;
+        position: relative;
+        padding: 0 0 0 20px;
+
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 6px;
+          width: 12px;
+          height: 12px;
+          background-color: var(--bullet-list-color);
+        }
+      }
+
+      li.task-list-item {
+        padding-left: 0;
+
+        input {
+          padding: 0;
+          margin: 0 2px 0 0;
+        }
+
+        &:before {
+          display: none;
+        }
+      }
+    }
+
+    ol {
+      line-height: 1.5em;
+      margin: 5px 0 15px;
+      padding: 0;
+
+      li {
+        list-style-type: none;
+        counter-increment: item;
+        &::before {
+          content: counter(item);
+          margin-right: 5px;
+          font-size: 80%;
+          background-color: var(--bullet-list-color);
+          color: var(--white-color);
+          font-weight: bold;
+          padding: 3px 8px;
+          border-radius: 3px;
+        }
+      }
+    }
   }
 }
 

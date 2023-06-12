@@ -23,7 +23,7 @@ const DashboardContainer = () => {
     description: "",
     tags: "",
   });
-  const [selectedTab, setSelectedTab] = useState<TabListItem>("editor");
+  const [selectedTab, setSelectedTab] = useState<TabListItem>("info");
   const warningText = UNSAVED_CHANGES_WARNING_TEXT;
   const pdfSettings = {
     areaName: "pdfReport",
@@ -78,6 +78,7 @@ const DashboardContainer = () => {
 
     setFileNameEdited(file.name || "");
     setIsSelectedFileParsed(false);
+    setSelectedTab("editor");
     parseFile(file);
   }
 
@@ -108,6 +109,7 @@ const DashboardContainer = () => {
     });
     setContent(DEFAULT_CONTENT);
     setContentEdited(DEFAULT_CONTENT);
+    setSelectedTab("info");
     setIsSelectedFileParsed(true);
   }
 

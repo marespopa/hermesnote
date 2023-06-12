@@ -40,6 +40,7 @@ const FileInfo = ({
         label="Tags"
         value={metadata.tags}
         handleChange={handleMetadataChange}
+        helperText="Tags should be delimited by comma, for eg. tag1, tag2"
       />
     </div>
   );

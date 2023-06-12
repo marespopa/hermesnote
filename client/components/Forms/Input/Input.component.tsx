@@ -3,10 +3,18 @@ interface Props {
   label: string;
   value: string | number | undefined;
   placeholder?: string;
+  helperText?: string;
   handleChange: (e: React.FormEvent<HTMLInputElement>) => void;
 }
 
-const Input = ({ name, label, value, placeholder, handleChange }: Props) => {
+const Input = ({
+  name,
+  label,
+  value,
+  placeholder,
+  helperText,
+  handleChange,
+}: Props) => {
   return (
     <div className="form-group">
       <label htmlFor={name}>{label}</label>
@@ -19,6 +27,7 @@ const Input = ({ name, label, value, placeholder, handleChange }: Props) => {
         onChange={handleChange}
         placeholder={placeholder}
       />
+      {helperText && <p className="helper-text small">{helperText}</p>}
     </div>
   );
 };
