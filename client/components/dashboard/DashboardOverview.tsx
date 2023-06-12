@@ -1,8 +1,6 @@
 import { FileMetadata } from "@/types/markdown";
 import React from "react";
 import Button from "../Forms/Button";
-import FileEditor from "../file/FileEditor";
-import FileInfo from "../file/FileInfo";
 import { TabListItem, TAB_LIST } from "./constants";
 import DashboardActions from "./DashboardActions";
 import File from "../file/File";
@@ -69,7 +67,7 @@ const DashboardOverview = (props: Props) => {
         <div>
           {renderTabs()}
           <File {...fileProps} />
-          {selectedTab === "editor" && renderExportButtons()}
+          {selectedTab === "export" && renderExportButtons()}
         </div>
       )}
     </div>

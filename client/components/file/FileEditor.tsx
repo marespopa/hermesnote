@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import TextareaResizable from "../Forms/TextareaResizable";
+import Button from "../Forms/Button";
+import FilePreviewPane from "./FilePreviewPane";
 
 type Props = {
   contentEdited: string;
@@ -14,15 +16,16 @@ const FileEditor = ({
   pdfAreaName,
 }: Props) => {
   return (
-    <article className="file">
-      <div className="file__preview">
-        <div className="file__pdf-export" id={pdfAreaName}>
-          <div>
-            <ReactMarkdown>{contentEdited}</ReactMarkdown>
-          </div>
-        </div>
-      </div>
+    <>
+      <article className="file">
+        {renderEditor()}
+        {renderPreviewPane()}
+      </article>
+    </>
+  );
 
+  function renderEditor() {
+    return (
       <div className="file__editor">
         <TextareaResizable
           name={"fileContent"}
@@ -33,8 +36,17 @@ const FileEditor = ({
           }
         ></TextareaResizable>
       </div>
-    </article>
-  );
+    );
+  }
+
+  function renderPreviewPane() {
+    return (
+      <FilePreviewPane
+        contentEdited={contentEdited}
+        pdfAreaName={pdfAreaName}
+      />
+    );
+  }
 };
 
 export default FileEditor;

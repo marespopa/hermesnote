@@ -3,6 +3,7 @@ import { TabListItem } from "../dashboard/constants";
 import FileEditor from "./FileEditor";
 import FileInfo from "./FileInfo";
 import { FileMetadata } from "@/types/markdown";
+import FilePreviewPane from "./FilePreviewPane";
 
 type Props = {
   selectedTab: TabListItem;
@@ -40,6 +41,13 @@ const File = ({
         <FileEditor
           contentEdited={contentEdited}
           setContentEdited={setContentEdited}
+          pdfAreaName={pdfAreaName}
+        />
+      )}
+
+      {selectedTab === "export" && (
+        <FilePreviewPane
+          contentEdited={contentEdited}
           pdfAreaName={pdfAreaName}
         />
       )}

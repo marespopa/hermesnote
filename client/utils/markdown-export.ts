@@ -69,12 +69,24 @@ function exportToPDF(
     keywords: metadata.tags,
   });
 
+  const pdfMargin = {
+    y: 10,
+    x: 20,
+  };
+
+  const htmlCanvasScale =
+    (report.internal.pageSize.getWidth() - pdfMargin.x * 2) /
+    reportElement.offsetWidth;
+  //    report.internal.pageSize.width -
+  //    (pdfMargin * 2) / document.body.clientWidth;
+
   report
     .html(reportElement, {
-      margin: 20,
-      width: reportElement.offsetWidth * 0.9,
-      windowWidth: reportElement.offsetWidth,
+      margin: [pdfMargin.y, pdfMargin.x, pdfMargin.y, pdfMargin.x],
       autoPaging: "text",
+      html2canvas: {
+        scale: htmlCanvasScale,
+      },
     })
     .then(() => {
       report.save(reportName || "File.pdf");
