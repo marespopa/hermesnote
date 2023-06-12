@@ -15,8 +15,10 @@ const FileEditor = ({
 }: Props) => {
   return (
     <article className="file">
-      <div className="file__preview" id={pdfAreaName}>
-        <ReactMarkdown>{contentEdited}</ReactMarkdown>
+      <div className="file__preview">
+        <div className="file__pdf-export" id={pdfAreaName}>
+          <ReactMarkdown>{contentEdited}</ReactMarkdown>
+        </div>
       </div>
 
       <div className="file__editor">

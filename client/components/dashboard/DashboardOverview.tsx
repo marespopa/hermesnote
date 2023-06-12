@@ -100,6 +100,7 @@ const DashboardOverview = (props: Props) => {
           {TAB_LIST.map((tab) => {
             return (
               <li
+                key={tab.id}
                 className={`tab ${
                   tab.id === selectedTab ? "tab--is-active" : ""
                 }`}

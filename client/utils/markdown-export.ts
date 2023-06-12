@@ -1,6 +1,10 @@
 import jsPDF from "jspdf";
-import { FileMetadata, FrontMatterGeneric } from "./../types/markdown";
+import { FileMetadata } from "./../types/markdown";
 import { saveFile } from "./save-utils";
+import "./fonts/Montserrat-bold";
+import "./fonts/Montserrat-bolditalic";
+import "./fonts/Montserrat-italic";
+import "./fonts/Montserrat-normal";
 
 const MarkdownExport = {
   exportMarkdown,
@@ -65,12 +69,12 @@ function exportToPDF(
     title: metadata.title,
     keywords: metadata.tags,
   });
-  report.setFont("Times");
+
   report
     .html(reportElement, {
-      margin: [2, 0, 2, 10],
-      width: reportElement.offsetWidth * 0.9,
-      windowWidth: reportElement.offsetWidth * 0.95,
+      margin: 2,
+      width: reportElement.offsetWidth * 0.95,
+      windowWidth: reportElement.offsetWidth,
       autoPaging: "text",
     })
     .then(() => {

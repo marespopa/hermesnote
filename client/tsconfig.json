@@ -28,7 +28,8 @@
     "next-env.d.ts",
     "next-auth.d.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "utils/Montserrat-normal.js"
   ],
   "exclude": ["node_modules"]
 }
