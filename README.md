@@ -32,11 +32,5 @@ An interactive preview window that allows users to see how their Markdown docume
 ### Export to PDF
 The app will provide a straightforward option to export Markdown files as PDFs, ensuring compatibility across different platforms and devices.
 
-### Customization Options
-Users will have the ability to customize the styling of their Markdown documents, including fonts, colors, and themes, to create visually appealing PDF outputs.
-
-### Collaboration and Sharing
-The app will enable easy collaboration by allowing users to share Markdown files with others, facilitating seamless teamwork and feedback exchange.
-
 ## Will your target audience see the app as useful?
 The app will be highly useful for individuals who regularly work with Markdown, such as writers, researchers, developers, and technical documentation creators. By providing a user-friendly interface, real-time preview, and effortless PDF export functionality, the app will significantly simplify and enhance the Markdown writing process, making it an indispensable tool for its target audience.
