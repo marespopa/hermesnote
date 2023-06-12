@@ -5,11 +5,12 @@ import FileEditor from "../file/FileEditor";
 import FileInfo from "../file/FileInfo";
 import { TabListItem, TAB_LIST } from "./constants";
 import DashboardActions from "./DashboardActions";
+import File from "../file/File";
 
 type Props = {
   fileSelectorLabel: string;
   isSelectedFileParsed: boolean;
-  selectedTab: string;
+  selectedTab: TabListItem;
   metadata: FileMetadata;
   contentEdited: string;
   pdfSettings: { areaName: string; fileName: string };
@@ -49,6 +50,17 @@ const DashboardOverview = (props: Props) => {
     handleCreateFile,
   };
 
+  const fileProps = {
+    selectedTab,
+    fileNameEdited,
+    contentEdited,
+    setContentEdited,
+    metadata,
+    pdfAreaName: pdfSettings.areaName,
+    handleFileNameChange,
+    handleMetadataChange,
+  };
+
   return (
     <div className="dashboard-container">
       <DashboardActions {...dashboardActionsProps} />
@@ -56,22 +68,7 @@ const DashboardOverview = (props: Props) => {
       {isSelectedFileParsed && (
         <div>
           {renderTabs()}
-          {selectedTab === "info" && (
-            <FileInfo
-              fileNameEdited={fileNameEdited}
-              handleFileNameChange={handleFileNameChange}
-              metadata={metadata}
-              handleMetadataChange={handleMetadataChange}
-            />
-          )}
-
-          {selectedTab === "editor" && (
-            <FileEditor
-              contentEdited={contentEdited}
-              setContentEdited={setContentEdited}
-              pdfAreaName={pdfSettings.areaName}
-            />
-          )}
+          <File {...fileProps} />
           {selectedTab === "editor" && renderExportButtons()}
         </div>
       )}
