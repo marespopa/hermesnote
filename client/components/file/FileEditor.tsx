@@ -17,7 +17,9 @@ const FileEditor = ({
     <article className="file">
       <div className="file__preview">
         <div className="file__pdf-export" id={pdfAreaName}>
-          <ReactMarkdown>{contentEdited}</ReactMarkdown>
+          <div>
+            <ReactMarkdown>{contentEdited}</ReactMarkdown>
+          </div>
         </div>
       </div>
 

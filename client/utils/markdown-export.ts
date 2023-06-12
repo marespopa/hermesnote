@@ -58,7 +58,6 @@ function exportToPDF(
   metadata: FileMetadata
 ) {
   const report = new jsPDF("portrait", "pt", "a4");
-
   const reportElement = document.querySelector(elementId) as HTMLElement;
 
   if (!reportElement) {
@@ -72,8 +71,8 @@ function exportToPDF(
 
   report
     .html(reportElement, {
-      margin: 2,
-      width: reportElement.offsetWidth * 0.95,
+      margin: 20,
+      width: reportElement.offsetWidth * 0.9,
       windowWidth: reportElement.offsetWidth,
       autoPaging: "text",
     })

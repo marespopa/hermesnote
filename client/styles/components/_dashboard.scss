@@ -35,9 +35,32 @@
 }
 
 .file__pdf-export {
-  font-size: 12px;
-  padding: 1em 2em;
+  display: flex;
+  justify-content: center;
+  font-size: var(--text--md);
+  padding: 16px 32px;
   letter-spacing: 0.2px;
+
+  h1 {
+    font-size: var(--text--3xl);
+  }
+
+  h2 {
+    font-size: var(--text--2xl);
+  }
+
+  h3 {
+    font-size: var(--text-xl);
+  }
+
+  li,
+  p {
+    font-size: var(--text--md);
+  }
+
+  div {
+    align-items: center;
+  }
 }
 
 @media screen and (min-width: $tablet-breakpoint) {
