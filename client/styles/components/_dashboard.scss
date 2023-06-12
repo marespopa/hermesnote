@@ -21,7 +21,7 @@
 }
 
 .file__export {
-  background: var(--white-color);
+  background: var(--box-bg);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow--md);
@@ -108,8 +108,8 @@
           content: counter(item);
           margin-right: 5px;
           font-size: 80%;
-          background-color: var(--bullet-list-color);
-          color: var(--white-color);
+          background-color: var(--bullet-list-bg);
+          color: var(--bullet-list-color);
           font-weight: bold;
           padding: 3px 8px;
           border-radius: 3px;

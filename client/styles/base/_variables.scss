@@ -5,13 +5,16 @@ $desktop-breakpoint: 1024px;
 :root {
   --primary-color: #457b9d;
   --white-color: #fff;
+  --box-bg: #fff;
   --primary-shade-color: #daedee;
   --secondary-color: #3c153b;
   --main-bg-color: #f7f5ff;
   --main-text-color: #4f4f4f;
   --main-heading-color: #131313;
 
-  --bullet-list-color: #a2c7dd;
+  --bullet-list-bg: #a2c7dd;
+  --bullet-list-color: #fff;
+
   --link-color: #457b9d;
   --border-color: #dfdfdf;
 
@@ -44,7 +47,4 @@ $desktop-breakpoint: 1024px;
 
   /** Transition **/
   --transition: 250ms cubic-bezier(0.17, 0.67, 0.83, 0.67);
-
-  /** Pdf Background **/
-  --pdf-background: rgb(254, 249, 222);
 }

@@ -29,7 +29,7 @@ const FileEditor = ({
       <div className="file__editor">
         <TextareaResizable
           name={"fileContent"}
-          label={"Content"}
+          label={"Raw file"}
           value={contentEdited}
           handleChange={(e: React.FormEvent<HTMLTextAreaElement>) =>
             setContentEdited(e.currentTarget.value)
