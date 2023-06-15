@@ -1,6 +1,7 @@
 import { useSession } from "next-auth/react";
 import Layout from "../components/layout";
 import AccessDenied from "@/components/access-denied";
+import Image from "next/image";
 
 export default function MePage() {
   const { data } = useSession();
@@ -12,10 +13,12 @@ export default function MePage() {
           <h2 className="profile__title">
             Hi
             <span className="profile__username">
-              <img
-                className="w-8 h-8 rounded-full"
+              <Image
                 src={data?.user?.image || ""}
-                alt="User Profile Pic"
+                alt={data?.user?.name || "User"}
+                width={8}
+                height={8}
+                className="rounded-full"
               />
               {data?.user?.name}!
             </span>
