@@ -20,6 +20,12 @@
   overflow-y: auto;
 }
 
+.file__editor {
+  textarea {
+    max-width: 100%;
+  }
+}
+
 .file__export {
   background: var(--box-bg);
   border: 1px solid var(--border-color);
@@ -55,6 +61,7 @@
   .file__pdf-export-window {
     flex: 1;
     align-items: center;
+    width: 100%;
 
     input,
     textarea {
@@ -115,6 +122,21 @@
           border-radius: 3px;
         }
       }
+    }
+
+    pre {
+      font-family: monospace;
+    }
+
+    code {
+      background: var(--code-bg);
+      color: var(--code-c);
+      border: 1px solid var(--code-border-c);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow--md);
+      display: flex;
+      overflow: auto;
+      padding: var(--code-p);
     }
   }
 }

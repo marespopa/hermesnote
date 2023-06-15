@@ -1,12 +1,15 @@
 import { FileMetadata } from "@/types/markdown";
 import React from "react";
 import Input from "../Forms/Input";
+import Textarea from "../Forms/Textarea";
 
 type Props = {
   fileNameEdited: string;
   metadata: FileMetadata;
   handleFileNameChange: (e: React.FormEvent<HTMLInputElement>) => void;
-  handleMetadataChange: (e: React.FormEvent<HTMLInputElement>) => void;
+  handleMetadataChange: (
+    e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
 };
 
 const FileInfo = ({
@@ -29,7 +32,7 @@ const FileInfo = ({
         value={metadata.title}
         handleChange={handleMetadataChange}
       />
-      <Input
+      <Textarea
         name={"description"}
         label="Description"
         value={metadata.description}
