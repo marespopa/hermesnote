@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { FileMetadata } from "@/types/markdown";
 import MarkdownExport from "@/utils/markdown-export";
 import matter from "gray-matter";
-import { useRouter } from "next/router";
 import {
   TabListItem,
   PICKER_OPTIONS,
@@ -58,7 +57,9 @@ const DashboardContainer = () => {
 
   return <DashboardOverview {...props} />;
 
-  function handleMetadataChange(e: React.FormEvent<HTMLInputElement>) {
+  function handleMetadataChange(
+    e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
     const newValue = e.currentTarget.value;
     const property = e.currentTarget.name;
 
