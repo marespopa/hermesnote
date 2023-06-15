@@ -13,7 +13,9 @@ type Props = {
   setContentEdited: React.Dispatch<React.SetStateAction<string>>;
   pdfAreaName: string;
   handleFileNameChange: (e: React.FormEvent<HTMLInputElement>) => void;
-  handleMetadataChange: (e: React.FormEvent<HTMLInputElement>) => void;
+  handleMetadataChange: (
+    e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
 };
 
 const File = ({

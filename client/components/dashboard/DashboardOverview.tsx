@@ -18,7 +18,9 @@ type Props = {
   handleOpenFile: () => Promise<void>;
   handleCreateFile: () => void;
   handleFileNameChange: (e: React.FormEvent<HTMLInputElement>) => void;
-  handleMetadataChange: (e: React.FormEvent<HTMLInputElement>) => void;
+  handleMetadataChange: (
+    e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   handleExportToMD: (fileName: string) => void;
   handleExportToPDF: () => void;
 };
