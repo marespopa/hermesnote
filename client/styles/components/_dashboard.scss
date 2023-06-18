@@ -5,7 +5,7 @@
 }
 
 .dashboard-container__file-controls {
-  margin-top: var(--margin--lg);
+  margin-block: var(--margin--lg);
 }
 
 .file {
@@ -39,10 +39,10 @@
   justify-content: center;
   font-size: var(--text--md);
   letter-spacing: 0.2px;
-  width: 100%;
 
   h1 {
     font-size: var(--text--3xl);
+    text-align: center;
   }
 
   h2 {
@@ -61,7 +61,7 @@
   .file__pdf-export-window {
     flex: 1;
     align-items: center;
-    width: 100%;
+    max-width: min(100% - 3rem, 80ch);
 
     input,
     textarea {

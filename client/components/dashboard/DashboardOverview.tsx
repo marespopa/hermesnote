@@ -68,8 +68,8 @@ const DashboardOverview = (props: Props) => {
       {isSelectedFileParsed && (
         <div>
           {renderTabs()}
-          <File {...fileProps} />
           {selectedTab === "export" && renderExportButtons()}
+          <File {...fileProps} />
         </div>
       )}
     </div>
