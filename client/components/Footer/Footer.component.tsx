@@ -8,7 +8,7 @@ export default function Footer() {
     <footer className={styles.footer}>
       <ul className={styles.items}>
         <li className={styles.item}>
-          <a href="https://github.com/smoothwizz/trackfcl">GitHub</a>
+          <a href="https://github.com/smoothwizz/hermesnote">GitHub</a>
         </li>
         <li className={styles.item}>
           <Link href="/policy">Policy</Link>

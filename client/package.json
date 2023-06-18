@@ -1,6 +1,6 @@
 {
-  "title": "trackfcl",
-  "description": "An example project for NextAuth.js with Next.js",
+  "title": "hermesnote",
+  "description": "Markdown editor",
   "scripts": {
     "dev": "next",
     "build": "next build",
