@@ -17,7 +17,6 @@
     "gray-matter": "^4.0.3",
     "jspdf": "^2.5.1",
     "next": "canary",
-    "next-auth": "latest",
     "nodemailer": "^6",
     "postcss": "^8.4.21",
     "raw-loader": "^4.0.2",
