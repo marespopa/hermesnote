@@ -16,7 +16,7 @@ textarea {
   background-color: var(--box-bg);
   box-shadow: var(--box-shadow--md);
   padding: 0.5rem 0.75rem;
-  caret-color: royalblue;
+  caret-color: var(--accent-c);
 
   &::placeholder {
     font-size: var(--text--sm);

@@ -6,6 +6,11 @@ body {
   background: var(--main-bg-color);
 }
 
+::selection {
+  background-color: var(--accent-c);
+  color: var(--white-c);
+}
+
 .wrapper {
   min-height: 100%;
   display: grid;

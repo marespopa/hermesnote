@@ -13,7 +13,7 @@
 
 body {
   color: var(--main-text-color);
-  font-size: var(--text--md);
+  font-size: calc(15px + 0.390625vw);
 }
 
 a,
