@@ -6,7 +6,6 @@ import DashboardActions from "./DashboardActions";
 import File from "../file/File";
 
 type Props = {
-  fileSelectorLabel: string;
   isSelectedFileParsed: boolean;
   isExporting: boolean;
   selectedTab: TabListItem;
@@ -28,7 +27,6 @@ type Props = {
 
 const DashboardOverview = (props: Props) => {
   const {
-    fileSelectorLabel,
     handleOpenFile,
     handleCreateFile,
     isExporting,
@@ -47,9 +45,10 @@ const DashboardOverview = (props: Props) => {
   } = props;
 
   const dashboardActionsProps = {
-    fileSelectorLabel,
+    fileNameEdited,
     handleOpenFile,
     handleCreateFile,
+    handleExportToMD,
   };
 
   const fileProps = {
@@ -81,12 +80,6 @@ const DashboardOverview = (props: Props) => {
   function renderExportButtons(): React.ReactNode {
     return (
       <div className="dashboard-container__file-controls">
-        <Button
-          variant="primary"
-          handleClick={() => handleExportToMD(fileNameEdited || "File.md")}
-          label={"Save as"}
-        />
-
         <Button
           variant="primary"
           handleClick={() => handleExportToPDF()}

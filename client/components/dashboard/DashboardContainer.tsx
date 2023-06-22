@@ -30,16 +30,11 @@ const DashboardContainer = () => {
     fileName: fileNameEdited.replace(".md", "") + ".pdf",
   };
 
-  const fileSelectorLabel = isSelectedFileParsed
-    ? "Open another file"
-    : "Open file";
-
   const hasUnsavedChanges = contentEdited !== content;
 
   useLeavePageConfirmation(hasUnsavedChanges, warningText);
 
   const props = {
-    fileSelectorLabel,
     handleOpenFile,
     handleCreateFile,
     isSelectedFileParsed,
@@ -144,7 +139,6 @@ const DashboardContainer = () => {
 
   function handleExportToMD(fileName: string) {
     setContent(contentEdited);
-    setFileNameEdited(fileName);
     MarkdownExport.exportMarkdown(contentEdited, metadata, fileName);
   }
 
