@@ -18,7 +18,7 @@ const DashboardActions = ({ handleOpenFile, handleCreateFile }: Props) => {
       />
       <Button
         variant="primary"
-        label={"Create File"}
+        label={"New File"}
         handleClick={handleCreateFile}
       />
     </div>

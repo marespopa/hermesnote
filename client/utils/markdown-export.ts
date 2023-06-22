@@ -70,8 +70,8 @@ function exportToPDF(
   });
 
   const pdfMargin = {
-    y: 10,
-    x: 20,
+    y: 5,
+    x: 10,
   };
 
   const htmlCanvasScale =
