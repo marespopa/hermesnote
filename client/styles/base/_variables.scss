@@ -3,26 +3,30 @@ $tablet-breakpoint: 768px;
 $desktop-breakpoint: 1024px;
 
 :root {
-  --primary-color: #457b9d;
+  --primary-c: #457b9d;
   --accent-c: #00ccff;
   --white-c: #fff;
   --box-bg: #fff;
-  --primary-shade-color: #daedee;
-  --secondary-color: #3c153b;
-  --main-bg-color: #f7f5ff;
-  --main-text-color: #4f4f4f;
-  --main-heading-color: #131313;
+  --primary-shade-c: #daedee;
+  --main-bg-c: #f7f5ff;
+  --main-text-c: #4f4f4f;
+  --main-heading-c: #131313;
 
   --bullet-list-bg: #a2c7dd;
-  --bullet-list-color: #fff;
+  --bullet-list-c: #fff;
 
-  --link-color: #457b9d;
-  --border-color: #dfdfdf;
+  --link-c: #457b9d;
+  --border-c: #dfdfdf;
 
   /* Buttons */
-  --primary-button-bg: #457b9d;
-  --primary-button-bg-hover: #5293bc;
-  --primary-button-text: #fefefe;
+  --button-default-bg: #fafbfc;
+  --button-default-bg--hover: #fafbfc;
+  --button-default-bg--active: #fff;
+
+  --button-default-c: #131313;
+  --button-primary-bg: #457b9d;
+  --button-primary-bg-hover: #5293bc;
+  --button-primary-c: #fefefe;
 
   /** Margins **/
   --margin--sm: 0.375rem;
@@ -53,4 +57,41 @@ $desktop-breakpoint: 1024px;
 
   /** Transition **/
   --transition: 250ms cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-c: #457b9d;
+    --accent-c: #00ccff;
+    --white-c: #323232;
+    --box-bg: #323232;
+    --primary-shade-c: #191919;
+    --main-bg-c: #1e1e1e;
+    --main-text-c: #fff;
+    --main-heading-c: #fff;
+
+    --bullet-list-bg: #3e528e;
+    --bullet-list-c: #fff;
+
+    --link-c: #78b1d5;
+    --border-c: #262626;
+
+    /* Buttons */
+    --button-default-bg: #fafbfc;
+    --button-default-bg--hover: #fafbfc;
+    --button-default-bg--active: #fff;
+
+    --button-default-c: #fff;
+    --button-primary-bg: #457b9d;
+    --button-primary-bg-hover: #5293bc;
+    --button-primary-c: #fefefe;
+
+    --box-shadow--md: 0px 7px 29px 0px rgba(100, 100, 111, 0.1);
+    --box-shadow--lg: 0px 3px 15px rgba(0, 0, 0, 0.2);
+
+    /** Code **/
+    --code-bg: #383838;
+    --code-c: #fff;
+    --code-border-c: #1f1f1f;
+  }
 }

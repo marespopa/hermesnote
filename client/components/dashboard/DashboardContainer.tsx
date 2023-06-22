@@ -17,6 +17,7 @@ const DashboardContainer = () => {
   const [contentEdited, setContentEdited] = useState<string>(content || "");
   const [fileNameEdited, setFileNameEdited] = useState<string>("");
   const [isSelectedFileParsed, setIsSelectedFileParsed] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const [metadata, setMetadata] = useState<FileMetadata>({
     title: "",
     description: "",
@@ -42,6 +43,7 @@ const DashboardContainer = () => {
     handleOpenFile,
     handleCreateFile,
     isSelectedFileParsed,
+    isExporting,
     selectedTab,
     setSelectedTab,
     fileNameEdited,
@@ -145,11 +147,17 @@ const DashboardContainer = () => {
     MarkdownExport.exportMarkdown(contentEdited, metadata, fileName);
   }
 
-  function handleExportToPDF() {
+  async function handleExportToPDF() {
     const htmlElementId = `#${pdfSettings.areaName}`;
 
     setContent(contentEdited);
-    MarkdownExport.exportToPDF(htmlElementId, pdfSettings.fileName, metadata);
+    setIsExporting(true);
+    await MarkdownExport.exportToPDF(
+      htmlElementId,
+      pdfSettings.fileName,
+      metadata
+    );
+    setIsExporting(false);
   }
 };
 

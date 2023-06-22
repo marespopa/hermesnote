@@ -12,6 +12,10 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
+
+  &--on-export {
+    visibility: hidden;
+  }
 }
 
 .file > * {
@@ -28,41 +32,37 @@
 
 .file__export {
   background: var(--box-bg);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border-c);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow--md);
   padding: 16px 32px;
 }
 
 .file__pdf-export {
+  color: var(--main-text-c);
   display: flex;
   justify-content: center;
   font-size: var(--text--md);
   letter-spacing: 0.2px;
 
+  * {
+    color: inherit;
+  }
+
   h1 {
-    font-size: var(--text--3xl);
     text-align: center;
   }
 
-  h2 {
-    font-size: var(--text--2xl);
-  }
-
-  h3 {
-    font-size: var(--text-xl);
-  }
-
-  li,
-  p {
-    font-size: var(--text--md);
-  }
-
   .file__pdf-export-window {
-    flex: 1;
     align-items: center;
+    flex: 1;
     max-width: min(100% - 3rem, 90ch);
 
+    h1 {
+      + * {
+        margin-top: var(--margin--lg);
+      }
+    }
     input,
     textarea {
       width: fit-content;
@@ -116,7 +116,7 @@
           margin-right: 5px;
           font-size: 80%;
           background-color: var(--bullet-list-bg);
-          color: var(--bullet-list-color);
+          color: var(--bullet-list-c);
           font-weight: bold;
           padding: 3px 8px;
           border-radius: 3px;

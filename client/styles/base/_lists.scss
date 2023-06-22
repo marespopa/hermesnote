@@ -1,7 +1,7 @@
 dl {
-  border: solid var(--border-color);
+  border: solid var(--border-c);
   border-width: 1px 1px 0 0;
-  color: var(--main-heading-color);
+  color: var(--main-heading-c);
   display: flex;
   flex-flow: column wrap;
   margin: 0;
@@ -10,7 +10,7 @@ dl {
 dt {
   flex-basis: 20%;
   padding: 0.125rem 0.25rem;
-  background: var(--primary-shade-color);
+  background: var(--primary-shade-c);
   text-align: left;
 }
 
@@ -19,7 +19,7 @@ dd {
   flex-grow: 1;
   margin: 0;
   padding: 0.125rem 0.25rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-c);
 }
 
 @media only screen and (min-width: 768px) {

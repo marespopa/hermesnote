@@ -49,23 +49,23 @@
 }
 
 .button-default {
-  background-color: #fafbfc;
-  color: #24292e;
+  background-color: var(--button-default-bg);
+  color: var(--button-default-c);
 
   &:hover {
-    background-color: #f3f4f6;
+    background-color: var(--button-default-bg--hover);
   }
 
   &:active {
-    background-color: #edeff2;
+    background-color: var(--button-default-bg--active);
   }
 }
 
 .button-primary {
-  background: var(--primary-button-bg);
-  color: var(--primary-button-text);
+  background: var(--button-primary-bg);
+  color: var(--button-primary-c);
 
   &:hover {
-    background: var(--primary-button-bg-hover);
+    background: var(--button-primary-bg-hover);
   }
 }

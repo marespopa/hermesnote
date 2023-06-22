@@ -8,6 +8,7 @@ import File from "../file/File";
 type Props = {
   fileSelectorLabel: string;
   isSelectedFileParsed: boolean;
+  isExporting: boolean;
   selectedTab: TabListItem;
   metadata: FileMetadata;
   contentEdited: string;
@@ -30,6 +31,7 @@ const DashboardOverview = (props: Props) => {
     fileSelectorLabel,
     handleOpenFile,
     handleCreateFile,
+    isExporting,
     isSelectedFileParsed,
     selectedTab,
     setSelectedTab,
@@ -52,6 +54,7 @@ const DashboardOverview = (props: Props) => {
 
   const fileProps = {
     selectedTab,
+    isExporting,
     fileNameEdited,
     contentEdited,
     setContentEdited,
@@ -81,7 +84,7 @@ const DashboardOverview = (props: Props) => {
         <Button
           variant="primary"
           handleClick={() => handleExportToMD(fileNameEdited || "File.md")}
-          label={"Export to .md"}
+          label={"Save as"}
         />
 
         <Button

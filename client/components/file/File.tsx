@@ -7,6 +7,7 @@ import FilePreviewPane from "./FilePreviewPane";
 
 type Props = {
   selectedTab: TabListItem;
+  isExporting: boolean;
   fileNameEdited: string;
   metadata: FileMetadata;
   contentEdited: string;
@@ -20,6 +21,7 @@ type Props = {
 
 const File = ({
   selectedTab,
+  isExporting,
   fileNameEdited,
   contentEdited,
   setContentEdited,
@@ -49,6 +51,7 @@ const File = ({
 
       {selectedTab === "export" && (
         <FilePreviewPane
+          isExporting={isExporting}
           contentEdited={contentEdited}
           pdfAreaName={pdfAreaName}
         />

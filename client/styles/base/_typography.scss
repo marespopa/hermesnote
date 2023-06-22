@@ -8,21 +8,14 @@
 }
 
 * {
+  color: var(--main-text-c);
   font-family: "Montserrat";
-}
-
-html {
-  font-size: 16px;
-}
-
-body {
-  color: var(--main-text-color);
 }
 
 a,
 a:visited {
   font-weight: 500;
-  color: var(--link-color);
+  color: var(--link-c);
 }
 
 h1,
@@ -31,7 +24,7 @@ h3,
 h4,
 h5,
 h6 {
-  color: var(--main-heading-color);
+  color: var(--main-heading-c);
 }
 
 h1 {

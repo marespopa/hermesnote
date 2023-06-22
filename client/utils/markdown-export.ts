@@ -31,7 +31,7 @@ function formatFrontMatter(metadata: FileMetadata) {
     `description: ${metadata.description}\n` +
     `tags:\n` +
     `${formatTags(metadata.tags)}` +
-    `---\n\n`;
+    `---`;
 
   return text;
 }
@@ -74,13 +74,16 @@ function exportToPDF(
     x: 10,
   };
 
+  const currentColor = reportElement.style.color;
+  reportElement.style.color = "#131313";
+
   const htmlCanvasScale =
     (report.internal.pageSize.getWidth() - pdfMargin.x * 2) /
     reportElement.offsetWidth;
   //    report.internal.pageSize.width -
   //    (pdfMargin * 2) / document.body.clientWidth;
 
-  report
+  return report
     .html(reportElement, {
       margin: [pdfMargin.y, pdfMargin.x, pdfMargin.y, pdfMargin.x],
       autoPaging: "text",
@@ -90,6 +93,9 @@ function exportToPDF(
     })
     .then(() => {
       report.save(reportName || "File.pdf");
+    })
+    .finally(() => {
+      reportElement.style.color = currentColor;
     });
 }
 
