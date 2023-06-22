@@ -144,6 +144,7 @@ const DashboardContainer = () => {
 
   function handleExportToMD(fileName: string) {
     setContent(contentEdited);
+    setFileNameEdited(fileName);
     MarkdownExport.exportMarkdown(contentEdited, metadata, fileName);
   }
 
