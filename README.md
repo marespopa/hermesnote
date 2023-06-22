@@ -12,7 +12,7 @@ The app is designed to provide a seamless and efficient solution for creating Ma
 
 ## Status
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/78c585c4-15cc-4733-8da9-5b490f871de6/deploy-status)](https://app.netlify.com/sites/hermesnote/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/791876b3-c7fe-43c6-850e-6cc486395ba1/deploy-status)](https://app.netlify.com/sites/hermesmd/deploys)
 
 ## What is the app's purpose?
 
