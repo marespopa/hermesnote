@@ -85,7 +85,7 @@
           top: 6px;
           width: 12px;
           height: 12px;
-          background-color: var(--bullet-list-bg);
+          background-color: var(--ol-marker-bg);
         }
       }
 
@@ -115,8 +115,8 @@
           content: counter(item);
           margin-right: 5px;
           font-size: 80%;
-          background-color: var(--bullet-list-bg);
-          color: var(--bullet-list-c);
+          background-color: var(--ol-marker-bg);
+          color: var(--ol-marker-c);
           font-weight: bold;
           padding: 3px 8px;
           border-radius: 3px;
