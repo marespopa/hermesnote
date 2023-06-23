@@ -12,7 +12,7 @@ const ThemeSwitch = () => {
   }, []);
 
   if (!mounted) {
-    return;
+    return null;
   }
 
   return (
