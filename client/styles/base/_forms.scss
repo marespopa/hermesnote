@@ -2,6 +2,13 @@
   display: flex;
   flex-direction: column;
 }
+$toggle-indicator-size: 24px; // changing this number will resize the whole toggle
+$track-height: $toggle-indicator-size + 6;
+$track-width: $toggle-indicator-size * 2.5;
+$highContrastModeSupport: solid 2px transparent;
+$track-border: var(--accent-c);
+$track-background: var(--light);
+$focus-ring: 0px 0px 0px 2px var(--dark);
 
 input,
 textarea {
@@ -40,4 +47,24 @@ textarea {
 
 .form-group .helper-text {
   margin-top: -8px;
+}
+
+.toggle-switch {
+  align-items: center;
+  background: var(--code-bg);
+  border: 1px solid var(--code-border-c);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  max-width: fit-content;
+  padding: 8px 16px;
+  user-select: none;
+  margin: 0;
+
+  input {
+    display: none;
+    margin: 0;
+    padding: 8px;
+  }
 }

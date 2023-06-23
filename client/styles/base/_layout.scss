@@ -23,3 +23,9 @@ body {
   box-shadow: var(--box-shadow--md);
   padding: 0.5rem 0.75rem;
 }
+
+.global-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}

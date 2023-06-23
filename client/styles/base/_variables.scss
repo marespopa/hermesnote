@@ -3,6 +3,9 @@ $tablet-breakpoint: 768px;
 $desktop-breakpoint: 1024px;
 
 :root {
+  --light: #d8dbe0;
+  --dark: #28292c;
+
   --primary-c: #457b9d;
   --accent-c: #00ccff;
   --white-c: #fff;
@@ -59,39 +62,37 @@ $desktop-breakpoint: 1024px;
   --transition: 250ms cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --primary-c: #457b9d;
-    --accent-c: #00ccff;
-    --white-c: #323232;
-    --box-bg: #323232;
-    --primary-shade-c: #191919;
-    --main-bg-c: #1e1e1e;
-    --main-text-c: #fff;
-    --main-heading-c: #fff;
+[data-theme="dark"] {
+  --primary-c: #457b9d;
+  --accent-c: #00ccff;
+  --white-c: #323232;
+  --box-bg: #323232;
+  --primary-shade-c: #191919;
+  --main-bg-c: #1e1e1e;
+  --main-text-c: #fff;
+  --main-heading-c: #fff;
 
-    --ol-marker-bg: #3e528e;
-    --ol-marker-c: #fff;
+  --ol-marker-bg: #3e528e;
+  --ol-marker-c: #fff;
 
-    --link-c: #78b1d5;
-    --border-c: #262626;
+  --link-c: #78b1d5;
+  --border-c: #262626;
 
-    /* Buttons */
-    --button-default-bg: #fafbfc;
-    --button-default-bg--hover: #fafbfc;
-    --button-default-bg--active: #fff;
+  /* Buttons */
+  --button-default-bg: #fafbfc;
+  --button-default-bg--hover: #fafbfc;
+  --button-default-bg--active: #fff;
 
-    --button-default-c: #fff;
-    --button-primary-bg: #457b9d;
-    --button-primary-bg-hover: #5293bc;
-    --button-primary-c: #fefefe;
+  --button-default-c: #fff;
+  --button-primary-bg: #457b9d;
+  --button-primary-bg-hover: #5293bc;
+  --button-primary-c: #fefefe;
 
-    --box-shadow--md: 0px 7px 29px 0px rgba(100, 100, 111, 0.1);
-    --box-shadow--lg: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  --box-shadow--md: 0px 7px 29px 0px rgba(100, 100, 111, 0.1);
+  --box-shadow--lg: 0px 3px 15px rgba(0, 0, 0, 0.2);
 
-    /** Code **/
-    --code-bg: #383838;
-    --code-c: #fff;
-    --code-border-c: #1f1f1f;
-  }
+  /** Code **/
+  --code-bg: #383838;
+  --code-c: #fff;
+  --code-border-c: #1f1f1f;
 }
