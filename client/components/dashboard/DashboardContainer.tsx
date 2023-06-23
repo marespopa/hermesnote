@@ -41,6 +41,7 @@ const DashboardContainer = () => {
     isExporting,
     selectedTab,
     setSelectedTab,
+    hasUnsavedChanges,
     fileNameEdited,
     handleFileNameChange,
     metadata,

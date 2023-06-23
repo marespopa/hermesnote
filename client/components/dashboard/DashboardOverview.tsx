@@ -6,6 +6,7 @@ import DashboardActions from "./DashboardActions";
 import File from "../file/File";
 
 type Props = {
+  hasUnsavedChanges: boolean;
   isSelectedFileParsed: boolean;
   isExporting: boolean;
   selectedTab: TabListItem;
@@ -27,24 +28,26 @@ type Props = {
 
 const DashboardOverview = (props: Props) => {
   const {
-    handleOpenFile,
-    handleCreateFile,
+    hasUnsavedChanges,
     isExporting,
     isSelectedFileParsed,
     selectedTab,
     setSelectedTab,
     fileNameEdited,
-    handleFileNameChange,
     metadata,
-    handleMetadataChange,
     contentEdited,
     setContentEdited,
     pdfSettings,
+    handleOpenFile,
+    handleCreateFile,
+    handleFileNameChange,
+    handleMetadataChange,
     handleExportToMD,
     handleExportToPDF,
   } = props;
 
   const dashboardActionsProps = {
+    hasUnsavedChanges,
     fileNameEdited,
     handleOpenFile,
     handleCreateFile,

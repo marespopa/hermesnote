@@ -3,6 +3,7 @@ import Button from "../Forms/Button";
 
 type Props = {
   fileNameEdited: string;
+  hasUnsavedChanges: boolean;
   handleOpenFile: () => Promise<void>;
   handleCreateFile: () => void;
   handleExportToMD: (a: string) => void;
@@ -10,6 +11,7 @@ type Props = {
 
 const DashboardActions = ({
   fileNameEdited,
+  hasUnsavedChanges,
   handleOpenFile,
   handleCreateFile,
   handleExportToMD,
@@ -29,11 +31,13 @@ const DashboardActions = ({
         handleClick={handleCreateFile}
       />
 
-      <Button
-        variant="primary"
-        handleClick={() => handleExportToMD(fileNameEdited || "File.md")}
-        label={"Save as"}
-      />
+      {hasUnsavedChanges && (
+        <Button
+          variant="primary"
+          handleClick={() => handleExportToMD(fileNameEdited || "File.md")}
+          label={"Save as"}
+        />
+      )}
     </div>
   );
 };
