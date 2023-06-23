@@ -2,33 +2,31 @@
 $tablet-breakpoint: 768px;
 $desktop-breakpoint: 1024px;
 
+$primary-c: #006494;
+$primary-c--dark: #006494;
+
 :root {
   --light: #d8dbe0;
   --dark: #28292c;
 
-  --primary-c: #457b9d;
-  --accent-c: #00ccff;
+  --primary-c: #{$primary-c};
+  --accent-c: #7cc6fe;
   --white-c: #fff;
-  --box-bg: #fff;
-  --primary-shade-c: #daedee;
-  --main-bg-c: #f7f5ff;
+  --box-bg: #f4faff;
+  --primary-shade-c: #ebf6ff;
+  --main-bg-c: #f4faff;
   --main-text-c: #4f4f4f;
   --main-heading-c: #131313;
 
-  --ol-marker-bg: #a2c7dd;
+  --ol-marker-bg: #{lighten($primary-c, 8%)};
   --ol-marker-c: #fff;
 
   --link-c: #457b9d;
   --border-c: #dfdfdf;
 
   /* Buttons */
-  --button-default-bg: #fafbfc;
-  --button-default-bg--hover: #fafbfc;
-  --button-default-bg--active: #fff;
-
-  --button-default-c: #131313;
-  --button-primary-bg: #457b9d;
-  --button-primary-bg-hover: #5293bc;
+  --button-primary-bg: #{$primary-c};
+  --button-primary-bg-hover: #{lighten($primary-c, 8%)};
   --button-primary-c: #fefefe;
 
   /** Margins **/
@@ -63,7 +61,7 @@ $desktop-breakpoint: 1024px;
 }
 
 [data-theme="dark"] {
-  --primary-c: #457b9d;
+  --primary-c: #{$primary-c--dark};
   --accent-c: #00ccff;
   --white-c: #323232;
   --box-bg: #323232;
@@ -72,20 +70,15 @@ $desktop-breakpoint: 1024px;
   --main-text-c: #fff;
   --main-heading-c: #fff;
 
-  --ol-marker-bg: #3e528e;
+  --ol-marker-bg: #{lighten($primary-c--dark, 8%)};
   --ol-marker-c: #fff;
 
   --link-c: #78b1d5;
   --border-c: #262626;
 
   /* Buttons */
-  --button-default-bg: #fafbfc;
-  --button-default-bg--hover: #fafbfc;
-  --button-default-bg--active: #fff;
-
-  --button-default-c: #fff;
-  --button-primary-bg: #457b9d;
-  --button-primary-bg-hover: #5293bc;
+  --button-primary-bg: #{$primary-c--dark};
+  --button-primary-bg-hover: #{lighten($primary-c--dark, 8%)};
   --button-primary-c: #fefefe;
 
   --box-shadow--md: 0px 7px 29px 0px rgba(100, 100, 111, 0.1);
