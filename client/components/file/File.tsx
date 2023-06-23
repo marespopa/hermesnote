@@ -43,6 +43,7 @@ const File = ({
 
       {selectedTab === "editor" && (
         <FileEditor
+          isExporting={isExporting}
           contentEdited={contentEdited}
           setContentEdited={setContentEdited}
           pdfAreaName={pdfAreaName}

@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import ReactMarkdown from "react-markdown";
 import TextareaResizable from "../Forms/TextareaResizable";
-import Button from "../Forms/Button";
 import FilePreviewPane from "./FilePreviewPane";
 
 type Props = {
   contentEdited: string;
+  isExporting: boolean;
   setContentEdited: React.Dispatch<React.SetStateAction<string>>;
   pdfAreaName: string;
 };
 
 const FileEditor = ({
   contentEdited,
+  isExporting,
   setContentEdited,
   pdfAreaName,
 }: Props) => {
@@ -42,6 +42,7 @@ const FileEditor = ({
   function renderPreviewPane() {
     return (
       <FilePreviewPane
+        isExporting={isExporting}
         contentEdited={contentEdited}
         pdfAreaName={pdfAreaName}
       />
