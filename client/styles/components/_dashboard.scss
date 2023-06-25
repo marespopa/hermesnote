@@ -81,23 +81,20 @@
     }
 
     ul {
-      line-height: 1.5em;
       margin: 5px 0 15px;
       padding: 0;
+      list-style-type: none;
 
       li {
-        list-style: none;
-        position: relative;
-        padding: 0 0 0 20px;
+        display: flex;
+        gap: 8px;
 
-        &::before {
-          content: "";
-          position: absolute;
-          left: 0;
-          top: 6px;
-          width: 12px;
-          height: 12px;
-          background-color: var(--ol-marker-bg);
+        &:before {
+          color: var(--primary-c);
+          content: " ■";
+          font-size: 1.2em;
+          font-weight: bold;
+          line-height: 1em;
         }
       }
 
@@ -131,24 +128,15 @@
     }
 
     ol {
-      line-height: 1.5em;
-      margin: 5px 0 15px;
-      padding: 0;
+      list-style-type: none;
+      counter-reset: list;
+    }
 
-      li {
-        list-style-type: none;
-        counter-increment: item;
-        &::before {
-          content: counter(item);
-          margin-right: 5px;
-          font-size: 80%;
-          background-color: var(--ol-marker-bg);
-          color: var(--ol-marker-c);
-          font-weight: bold;
-          padding: 3px 8px;
-          border-radius: 3px;
-        }
-      }
+    ol li:before {
+      color: var(--primary-c);
+      counter-increment: list;
+      content: counters(list, ".") ". ";
+      font-weight: bold;
     }
 
     pre {
