@@ -75,7 +75,7 @@ function exportToPDF(
   };
 
   const currentColor = reportElement.style.color;
-  reportElement.style.color = "#131313";
+  reportElement.style.setProperty("color", "#131313", "important");
 
   const htmlCanvasScale =
     report.internal.pageSize.getWidth() / reportElement.offsetWidth;
