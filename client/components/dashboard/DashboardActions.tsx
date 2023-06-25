@@ -19,26 +19,31 @@ const DashboardActions = ({
   const fileSelectorLabel = "Open File";
 
   return (
-    <div className="dashboard__actions">
-      <Button
-        variant="primary"
-        label={fileSelectorLabel}
-        handleClick={handleOpenFile}
-      />
-      <Button
-        variant="primary"
-        label={"New File"}
-        handleClick={handleCreateFile}
-      />
+    <>
+      <div className="dashboard__actions">
+        <div className="controls">
+          <Button
+            variant="primary"
+            label={fileSelectorLabel}
+            handleClick={handleOpenFile}
+          />
+          <Button
+            variant="primary"
+            label={"New File"}
+            handleClick={handleCreateFile}
+          />
 
-      {hasUnsavedChanges && (
-        <Button
-          variant="primary"
-          handleClick={() => handleExportToMD(fileNameEdited || "File.md")}
-          label={"Save as"}
-        />
-      )}
-    </div>
+          <Button
+            variant="primary"
+            handleClick={() => handleExportToMD(fileNameEdited || "File.md")}
+            label={"Save as"}
+          />
+        </div>
+        {hasUnsavedChanges && (
+          <span className="small">You have unsaved changes.</span>
+        )}
+      </div>
+    </>
   );
 };
 
