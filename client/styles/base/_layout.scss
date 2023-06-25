@@ -1,6 +1,4 @@
 body {
-  padding: 0 1rem 1rem;
-  max-width: 80rem;
   min-height: 100vh;
   margin: 0 auto;
   background: var(--main-bg-c);
@@ -9,6 +7,11 @@ body {
 ::selection {
   background-color: var(--accent-c);
   color: var(--white-c);
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1400px;
 }
 
 .wrapper {
@@ -24,8 +27,6 @@ body {
   padding: 0.5rem 0.75rem;
 }
 
-.global-header {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
+main {
+  padding: var(--margin-md) 0;
 }

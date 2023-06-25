@@ -1,14 +1,17 @@
 .footer {
-  margin-top: 2rem;
+  background: #131313;
+  color: white;
+  padding: var(--margin-md) 0;
+
+  a,
+  a:visited {
+    color: var(--footer-link-c);
+  }
 }
 
 .items {
-  margin-bottom: 1rem;
+  display: flex;
+  gap: var(--margin-md);
   padding: 0;
   list-style: none;
-}
-
-.item {
-  display: inline-block;
-  margin-right: 1rem;
 }

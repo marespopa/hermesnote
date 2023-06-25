@@ -11,7 +11,7 @@
   line-height: 20px;
   list-style: none;
   max-width: 18.75rem;
-  padding: 6px 16px;
+  padding: 8px 16px;
   position: relative;
   transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
   user-select: none;
@@ -44,7 +44,7 @@
   }
 
   & + .button {
-    margin-left: var(--margin--md);
+    margin-left: var(--margin-md);
   }
 }
 

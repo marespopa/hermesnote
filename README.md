@@ -1,5 +1,5 @@
 ---
-title: HermesNote
+title: HermesNotes
 description: Reason behind making the app
 tags:
   - planning

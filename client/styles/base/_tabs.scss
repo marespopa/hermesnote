@@ -1,6 +1,6 @@
 .tabs ul {
   display: flex;
-  gap: 16px;
+  gap: var(--margin-md);
   list-style-type: none;
   padding-inline: 0;
   border-bottom: 1px solid var(--border-c);

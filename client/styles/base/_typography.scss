@@ -7,15 +7,25 @@
   font-display: swap;
 }
 
-* {
-  color: var(--main-text-c);
+html {
   font-family: "Montserrat";
+  color: var(--main-text-c);
+}
+
+em {
+  color: var(--primary-c);
+  font-weight: bold;
 }
 
 a,
 a:visited {
   font-weight: 500;
   color: var(--link-c);
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
 }
 
 h1,

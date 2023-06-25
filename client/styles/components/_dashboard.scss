@@ -1,17 +1,26 @@
-.dashboard-container {
+.container--dashboard {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.dashboard-container__file-controls {
-  margin-block: var(--margin--lg);
+.dashboard {
+  margin-top: var(--margin-md);
+}
+
+.dashboard__actions {
+  margin-block: var(--margin-md);
+}
+
+.dashboard__file-controls {
+  margin-block: var(--margin-lg);
 }
 
 .file {
   display: flex;
   flex-direction: column;
   gap: 32px;
+  margin-top: var(--margin-md);
 
   &--on-export {
     visibility: hidden;
@@ -35,7 +44,7 @@
   border: 1px solid var(--border-c);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow--md);
-  padding: 16px 32px;
+  padding: var(--margin-md) 32px;
 }
 
 .file__pdf-export {
@@ -60,7 +69,7 @@
 
     h1 {
       + * {
-        margin-top: var(--margin--lg);
+        margin-top: var(--margin-lg);
       }
     }
     input,

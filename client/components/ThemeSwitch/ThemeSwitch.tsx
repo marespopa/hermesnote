@@ -24,8 +24,12 @@ const ThemeSwitch = () => {
         checked={resolvedTheme === "dark"}
         onChange={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       />
-      {resolvedTheme === "light" && <span>🌞</span>}
-      {resolvedTheme === "dark" && <span>🌙</span>}
+      {resolvedTheme === "light" && (
+        <span className="toggle-switch__icon">🌞</span>
+      )}
+      {resolvedTheme === "dark" && (
+        <span className="toggle-switch__icon">🌙</span>
+      )}
     </label>
   );
 };

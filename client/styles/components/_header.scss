@@ -1,0 +1,35 @@
+.header {
+  background: var(--header-bg);
+  box-shadow: var(--box-shadow--md);
+  z-index: 1;
+}
+
+.header .logo {
+  transition: transform var(--transition);
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.header .container--from-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 0;
+}
+
+.header__nav ul {
+  display: flex;
+  gap: 32px;
+  list-style-type: none;
+  margin: 0;
+
+  li {
+    margin: 0;
+
+    a {
+      color: var(--header-c);
+    }
+  }
+}

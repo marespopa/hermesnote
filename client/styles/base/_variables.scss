@@ -2,8 +2,8 @@
 $tablet-breakpoint: 768px;
 $desktop-breakpoint: 1024px;
 
-$primary-c: #006494;
-$primary-c--dark: #006494;
+$primary-c: #579e65;
+$primary-c--dark: #579e65;
 
 :root {
   --light: #d8dbe0;
@@ -12,17 +12,24 @@ $primary-c--dark: #006494;
   --primary-c: #{$primary-c};
   --accent-c: #7cc6fe;
   --white-c: #fff;
-  --box-bg: #f4faff;
+  --box-bg: #fff;
   --primary-shade-c: #ebf6ff;
-  --main-bg-c: #f4faff;
+  --main-bg-c: #fafafa;
   --main-text-c: #4f4f4f;
   --main-heading-c: #131313;
 
   --ol-marker-bg: #{lighten($primary-c, 8%)};
   --ol-marker-c: #fff;
 
-  --link-c: #457b9d;
+  --link-c: #0b3948;
   --border-c: #dfdfdf;
+
+  /* Header */
+  --header-bg: #fff;
+  --header-c: #131313;
+
+  /* Footer */
+  --footer-link-c: #4fbee3;
 
   /* Buttons */
   --button-primary-bg: #{$primary-c};
@@ -30,21 +37,21 @@ $primary-c--dark: #006494;
   --button-primary-c: #fefefe;
 
   /** Margins **/
-  --margin--sm: 0.375rem;
-  --margin--md: 0.5rem;
-  --margin--lg: 0.75rem;
-  --margin--xl: 1rem;
+  --margin-sm: 0.5rem;
+  --margin-md: 1rem;
+  --margin-lg: 1.5rem;
+  --margin-xl: 2rem;
 
-  --box-p: 8px 16px;
+  --box-p: 8px var(--margin-md);
   --border-radius: 8px;
-  --box-shadow--md: 0px 7px 29px 0px rgba(100, 100, 111, 0.1);
-  --box-shadow--lg: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  --box-shadow--md: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+  --box-shadow--lg: rgba(0, 0, 0, 0.18) 0px 2px 4px;
 
   /** Code **/
   --code-bg: #383838;
   --code-c: #fff;
   --code-border-c: #1f1f1f;
-  --code-p: 16px;
+  --code-p: var(--margin-md);
 
   /** Typography **/
   --text--xs: 0.64rem;
@@ -58,6 +65,8 @@ $primary-c--dark: #006494;
 
   /** Transition **/
   --transition: 250ms cubic-bezier(0.17, 0.67, 0.83, 0.67);
+
+  --landing-bg-img: url("../../assets/bg-pattern.png");
 }
 
 [data-theme="dark"] {
@@ -72,8 +81,7 @@ $primary-c--dark: #006494;
 
   --ol-marker-bg: #{lighten($primary-c--dark, 8%)};
   --ol-marker-c: #fff;
-
-  --link-c: #78b1d5;
+  --link-c: #4fbee3;
   --border-c: #262626;
 
   /* Buttons */
@@ -84,8 +92,14 @@ $primary-c--dark: #006494;
   --box-shadow--md: 0px 7px 29px 0px rgba(100, 100, 111, 0.1);
   --box-shadow--lg: 0px 3px 15px rgba(0, 0, 0, 0.2);
 
+  /* Header */
+  --header-bg: #2c2c2c;
+  --header-c: #fff;
+
   /** Code **/
   --code-bg: #383838;
   --code-c: #fff;
   --code-border-c: #1f1f1f;
+
+  --landing-bg-img: url("../../assets/bg-pattern-d.png");
 }

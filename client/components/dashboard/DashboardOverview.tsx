@@ -67,22 +67,22 @@ const DashboardOverview = (props: Props) => {
   };
 
   return (
-    <div className="dashboard-container">
+    <main className="container container--dashboard">
       <DashboardActions {...dashboardActionsProps} />
 
       {isSelectedFileParsed && (
-        <div>
+        <div className="dashboard">
           {renderTabs()}
           {selectedTab === "export" && renderExportButtons()}
           <File {...fileProps} />
         </div>
       )}
-    </div>
+    </main>
   );
 
   function renderExportButtons(): React.ReactNode {
     return (
-      <div className="dashboard-container__file-controls">
+      <div className="dashboard__file-controls">
         <Button
           variant="primary"
           handleClick={() => handleExportToPDF()}

@@ -2,7 +2,7 @@
   &__title {
     align-items: center;
     display: flex;
-    gap: 16px;
+    gap: var(--margin-md);
   }
 
   &__username {
