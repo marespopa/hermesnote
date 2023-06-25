@@ -6,8 +6,9 @@ $primary-c: #579e65;
 $primary-c--dark: #579e65;
 
 :root {
-  --light: #d8dbe0;
-  --dark: #28292c;
+  --light: #fafafa;
+  --dark: #131313;
+  --success: #579e65;
 
   --primary-c: #{$primary-c};
   --accent-c: #7cc6fe;
@@ -17,7 +18,7 @@ $primary-c--dark: #579e65;
   --main-bg-c: #fafafa;
   --main-text-c: #4f4f4f;
   --main-heading-c: #131313;
-
+  --input-bg: #fff;
   --ol-marker-bg: #{lighten($primary-c, 8%)};
   --ol-marker-c: #fff;
 
@@ -82,7 +83,9 @@ $primary-c--dark: #579e65;
   --ol-marker-bg: #{lighten($primary-c--dark, 8%)};
   --ol-marker-c: #fff;
   --link-c: #4fbee3;
-  --border-c: #262626;
+  --border-c: #2e2e2e;
+  --input-bg: #383838;
+  --input-border-c: #1f1f1f;
 
   /* Buttons */
   --button-primary-bg: #{$primary-c--dark};

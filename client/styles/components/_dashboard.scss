@@ -102,11 +102,26 @@
       }
 
       li.task-list-item {
+        display: flex;
+        align-items: center;
         padding-left: 0;
+        gap: 8px;
+
+        &:has(input:checked) {
+          text-decoration: line-through;
+        }
 
         input {
           padding: 0;
-          margin: 0 2px 0 0;
+          margin: 0;
+          width: 1em;
+          height: 1em;
+          box-shadow: none;
+          border: 1px solid var(--border-c);
+
+          &:checked {
+            background: var(--success);
+          }
         }
 
         &:before {

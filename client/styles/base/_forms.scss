@@ -18,9 +18,9 @@ textarea {
   width: 100%;
   margin-bottom: 0.5rem;
   border-radius: 0.25rem;
-  outline-color: var(--primary-c);
-  border: 1px solid var(--border-c);
-  background-color: var(--box-bg);
+  outline-color: var(--input-border-c);
+  border: 1px solid var(--input-border-c);
+  background-color: var(--input-bg);
   box-shadow: var(--box-shadow--md);
   padding: 0.5rem 0.75rem;
   caret-color: var(--accent-c);

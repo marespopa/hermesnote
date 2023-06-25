@@ -4,10 +4,20 @@ import Image from "next/image";
 import logoLight from "/assets/logo-l.svg";
 import logoDark from "/assets/logo-d.svg";
 import { useTheme } from "next-themes";
+import { useState, useEffect } from "react";
 
 export default function Header() {
+  const [mounted, setMounted] = useState(false);
   const { resolvedTheme } = useTheme();
   const logo = resolvedTheme === "dark" ? logoDark : logoLight;
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <header className="header">
