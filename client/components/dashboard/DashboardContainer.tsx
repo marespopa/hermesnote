@@ -9,7 +9,6 @@ import {
   UNSAVED_CHANGES_WARNING_TEXT,
 } from "./constants";
 import DashboardOverview from "./DashboardOverview";
-import sanitize from "sanitize-html";
 import { useLeavePageConfirmation } from "hooks/use-leave-page-confirmation";
 
 const DashboardContainer = () => {
@@ -122,15 +121,14 @@ const DashboardContainer = () => {
       if (reader.result) {
         const fileContent = String(reader.result);
         const { data: frontMatter, content } = matter(fileContent);
-        const sanitizedContent = sanitize(content);
 
         setMetadata({
           title: frontMatter?.title || "",
           description: frontMatter?.description || "",
           tags: frontMatter?.tags.join(","),
         });
-        setContent(sanitizedContent);
-        setContentEdited(sanitizedContent);
+        setContent(content);
+        setContentEdited(content);
         setIsSelectedFileParsed(true);
       }
     };
