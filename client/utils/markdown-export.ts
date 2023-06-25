@@ -70,19 +70,16 @@ function exportToPDF(
   });
 
   const pdfMargin = {
-    y: 5,
-    x: 10,
+    y: 6,
+    x: 0,
   };
 
   const currentColor = reportElement.style.color;
   reportElement.style.color = "#131313";
 
   const htmlCanvasScale =
-    (report.internal.pageSize.getWidth() - pdfMargin.x * 2) /
-    reportElement.offsetWidth;
-  //    report.internal.pageSize.width -
-  //    (pdfMargin * 2) / document.body.clientWidth;
-
+    report.internal.pageSize.getWidth() / reportElement.offsetWidth;
+  console.log("scale" + htmlCanvasScale);
   return report
     .html(reportElement, {
       margin: [pdfMargin.y, pdfMargin.x, pdfMargin.y, pdfMargin.x],
