@@ -4,6 +4,7 @@ import Button from "../Forms/Button";
 import { TabListItem, TAB_LIST } from "./constants";
 import DashboardActions from "./DashboardActions";
 import File from "../file/File";
+import useCtrlS from "hooks/use-save";
 
 type Props = {
   hasUnsavedChanges: boolean;
@@ -65,6 +66,10 @@ const DashboardOverview = (props: Props) => {
     handleFileNameChange,
     handleMetadataChange,
   };
+
+  useCtrlS(() => {
+    handleExportToMD(fileNameEdited);
+  });
 
   return (
     <main className="container container--dashboard">
