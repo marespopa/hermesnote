@@ -11,7 +11,7 @@ body {
 
 .container {
   margin: 0 auto;
-  max-width: 1400px;
+  max-width: var(--container-w);
 }
 
 .wrapper {

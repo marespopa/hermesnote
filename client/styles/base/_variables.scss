@@ -6,7 +6,8 @@ $primary-c: #579e65;
 $primary-c--dark: #579e65;
 
 :root {
-  --light: #fafafa;
+  --container-w: 1400px;
+  --light: #fcfcfc;
   --dark: #131313;
   --success: #579e65;
 
@@ -15,12 +16,17 @@ $primary-c--dark: #579e65;
   --white-c: #fff;
   --box-bg: #fff;
   --primary-shade-c: #ebf6ff;
-  --main-bg-c: #fafafa;
+  --main-bg-c: #fcfcfc;
   --main-text-c: #4f4f4f;
-  --main-heading-c: #131313;
+  --main-heading-c: #323232;
   --input-bg: #fff;
   --ol-marker-bg: #{lighten($primary-c, 8%)};
   --ol-marker-c: #fff;
+
+  /* Hero */
+  --hero-bg: #e8ffeb;
+  --hero-h1-c: #1e1e1e;
+  --hero-h2-c: #414141;
 
   --link-c: #0b3948;
   --border-c: #dfdfdf;
@@ -33,11 +39,6 @@ $primary-c--dark: #579e65;
   --footer-bg: #131313;
   --footer-link-c: #4fbee3;
 
-  /* Buttons */
-  --button-primary-bg: #{$primary-c};
-  --button-primary-bg-hover: #{lighten($primary-c, 8%)};
-  --button-primary-c: #fefefe;
-
   /** Margins **/
   --margin-sm: 0.5rem;
   --margin-md: 1rem;
@@ -46,8 +47,9 @@ $primary-c--dark: #579e65;
 
   --box-p: 8px var(--margin-md);
   --border-radius: 8px;
+  --box-shadow--md: rgba(0, 0, 0, 0.1) 0px 1px 8px;
   --box-shadow--md: rgba(0, 0, 0, 0.15) 0px 2px 8px;
-  --box-shadow--lg: rgba(0, 0, 0, 0.18) 0px 2px 4px;
+  --box-shadow--lg: rgba(0, 0, 0, 0.18) 0px 2px 8px;
 
   /** Code **/
   --code-bg: #383838;
@@ -64,11 +66,10 @@ $primary-c--dark: #579e65;
   --text--2xl: 1.953rem;
   --text--3xl: 2.44rem;
   --text--4xl: 3.052rem;
+  --text--5xl: 4rem;
 
   /** Transition **/
   --transition: 250ms cubic-bezier(0.17, 0.67, 0.83, 0.67);
-
-  --landing-bg-img: url("../../assets/bg-pattern.png");
 }
 
 [data-theme="dark"] {
@@ -78,8 +79,8 @@ $primary-c--dark: #579e65;
   --box-bg: #323232;
   --primary-shade-c: #191919;
   --main-bg-c: #1e1e1e;
-  --main-text-c: #fff;
-  --main-heading-c: #fff;
+  --main-text-c: #eeeeee;
+  --main-heading-c: #fefefe;
 
   --ol-marker-bg: #{lighten($primary-c--dark, 8%)};
   --ol-marker-c: #fff;
@@ -88,10 +89,10 @@ $primary-c--dark: #579e65;
   --input-bg: #383838;
   --input-border-c: #1f1f1f;
 
-  /* Buttons */
-  --button-primary-bg: #{$primary-c--dark};
-  --button-primary-bg-hover: #{lighten($primary-c--dark, 8%)};
-  --button-primary-c: #fefefe;
+  /* Hero */
+  --hero-bg: #343b35;
+  --hero-h1-c: #fff;
+  --hero-h2-c: #dddddd;
 
   --box-shadow--md: 0px 7px 29px 0px rgba(100, 100, 111, 0.1);
   --box-shadow--lg: 0px 3px 15px rgba(0, 0, 0, 0.2);
@@ -107,6 +108,4 @@ $primary-c--dark: #579e65;
   --code-bg: #383838;
   --code-c: #fff;
   --code-border-c: #1f1f1f;
-
-  --landing-bg-img: url("../../assets/bg-pattern-d.png");
 }

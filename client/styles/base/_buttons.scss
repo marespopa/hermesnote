@@ -1,8 +1,25 @@
+/* Buttons */
+$button-default-bg-l: #fdfdfd;
+$button-default-bg-d: #323232;
+
 .button {
+  /* Default */
+  --button-default-bg: #{$button-default-bg-l};
+  --button-default-bg-hover: #fff;
+  --button-default-c: #323232;
+
+  /* Primary */
+  --button-primary-bg: #{$primary-c};
+  --button-primary-bg-hover: #{lighten($primary-c, 8%)};
+  --button-primary-c: #fefefe;
+
+  /* Generics */
+  --button-transition: 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+
   appearance: none;
-  border: 1px solid rgb(27 31 35 / 15%);
+  border: 1px solid var(--border-c);
   border-radius: 0.375rem;
-  box-shadow: rgb(27 31 35 / 4%) 0 1px 0, rgb(255 255 255 / 25%) 0 1px 0 inset;
+  box-shadow: var(--box-shadow--sm);
   box-sizing: border-box;
   cursor: pointer;
   display: inline-block;
@@ -11,16 +28,19 @@
   line-height: 20px;
   list-style: none;
   max-width: 18.75rem;
-  padding: 8px 16px;
+  padding: 12px 16px;
   position: relative;
-  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  transition: background-color var(--button-transition),
+    box-shadow var(--button-transition);
   user-select: none;
   touch-action: manipulation;
   vertical-align: middle;
   white-space: nowrap;
   word-wrap: break-word;
 
-  &:hover {
+  &:hover,
+  &:focus {
+    box-shadow: var(--box-shadow--lg);
     text-decoration: none;
     transition: background-color var(--transition);
   }
@@ -48,11 +68,34 @@
   }
 }
 
+.button-default {
+  background: var(--button-default-bg);
+  color: var(--button-default-c);
+
+  &:hover,
+  &:focus {
+    background: var(--button-default-bg-hover);
+  }
+}
+
 .button-primary {
   background: var(--button-primary-bg);
   color: var(--button-primary-c);
 
-  &:hover {
+  &:hover,
+  &:focus {
     background: var(--button-primary-bg-hover);
+  }
+}
+
+[data-theme="dark"] {
+  .button {
+    --button-default-bg: #{$button-default-bg-d};
+    --button-default-bg-hover: #{lighten($button-default-bg-d, 8%)};
+    --button-default-c: #ffffff;
+
+    --button-primary-bg: #{$primary-c--dark};
+    --button-primary-bg-hover: #{lighten($primary-c--dark, 8%)};
+    --button-primary-c: #fefefe;
   }
 }
