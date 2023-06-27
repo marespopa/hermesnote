@@ -1,12 +1,17 @@
 .footer {
   background: var(--footer-bg);
   color: white;
-  padding: var(--margin-md) 0;
+  padding: 32px 0;
 
   a,
   a:visited {
     color: var(--footer-link-c);
   }
+}
+
+.footerContainer {
+  display: flex;
+  justify-content: space-between;
 }
 
 .items {

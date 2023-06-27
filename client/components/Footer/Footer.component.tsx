@@ -6,15 +6,15 @@ export default function Footer() {
 
   return (
     <footer className={styles.footer}>
-      <div className="container">
+      <div className={`${styles.footerContainer} container`}>
+        <span className="copyright">© {currentYear} Mares Popa</span>
         <ul className={styles.items}>
           <li className={styles.item}>
-            <a href="https://github.com/smoothwizz/hermesnote">GitHub</a>
+            <a href="https://github.com/smoothwizz/hermesnote">Github</a>
           </li>
           <li className={styles.item}>
-            <Link href="/policy">Policy</Link>
+            <Link href="/policy">Privacy Policy</Link>
           </li>
-          <li className={styles.item}>{`©${currentYear} Mares Popa`}</li>
         </ul>
       </div>
     </footer>
