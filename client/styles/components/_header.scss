@@ -16,7 +16,7 @@
   align-items: center;
   display: flex;
   justify-content: space-between;
-  padding: 16px 0;
+  padding-block: 16px;
 }
 
 .header__nav ul {
@@ -31,5 +31,11 @@
     a {
       color: var(--header-c);
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .header__nav {
+    display: none;
   }
 }

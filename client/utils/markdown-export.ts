@@ -31,7 +31,7 @@ function formatFrontMatter(metadata: FileMetadata) {
     `description: ${metadata.description}\n` +
     `tags:\n` +
     `${formatTags(metadata.tags)}` +
-    `---`;
+    `---\n`;
 
   return text;
 }

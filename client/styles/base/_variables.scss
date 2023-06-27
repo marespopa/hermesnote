@@ -19,8 +19,8 @@ $primary-c--light: #cce9e5;
   --main-text-c: #1e1e1e;
   --main-heading-c: #0f0f0f;
   --input-bg: #fff;
-  --ol-marker-bg: #{lighten($primary-c, 8%)};
-  --ol-marker-c: #fff;
+
+  --marker-c: #{$primary-c};
 
   --link-c: #0b3948;
   --border-c: #ebf5ff;
@@ -29,6 +29,9 @@ $primary-c--light: #cce9e5;
   --header-bg: #fff;
   --header-c: #131313;
   --theme-switcher-bg: #9eceff;
+
+  /* Features */
+  --features-bg: #{$primary-c--light};
 
   /* Footer */
   --footer-bg: #131313;
@@ -77,8 +80,7 @@ $primary-c--light: #cce9e5;
   --main-text-c: #eeeeee;
   --main-heading-c: #fefefe;
 
-  --ol-marker-bg: #{lighten($primary-c--dark, 8%)};
-  --ol-marker-c: #fff;
+  --marker-c: #fff;
   --link-c: #4fbee3;
   --border-c: #2e2e2e;
   --input-bg: #383838;
@@ -92,6 +94,9 @@ $primary-c--light: #cce9e5;
   /* Hero */
   --box-shadow--md: 0px 7px 29px 0px rgba(100, 100, 111, 0.1);
   --box-shadow--lg: 0px 3px 15px rgba(0, 0, 0, 0.2);
+
+  /* Features */
+  --features-bg: #{$primary-c--dark};
 
   /* Footer */
   --footer-bg: #080808;

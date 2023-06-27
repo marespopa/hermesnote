@@ -12,6 +12,11 @@ body {
 .container {
   margin: 0 auto;
   max-width: var(--container-w);
+  padding: 0 16px;
+}
+
+.container--text-only {
+  max-width: 90ch;
 }
 
 .wrapper {
@@ -29,4 +34,14 @@ body {
 
 main {
   padding: var(--margin-md) 0;
+}
+
+.documentation {
+  section + section {
+    margin-top: 64px;
+  }
+
+  section:last-of-type {
+    margin-bottom: 64px;
+  }
 }
