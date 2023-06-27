@@ -1,14 +1,4 @@
-@font-face {
-  font-family: "Montserrat";
-  src: url("../../assets/Montserrat-Regular.woff2") format("woff2"),
-    url("../../assets/Montserrat-Regular.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 html {
-  font-family: "Montserrat";
   color: var(--main-text-c);
 }
 

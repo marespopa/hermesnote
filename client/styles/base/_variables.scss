@@ -2,38 +2,33 @@
 $tablet-breakpoint: 768px;
 $desktop-breakpoint: 1024px;
 
-$primary-c: #579e65;
-$primary-c--dark: #579e65;
+$primary-c: #1789fc;
+$primary-c--dark: #2b3130;
+$primary-c--light: #cce9e5;
 
 :root {
   --container-w: 1400px;
-  --light: #fcfcfc;
-  --dark: #131313;
   --success: #579e65;
-
   --primary-c: #{$primary-c};
+
   --accent-c: #7cc6fe;
   --white-c: #fff;
   --box-bg: #fff;
   --primary-shade-c: #ebf6ff;
-  --main-bg-c: #fcfcfc;
-  --main-text-c: #4f4f4f;
-  --main-heading-c: #323232;
+  --main-bg-c: #fdfdfd;
+  --main-text-c: #1e1e1e;
+  --main-heading-c: #0f0f0f;
   --input-bg: #fff;
   --ol-marker-bg: #{lighten($primary-c, 8%)};
   --ol-marker-c: #fff;
 
-  /* Hero */
-  --hero-bg: #e8ffeb;
-  --hero-h1-c: #1e1e1e;
-  --hero-h2-c: #414141;
-
   --link-c: #0b3948;
-  --border-c: #dfdfdf;
+  --border-c: #ebf5ff;
 
   /* Header */
   --header-bg: #fff;
   --header-c: #131313;
+  --theme-switcher-bg: #9eceff;
 
   /* Footer */
   --footer-bg: #131313;
@@ -47,9 +42,9 @@ $primary-c--dark: #579e65;
 
   --box-p: 8px var(--margin-md);
   --border-radius: 8px;
-  --box-shadow--md: rgba(0, 0, 0, 0.1) 0px 1px 8px;
-  --box-shadow--md: rgba(0, 0, 0, 0.15) 0px 2px 8px;
-  --box-shadow--lg: rgba(0, 0, 0, 0.18) 0px 2px 8px;
+  --box-shadow--sm: rgba(100, 100, 100, 0.08) 0px 2px 3px;
+  --box-shadow--md: rgba(100, 100, 100, 0.2) 0px 2px 3px;
+  --box-shadow--lg: rgba(100, 100, 100, 0.38) 0px 2px 3px;
 
   /** Code **/
   --code-bg: #383838;
@@ -89,17 +84,14 @@ $primary-c--dark: #579e65;
   --input-bg: #383838;
   --input-border-c: #1f1f1f;
 
-  /* Hero */
-  --hero-bg: #343b35;
-  --hero-h1-c: #fff;
-  --hero-h2-c: #dddddd;
-
-  --box-shadow--md: 0px 7px 29px 0px rgba(100, 100, 111, 0.1);
-  --box-shadow--lg: 0px 3px 15px rgba(0, 0, 0, 0.2);
-
   /* Header */
   --header-bg: #151515;
   --header-c: #fff;
+  --theme-switcher-bg: #0d0d0d;
+
+  /* Hero */
+  --box-shadow--md: 0px 7px 29px 0px rgba(100, 100, 111, 0.1);
+  --box-shadow--lg: 0px 3px 15px rgba(0, 0, 0, 0.2);
 
   /* Footer */
   --footer-bg: #080808;

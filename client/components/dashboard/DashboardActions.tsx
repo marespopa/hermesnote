@@ -21,7 +21,7 @@ const DashboardActions = ({
   return (
     <>
       <div className="dashboard__actions">
-        <div className="controls">
+        <div className="dashboard__controls">
           <Button
             variant="primary"
             label={fileSelectorLabel}

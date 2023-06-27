@@ -8,16 +8,16 @@
   margin-top: var(--margin-md);
 }
 
+.dashboard__controls {
+  display: flex;
+  gap: 32px;
+}
+
 .dashboard__actions {
   align-items: center;
   margin-block: var(--margin-md);
   display: flex;
   justify-content: space-between;
-
-  &__controls {
-    display: flex;
-    gap: 32px;
-  }
 }
 
 .dashboard__file-controls {

@@ -1,4 +1,4 @@
-type ButtonVariants = "primary" | "default";
+type ButtonVariants = "primary" | "primary-large" | "default";
 
 type Props = {
   variant?: ButtonVariants;

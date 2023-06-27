@@ -23,7 +23,7 @@ export default function Header() {
     <header className="header">
       <div className="container container--from-header">
         <Link className="logo" href={"/"}>
-          <Image src={logo} alt="Hermes Notes" width={164} />
+          <Image priority src={logo} alt="Hermes Notes" width={164} />
         </Link>
 
         <nav className="header__nav">

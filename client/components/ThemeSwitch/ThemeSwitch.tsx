@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
+import Image from "next/image";
 
 const ThemeSwitch = () => {
   const [mounted, setMounted] = useState(false);
@@ -16,19 +17,33 @@ const ThemeSwitch = () => {
   }
 
   return (
-    <label className="toggle-switch">
+    <label className="theme-switcher">
       <input
         type="checkbox"
-        className="toggle-switch__input"
+        className="theme-switcher__input"
         id={elementName}
         checked={resolvedTheme === "dark"}
         onChange={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       />
       {resolvedTheme === "light" && (
-        <span className="toggle-switch__icon">🌞</span>
+        <span className="theme-switcher__icon">
+          <Image
+            src="/assets/icons/sun-icon.svg"
+            width={24}
+            height={24}
+            alt="Light Theme"
+          />
+        </span>
       )}
       {resolvedTheme === "dark" && (
-        <span className="toggle-switch__icon">🌙</span>
+        <span className="theme-switcher__icon">
+          <Image
+            src="/assets/icons/moon-icon.svg"
+            width={24}
+            height={24}
+            alt="Dark Theme"
+          />
+        </span>
       )}
     </label>
   );

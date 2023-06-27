@@ -1,8 +1,7 @@
 .header {
   background: var(--header-bg);
-  box-shadow: var(--box-shadow--sm);
   border: 1px solid var(--border-c);
-  z-index: 1;
+  z-index: 2;
 }
 
 .header .logo {

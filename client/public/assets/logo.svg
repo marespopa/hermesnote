@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 1600 1600" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-    <g transform="matrix(1,0,0,1,0,-2141.18)">
-        <g id="FullWidth" transform="matrix(1,0,0,1,0,2141.18)">
+<svg width="100%" height="100%" viewBox="0 0 1607 310" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,0,-2548.62)">
+        <g id="FullWidth" transform="matrix(1.00388,0,0,0.19375,0,2548.62)">
             <rect x="0" y="0" width="1600" height="1600" style="fill:none;"/>
-            <g id="Logo" transform="matrix(1.85457,0,0,1.85457,-774.244,-432.109)">
+            <g id="Logo" transform="matrix(1.84754,0,0,9.5727,-768.279,-5559.76)">
                 <g transform="matrix(0.964506,0,0,0.964506,-12.1901,132.961)">
                     <g transform="matrix(104.898,0,0,104.898,600.284,601.418)">
                         <path d="M0.699,-0.7L0.699,-0L0.626,-0L0.626,-0.323L0.188,-0.323L0.188,-0L0.114,-0L0.114,-0.7L0.188,-0.7L0.188,-0.388L0.626,-0.388L0.626,-0.7L0.699,-0.7Z" style="fill-rule:nonzero;"/>
