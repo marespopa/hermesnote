@@ -1,22 +1,19 @@
 import { FileMetadata } from "@/types/markdown";
 import React from "react";
-import Button from "../Forms/Button";
-import { TabListItem, TAB_LIST } from "./constants";
-import DashboardActions from "./DashboardActions";
-import File from "../file/File";
 import useCtrlS from "hooks/use-save";
+import Link from "next/link";
+import DashboardBlankState from "./DashboardBlankState/DashboardBlankState";
+import DashboardFile from "./DashboardFile";
 
 type Props = {
   hasUnsavedChanges: boolean;
   isSelectedFileParsed: boolean;
   isExporting: boolean;
-  selectedTab: TabListItem;
   metadata: FileMetadata;
   contentEdited: string;
   pdfSettings: { areaName: string; fileName: string };
   fileNameEdited: string;
   setContentEdited: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedTab: React.Dispatch<React.SetStateAction<TabListItem>>;
   handleOpenFile: () => Promise<void>;
   handleCreateFile: () => void;
   handleFileNameChange: (e: React.FormEvent<HTMLInputElement>) => void;
@@ -32,8 +29,6 @@ const DashboardOverview = (props: Props) => {
     hasUnsavedChanges,
     isExporting,
     isSelectedFileParsed,
-    selectedTab,
-    setSelectedTab,
     fileNameEdited,
     metadata,
     contentEdited,
@@ -47,78 +42,45 @@ const DashboardOverview = (props: Props) => {
     handleExportToPDF,
   } = props;
 
-  const dashboardActionsProps = {
-    hasUnsavedChanges,
-    fileNameEdited,
-    handleOpenFile,
-    handleCreateFile,
-    handleExportToMD,
-  };
-
-  const fileProps = {
-    selectedTab,
-    isExporting,
-    fileNameEdited,
-    contentEdited,
-    setContentEdited,
-    metadata,
-    pdfAreaName: pdfSettings.areaName,
-    handleFileNameChange,
-    handleMetadataChange,
-  };
-
   useCtrlS(() => {
     handleExportToMD(fileNameEdited);
   });
 
   return (
-    <main className="container container--dashboard">
-      <DashboardActions {...dashboardActionsProps} />
+    <main className="container dashboard">
+      {!isSelectedFileParsed && (
+        <DashboardBlankState
+          handleCreateFile={handleCreateFile}
+          handleOpenFile={handleOpenFile}
+        />
+      )}
 
       {isSelectedFileParsed && (
-        <div className="dashboard">
-          {renderTabs()}
-          {selectedTab === "export" && renderExportButtons()}
-          <File {...fileProps} />
-        </div>
+        <DashboardFile
+          pdfAreaName={pdfSettings.areaName}
+          isExporting={isExporting}
+          contentEdited={contentEdited}
+          setContentEdited={setContentEdited}
+          metadata={metadata}
+          fileNameEdited={fileNameEdited}
+          handleCreateFile={handleCreateFile}
+          handleOpenFile={handleOpenFile}
+          handleMetadataChange={() => handleMetadataChange}
+          handleFileNameChange={() => handleFileNameChange}
+          hasUnsavedChanges={hasUnsavedChanges}
+          handleExportToPDF={() => handleExportToPDF()}
+          handleSaveAs={() => handleExportToMD(fileNameEdited)}
+        />
       )}
+
+      <section className="dashboard__helper-text">
+        <p>
+          Want to learn more about how to write markdown.{" "}
+          <Link href={"/documentation"}>Access the documentation page.</Link>
+        </p>
+      </section>
     </main>
   );
-
-  function renderExportButtons(): React.ReactNode {
-    return (
-      <div className="dashboard__file-controls">
-        <Button
-          variant="primary"
-          handleClick={() => handleExportToPDF()}
-          label={"Export to .pdf"}
-        />
-      </div>
-    );
-  }
-
-  function renderTabs() {
-    return (
-      <nav className="tabs">
-        <ul>
-          {TAB_LIST.map((tab) => {
-            return (
-              <li
-                key={tab.id}
-                className={`tab ${
-                  tab.id === selectedTab ? "tab--is-active" : ""
-                }`}
-              >
-                <button onClick={() => setSelectedTab(tab.id)}>
-                  {tab.label}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-    );
-  }
 };
 
 export default DashboardOverview;

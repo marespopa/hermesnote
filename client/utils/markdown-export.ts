@@ -1,10 +1,6 @@
 import jsPDF from "jspdf";
 import { FileMetadata } from "./../types/markdown";
 import { saveFile } from "./save-utils";
-import "./fonts/Montserrat-bold";
-import "./fonts/Montserrat-bolditalic";
-import "./fonts/Montserrat-italic";
-import "./fonts/Montserrat-normal";
 
 const MarkdownExport = {
   exportMarkdown,
@@ -76,10 +72,8 @@ function exportToPDF(
 
   const currentColor = reportElement.style.color;
   reportElement.style.setProperty("color", "#131313", "important");
-
   const htmlCanvasScale =
     report.internal.pageSize.getWidth() / reportElement.offsetWidth;
-  console.log("scale" + htmlCanvasScale);
   return report
     .html(reportElement, {
       margin: [pdfMargin.y, pdfMargin.x, pdfMargin.y, pdfMargin.x],

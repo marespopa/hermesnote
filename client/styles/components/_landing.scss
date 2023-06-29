@@ -1,13 +1,10 @@
 .landing-page {
   padding: 0;
   margin: 0;
+}
 
-  h2,
-  h3,
-  h4,
-  h5 {
-    margin-top: var(--margin-md);
-  }
+.hero__wrapper {
+  background: var(--white-c);
 }
 
 .hero {
@@ -24,7 +21,7 @@
 
   h1 {
     font-weight: normal;
-    font-size: var(--text--5xl);
+    font-size: 4rem;
     margin-bottom: var(--margin-sm);
   }
 

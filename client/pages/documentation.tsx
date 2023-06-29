@@ -32,7 +32,7 @@ export default function DocumentationPage() {
       <main>
         <div className="container container--text-only documentation">
           <section>
-            <h1>Documentation</h1>
+            <h1 className="mt-xl">Documentation</h1>
             <p>
               Welcome to the <strong>Hermes Notes</strong> Markdown Syntax
               Guide. This documentation will provide you with a comprehensive
@@ -43,8 +43,8 @@ export default function DocumentationPage() {
               format text and add elements such as headers, lists, links, and
               more.
             </p>
-            <h3>Table of Contents</h3>
-            <ol>
+            <h3 className="mt-lg">Table of Contents</h3>
+            <ol className="mt-md">
               <li>
                 <a href="#headers">Headers</a>
               </li>
@@ -67,7 +67,6 @@ export default function DocumentationPage() {
                 <a href="#tables">Tables</a>
               </li>
             </ol>
-            <p>Easy track and manage markdown files.</p>
           </section>
 
           <section id="headers">
@@ -78,7 +77,7 @@ export default function DocumentationPage() {
               followed by a space. The number of hash symbols determines the
               header level:
             </p>
-            <code>{code.headers}</code>
+            <code className="mt-sm">{code.headers}</code>
           </section>
 
           <section id="emphasis">
@@ -101,7 +100,7 @@ export default function DocumentationPage() {
                 tildes (~~).
               </li>
             </ul>
-            <code>{code.emphasis}</code>
+            <code className="mt-sm">{code.emphasis}</code>
           </section>
 
           <section id="lists">
@@ -111,12 +110,12 @@ export default function DocumentationPage() {
               To create an unordered list, use hyphens (-), plus signs (+), or
               asterisks (*) followed by a space:
             </p>
-            <code>{code.lists.unordered}</code>
-            <p>
+            <code className="mt-sm">{code.lists.unordered}</code>
+            <p className="mt-md">
               To create an ordered list, use numbers followed by periods (.) and
               a space:
             </p>
-            <code>{code.lists.ordered}</code>
+            <code className="mt-sm">{code.lists.ordered}</code>
           </section>
 
           <section id="links">
@@ -125,7 +124,7 @@ export default function DocumentationPage() {
               You can add hyperlinks to your Markdown files using the following
               syntax:
             </p>
-            <code>{code.links}</code>
+            <code className="mt-sm">{code.links}</code>
           </section>
 
           <section id="images">
@@ -134,7 +133,7 @@ export default function DocumentationPage() {
               To insert images into your Markdown files, use the following
               syntax:
             </p>
-            <code>{code.images}</code>
+            <code className="mt-sm">{code.images}</code>
           </section>
 
           <section id="code-blocks">
@@ -144,7 +143,7 @@ export default function DocumentationPage() {
               enclose the code:
             </p>
             <p>For code blocks, you can use triple tilde character (~):</p>
-            <code>{code.codeBlocks}</code>
+            <code className="mt-sm">{code.codeBlocks}</code>
           </section>
 
           <section id="tables">
@@ -153,7 +152,7 @@ export default function DocumentationPage() {
               To create tables, use hyphens (-) to separate the header row and
               pipes (|) to separate the columns:
             </p>
-            <code>{code.tables}</code>
+            <code className="mt-sm">{code.tables}</code>
           </section>
 
           <section>

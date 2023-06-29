@@ -22,17 +22,20 @@ const TextareaResizable = ({
 
   return (
     <div className="form-group">
-      <label htmlFor={name}>{label}</label>
-
-      <textarea
-        ref={textAreaRef}
-        rows={4}
-        id={name}
-        name={name}
-        value={value}
-        placeholder={placeholder}
-        onChange={handleChange}
-      />
+      <label className="form-field">
+        <span className="form-field__label">{label}</span>
+        <textarea
+          className="form-field__input"
+          ref={textAreaRef}
+          rows={4}
+          aria-label={label}
+          id={name}
+          name={name}
+          value={value}
+          onChange={handleChange}
+          placeholder={placeholder}
+        />
+      </label>
     </div>
   );
 };

@@ -1,11 +1,11 @@
 export const TAB_LIST = [
-  { id: "info", label: "Info" },
-  { id: "editor", label: "Editor" },
+  { id: "frontmatter", label: "FrontMatter" },
+  { id: "content", label: "Content" },
   { id: "export", label: "Export" },
 ] as const;
 
 export const DEFAULT_CONTENT = "# Title";
-export type TabListItem = "info" | "editor" | "export";
+export type TabListItem = "frontmatter" | "content" | "export";
 
 export const PICKER_OPTIONS = {
   types: [

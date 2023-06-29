@@ -1,66 +1,144 @@
-.container--dashboard {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+.dashboard {
+  --dashboard-info-bg: #cce9e5;
+  --dashboard-tabs-border-c: #cecece;
+  --dashboard-tabs-border-c--active: #1789fc;
+}
+
+[data-theme="dark"] {
+  .dashboard {
+    --dashboard-info-bg: #2b3130;
+  }
 }
 
 .dashboard {
+  width: 100%;
   margin-top: var(--margin-md);
 }
 
-.dashboard__controls {
+.dashboard__helper-text {
+  padding: 64px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard__options {
   display: flex;
   gap: 32px;
 }
 
-.dashboard__actions {
+.dashboard__option {
+  background: var(--dashboard-info-bg);
+  padding: 48px 32px;
+  display: flex;
+  flex-direction: column;
+
+  h2,
+  button {
+    margin-inline: auto;
+  }
+
+  button {
+    margin-top: var(--margin-lg);
+  }
+}
+
+.dashboard__header {
   align-items: center;
-  margin-block: var(--margin-md);
   display: flex;
   justify-content: space-between;
 }
 
-.dashboard__file-controls {
-  margin-block: var(--margin-lg);
+.dashboard__info-messages {
+  text-align: right;
 }
 
-.file {
+.dashboard__actions {
   display: flex;
-  flex-direction: column;
-  gap: 32px;
-  margin-top: var(--margin-md);
+  gap: 16px;
+}
 
-  &--on-export {
-    visibility: hidden;
+.dashboard__tabs {
+  margin-top: 32px;
+
+  ul {
+    display: flex;
+    gap: var(--margin-md);
+    list-style-type: none;
+    padding-inline: 0;
+    border-bottom: 1px solid var(--dashboard-tabs-border-c);
   }
 }
 
-.file > * {
-  flex: 1;
-  max-height: 1000px;
-  overflow-y: auto;
+.dashboard__tab button {
+  appearance: none;
+  outline: none;
+  border: none;
+  background: transparent;
+  color: var(--main-heading-c);
+  cursor: pointer;
+  padding: 8px;
 }
 
-.file__editor {
-  textarea {
-    max-width: 100%;
+.dashboard__tab {
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--transition);
+
+  &--is-active {
+    border-bottom-color: var(--dashboard-tabs-border-c--active);
+  }
+}
+
+.dashboard__file {
+  margin-top: 32px;
+  display: flex;
+  gap: 64px;
+
+  > * {
+    flex: 1;
+  }
+
+  div:nth-child(2) {
+    h2 {
+      margin-top: 0;
+    }
+  }
+}
+
+.dashboard__info-panel {
+  background: var(--dashboard-info-bg);
+  padding: 16px 32px;
+  border-radius: var(--border-radius);
+}
+
+.dashboard__definitions {
+  margin-top: var(--margin-md);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  dt {
+    margin-top: var(--margin-lg);
+    font-size: var(--text--lg);
+    font-weight: bold;
+  }
+
+  dd {
+    margin-top: var(--margin-sm);
   }
 }
 
 .file__export {
   background: var(--box-bg);
-  border: 1px solid var(--border-c);
+  border: 2px solid #acacac;
   border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow--md);
   padding: var(--margin-md) 32px;
+  margin-top: 24px;
+  font-size: 18px;
 }
 
 .file__pdf-export {
   color: var(--main-text-c);
-  display: flex;
-  justify-content: center;
-  font-size: var(--text--md);
-  letter-spacing: 0.2px;
 
   h1 {
     text-align: center;
@@ -69,7 +147,7 @@
   .file__pdf-export-window {
     align-items: center;
     flex: 1;
-    max-width: min(100% - 3rem, 90ch);
+    padding: 32px;
 
     input,
     textarea {
@@ -130,7 +208,7 @@
 
     ol li:before {
       color: var(--primary-c);
-      counter-increment: list;
+      counter-incement: list;
       content: counters(list, ".") ". ";
       font-weight: bold;
     }
@@ -169,36 +247,56 @@
     h4,
     h5,
     h6 {
-      margin: 3rem 0 1.38rem;
-      font-weight: bold;
-      line-height: 1.3;
+      margin: 0;
       color: inherit;
+      line-height: 1em;
       text-wrap: balance; // scss-lint:disable unknownProperties
+    }
+
+    * + h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin-top: 1.3em;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
+      & + p {
+        margin-top: 0.8em;
+      }
     }
 
     h1 {
       margin-top: 0;
-      font-size: var(--text--4xl);
+      font-size: 3em;
     }
 
     h2 {
-      font-size: var(--text--3xl);
+      font-size: 2.532em;
     }
 
     h3 {
-      font-size: var(--text--2xl);
+      font-size: 1.8em;
     }
 
     h4 {
-      font-size: var(--text--xl);
+      font-size: 1.52em;
     }
 
     h5 {
-      font-size: var(--text--lg);
+      font-size: 1.3em;
     }
 
     h6 {
-      font-size: var(--text--md);
+      font-size: 1.125em;
     }
   }
 }

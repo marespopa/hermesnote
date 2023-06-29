@@ -1,32 +1,20 @@
-dl {
-  border: solid var(--border-c);
-  border-width: 1px 1px 0 0;
-  display: flex;
-  flex-flow: column wrap;
-  margin: 0;
-}
-
-dt {
-  flex-basis: 20%;
-  padding: 0.125rem 0.25rem;
-  background: var(--primary-shade-c);
-  text-align: left;
-}
-
-dd {
-  flex-basis: 70%;
-  flex-grow: 1;
-  margin: 0;
-  padding: 0.125rem 0.25rem;
-  border-bottom: 1px solid var(--border-c);
-}
-
-@media only screen and (min-width: 768px) {
-  dl {
-    flex-flow: row wrap;
+ul,
+ol {
+  ::marker {
+    color: var(--marker-c);
+    font-weight: bold;
   }
+}
 
-  dt {
-    text-align: right;
-  }
+ul {
+  list-style: inside square;
+}
+
+ol {
+  list-style: inside decimal;
+}
+
+li {
+  font-size: var(--text--md);
+  line-height: 1.5rem;
 }

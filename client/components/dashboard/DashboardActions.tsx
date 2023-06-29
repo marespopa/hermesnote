@@ -33,15 +33,14 @@ const DashboardActions = ({
             handleClick={handleCreateFile}
           />
 
-          <Button
-            variant="primary"
-            handleClick={() => handleExportToMD(fileNameEdited || "File.md")}
-            label={"Save as"}
-          />
+          {fileNameEdited && (
+            <Button
+              variant="primary"
+              handleClick={() => handleExportToMD(fileNameEdited || "File.md")}
+              label={"Save as"}
+            />
+          )}
         </div>
-        {hasUnsavedChanges && (
-          <span className="small">You have unsaved changes.</span>
-        )}
       </div>
     </>
   );

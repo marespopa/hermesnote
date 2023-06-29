@@ -15,14 +15,15 @@ $primary-c--light: #cce9e5;
   --white-c: #fff;
   --box-bg: #fff;
   --primary-shade-c: #ebf6ff;
-  --main-bg-c: #fdfdfd;
+  --main-bg-c: #f9f9f9;
   --main-text-c: #1e1e1e;
   --main-heading-c: #0f0f0f;
-  --input-bg: #fff;
+  --main-subheading-c: #1e1e1e;
 
   --marker-c: #{$primary-c};
 
-  --link-c: #0b3948;
+  --helper-text: #7b7b7b;
+  --link-c: #3f95b1;
   --border-c: #ebf5ff;
 
   /* Header */
@@ -78,13 +79,12 @@ $primary-c--light: #cce9e5;
   --primary-shade-c: #191919;
   --main-bg-c: #1e1e1e;
   --main-text-c: #eeeeee;
-  --main-heading-c: #fefefe;
+  --main-heading-c: #fff;
+  --main-subheading-c: #fefefe;
 
   --marker-c: #fff;
   --link-c: #4fbee3;
   --border-c: #2e2e2e;
-  --input-bg: #383838;
-  --input-border-c: #1f1f1f;
 
   /* Header */
   --header-bg: #151515;

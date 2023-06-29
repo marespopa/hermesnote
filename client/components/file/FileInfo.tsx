@@ -19,7 +19,7 @@ const FileInfo = ({
   handleMetadataChange,
 }: Props) => {
   return (
-    <div>
+    <form>
       <Input
         name={"filename"}
         label="File Name"
@@ -45,7 +45,7 @@ const FileInfo = ({
         handleChange={handleMetadataChange}
         helperText="Tags should be delimited by comma, for eg. tag1, tag2"
       />
-    </div>
+    </form>
   );
 };
 

@@ -45,3 +45,19 @@ main {
     margin-bottom: 64px;
   }
 }
+
+.mt-sm {
+  margin-top: var(--margin-sm);
+}
+
+.mt-md {
+  margin-top: var(--margin-md);
+}
+
+.mt-lg {
+  margin-top: var(--margin-lg);
+}
+
+.mt-xl {
+  margin-top: var(--margin-xl);
+}
