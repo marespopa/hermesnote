@@ -19,10 +19,7 @@ const ThemeSwitcher = () => {
   }
 
   return (
-    <label
-      className="flex bg-blue-300 dark:bg-slate-700 w-8 h-8 align-middle justify-center cursor-pointer rounded-lg
-    transition-background ease-in duration-300"
-    >
+    <label className="flex bg-blue-300 dark:bg-slate-700 w-8 h-8 align-middle justify-center cursor-pointer rounded-lg">
       <input
         type="checkbox"
         className="hidden"
