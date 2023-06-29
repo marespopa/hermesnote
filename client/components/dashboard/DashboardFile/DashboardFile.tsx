@@ -75,7 +75,6 @@ const DashboardFile = ({
       {renderTabs()}
       {selectedTab === "frontmatter" && renderFrontMatterEditor()}
       {selectedTab === "content" && renderContentEditor()}
-      {selectedTab === "export" && renderExportPane()}
     </div>
   );
 
@@ -203,18 +202,6 @@ const DashboardFile = ({
           pdfAreaName={pdfAreaName}
         />
       </div>
-    );
-  }
-
-  function renderExportPane() {
-    return (
-      <>
-        <FilePreviewPane
-          isExporting={isExporting}
-          contentEdited={contentEdited}
-          pdfAreaName={pdfAreaName}
-        />
-      </>
     );
   }
 };
