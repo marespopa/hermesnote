@@ -4,9 +4,9 @@ type Props = {};
 
 export default function LandingPage({}: Props) {
   return (
-    <main className="py-4">
+    <main data-testid="landing-page" className="py-4">
       <article className="prose dark:prose-invert">
-        <h1 className="text-5xl leading-tight">
+        <h1 className="text-5xl mt-8 leading-tight">
           Effortlessly Create, Edit, and Export Markdown Files
         </h1>
         <p className="text-lg">
