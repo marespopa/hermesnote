@@ -14,6 +14,9 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
     },
+    animation: {
+      "pop-short": "pulse 300ms ease-in",
+    },
   },
   plugins: [],
 };

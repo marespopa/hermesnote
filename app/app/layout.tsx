@@ -1,7 +1,7 @@
-import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { Montserrat } from "next/font/google";
 import CustomProviders from "@/app/components/CustomProviders";
+import Header from "./components/Header";
 
 const mainFont = Montserrat({ subsets: ["latin"] });
 
@@ -20,10 +20,12 @@ export default function RootLayout({
       <body className={mainFont.className}>
         <CustomProviders>
           <div className="min-h-screen flex flex-col">
-            <header className="bg-red-50">Header</header>
+            <Header />
 
             <div className="flex-1 flex flex-col sm:flex-row">
-              <main className="flex-1 bg-indigo-100">{children}</main>
+              <div className="container max-w-screen-xl mx-auto">
+                {children}
+              </div>
             </div>
 
             <footer className="bg-gray-700">Footer</footer>

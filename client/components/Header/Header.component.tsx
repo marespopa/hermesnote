@@ -21,9 +21,9 @@ export default function Header() {
 
   return (
     <header className="header">
-      <div className="container container--from-header">
-        <Link className="logo" href={"/"}>
-          <Image priority src={logo} alt="Hermes Notes" width={164} />
+      <div className="container max-w-screen-xl">
+        <Link href={"/"}>
+          <Image priority src={logo} alt="Hermes Notes" height={128} />
         </Link>
 
         <nav className="header__nav">
