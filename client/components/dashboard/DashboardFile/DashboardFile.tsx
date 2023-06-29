@@ -214,13 +214,6 @@ const DashboardFile = ({
           contentEdited={contentEdited}
           pdfAreaName={pdfAreaName}
         />
-        <div className="mt-md">
-          <Button
-            variant="default"
-            label="Export to PDF"
-            handleClick={handleExportToPDF}
-          />
-        </div>
       </>
     );
   }

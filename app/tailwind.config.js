@@ -18,5 +18,5 @@ module.exports = {
       "pop-short": "pulse 300ms ease-in",
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
 };
