@@ -4,9 +4,9 @@ import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 describe("Header", () => {
-  it("Should render the Header", () => {
+  it("should render the component", () => {
     const { getByTestId } = render(<Header />);
-    const element = getByTestId("global-header");
+    const element = getByTestId("GlobalHeader");
 
     expect(element).toBeInTheDocument();
   });

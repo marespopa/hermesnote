@@ -25,7 +25,10 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-white dark:bg-slate-900 text-gray-90 dark:text-white border-b-2 border-b-gray-100 dark:border-b-slate-800 py-4">
+    <header
+      data-testid="GlobalHeader"
+      className="bg-white dark:bg-slate-900 text-gray-90 dark:text-white border-b-2 border-b-gray-100 dark:border-b-slate-800 py-4"
+    >
       <div className="container max-w-screen-xl mx-auto flex justify-between">
         <Link
           className="hover:scale-110 focus:scale-110 transition-transform ease-in"
