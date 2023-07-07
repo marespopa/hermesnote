@@ -5,7 +5,10 @@ import Motto from "./subcomponents/Motto";
 
 export default function LandingPage() {
   return (
-    <main data-testid="landing-page" className="py-4">
+    <main
+      data-testid="landing-page"
+      className="py-4 bg-white dark:bg-slate-800"
+    >
       <Hero />
       <Features />
       <Motto />

@@ -1,38 +1,39 @@
-import Layout from "@/components/layout";
+import React from "react";
+import { containerStyle } from "../constants/styles";
 
-export default function DocumentationPage() {
+export default function Prices() {
   const code = {
     headers: `# Heading 1
-              ## Heading 2
-              ### Heading 3 `,
+                  ## Heading 2
+                  ### Heading 3 `,
     emphasis: `**Bold Text**
-              *Italic Text*
-              ~~Strikethrough Text~~`,
+                  *Italic Text*
+                  ~~Strikethrough Text~~`,
     lists: {
       unordered: `- Item 1
-                  - Item 2
-                  - Item 3`,
+                      - Item 2
+                      - Item 3`,
       ordered: `1. Item 1
-              2. Item 2
-              3. Item 3`,
+                  2. Item 2
+                  3. Item 3`,
     },
     links: `[Visit Hermes Notes](https://hermesmd.netlify.app/)`,
     images: `![Alt Text](Image URL)`,
     codeBlocks: `~~~
-              console.log("Hello, world!")
-              ~~~`,
+                  console.log("Hello, world!")
+                  ~~~`,
     tables: `| Header 1 | Header 2 |
-            | -------- | -------- |
-            | Cell 1   | Cell 2   |
-            | Cell 3   | Cell 4   |`,
+                | -------- | -------- |
+                | Cell 1   | Cell 2   |
+                | Cell 3   | Cell 4   |`,
   } as const;
 
   return (
-    <Layout>
-      <main>
-        <div className="container container--text-only documentation">
+    <main className="py-4 bg-white dark:bg-slate-800">
+      <div className={`${containerStyle}`}>
+        <div className="prose dark:prose-invert">
           <section>
-            <h1 className="mt-xl">Documentation</h1>
+            <h1>Documentation</h1>
             <p>
               Welcome to the <strong>Hermes Notes</strong> Markdown Syntax
               Guide. This documentation will provide you with a comprehensive
@@ -43,8 +44,8 @@ export default function DocumentationPage() {
               format text and add elements such as headers, lists, links, and
               more.
             </p>
-            <h3 className="mt-lg">Table of Contents</h3>
-            <ol className="mt-md">
+            <h3>Table of Contents</h3>
+            <ol>
               <li>
                 <a href="#headers">Headers</a>
               </li>
@@ -77,7 +78,7 @@ export default function DocumentationPage() {
               followed by a space. The number of hash symbols determines the
               header level:
             </p>
-            <code className="mt-sm">{code.headers}</code>
+            <code>{code.headers}</code>
           </section>
 
           <section id="emphasis">
@@ -100,7 +101,7 @@ export default function DocumentationPage() {
                 tildes (~~).
               </li>
             </ul>
-            <code className="mt-sm">{code.emphasis}</code>
+            <code>{code.emphasis}</code>
           </section>
 
           <section id="lists">
@@ -110,12 +111,12 @@ export default function DocumentationPage() {
               To create an unordered list, use hyphens (-), plus signs (+), or
               asterisks (*) followed by a space:
             </p>
-            <code className="mt-sm">{code.lists.unordered}</code>
+            <code>{code.lists.unordered}</code>
             <p className="mt-md">
               To create an ordered list, use numbers followed by periods (.) and
               a space:
             </p>
-            <code className="mt-sm">{code.lists.ordered}</code>
+            <code>{code.lists.ordered}</code>
           </section>
 
           <section id="links">
@@ -124,7 +125,7 @@ export default function DocumentationPage() {
               You can add hyperlinks to your Markdown files using the following
               syntax:
             </p>
-            <code className="mt-sm">{code.links}</code>
+            <code>{code.links}</code>
           </section>
 
           <section id="images">
@@ -133,7 +134,7 @@ export default function DocumentationPage() {
               To insert images into your Markdown files, use the following
               syntax:
             </p>
-            <code className="mt-sm">{code.images}</code>
+            <code>{code.images}</code>
           </section>
 
           <section id="code-blocks">
@@ -143,7 +144,7 @@ export default function DocumentationPage() {
               enclose the code:
             </p>
             <p>For code blocks, you can use triple tilde character (~):</p>
-            <code className="mt-sm">{code.codeBlocks}</code>
+            <code>{code.codeBlocks}</code>
           </section>
 
           <section id="tables">
@@ -152,7 +153,7 @@ export default function DocumentationPage() {
               To create tables, use hyphens (-) to separate the header row and
               pipes (|) to separate the columns:
             </p>
-            <code className="mt-sm">{code.tables}</code>
+            <code>{code.tables}</code>
           </section>
 
           <section>
@@ -164,7 +165,7 @@ export default function DocumentationPage() {
             </p>
           </section>
         </div>
-      </main>
-    </Layout>
+      </div>
+    </main>
   );
 }
