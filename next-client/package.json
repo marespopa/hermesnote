@@ -20,6 +20,7 @@
     "autoprefixer": "10.4.14",
     "eslint": "8.43.0",
     "eslint-config-next": "13.4.7",
+    "gray-matter": "^4.0.3",
     "jest": "^29.5.0",
     "jotai": "^2.2.2",
     "next": "13.4.7",

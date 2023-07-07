@@ -8,17 +8,24 @@ import {
 import Button from "@/app/components/Button";
 import MarkdownExport from "@/app/services/markdown-export";
 import { useAtom } from "jotai";
+import { useRouter } from "next/navigation";
 
 export default function EditorHeader() {
   const [hasChanges] = useAtom(atom_hasChanges);
   const [content] = useAtom(atom_contentEdited);
   const [frontMatter] = useAtom(atom_frontMatter);
+  const router = useRouter();
 
   return (
     <div className="mt-8 flex justify-between">
       <h1 className="text-5xl leading-tight">Edit File</h1>
       <div className="flex flex-col items-end">
         <div className="flex gap-4">
+          <Button
+            variant="default"
+            label="Back to Main"
+            handler={() => router.push("/app")}
+          />
           <Button variant="primary" label="Save As" handler={exportToMD} />
         </div>
         <span

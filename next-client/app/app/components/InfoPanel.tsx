@@ -6,8 +6,8 @@ type Props = {
   title: string;
   action: {
     label: string;
-    disabled: boolean;
     handler: () => void;
+    disabled?: boolean;
   };
 };
 

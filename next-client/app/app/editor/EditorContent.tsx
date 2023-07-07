@@ -9,7 +9,7 @@ import {
 } from "@/app/atoms/atoms";
 
 export default function EditorContent() {
-  const [content, setContent] = useAtom(atom_content);
+  const [content] = useAtom(atom_content);
   const [contentEdited, setContentEdited] = useAtom(atom_contentEdited);
   const [, setHasChanges] = useAtom(atom_hasChanges);
 
@@ -17,13 +17,6 @@ export default function EditorContent() {
     setHasChanges(content !== contentEdited);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [content, contentEdited]);
-
-  useEffect(() => {
-    const updatedContent = "# Title";
-
-    setContent(updatedContent);
-    setContentEdited(updatedContent);
-  }, [setContent, setContentEdited]);
 
   return (
     <div className="flex gap-4">
