@@ -1,9 +1,15 @@
+"use client";
+
 import Image from "next/image";
+import Button from "../../Button";
+import { useRouter } from "next/navigation";
 
 export default function Hero() {
+  const router = useRouter();
+
   return (
     <div className="container max-w-screen-xl mx-auto">
-      <section className="flex flex-wrap mt-4 sm:mt-8 md:mt-16">
+      <section className="flex flex-wrap mt-4 sm:mt-8 md:mt-16 items-center">
         <div className="w-full sm:w-1/2 prose dark:prose-invert">
           <h1 className="text-5xl mt-8 leading-tight">
             Effortlessly Create, Edit, and Export Markdown Files
@@ -17,6 +23,11 @@ export default function Hero() {
             experience when it comes to opening, saving, and exporting your
             Markdown files.
           </p>
+          <Button
+            variant="primary-large"
+            label="Start now for free"
+            handler={() => router.push("/app")}
+          ></Button>
         </div>
         <div className="w-full sm:w-1/2">
           <Image
