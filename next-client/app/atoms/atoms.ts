@@ -1,4 +1,6 @@
-import { atom } from "jotai";
+import { atom, createStore } from "jotai";
+
+export const contentStore = createStore();
 
 export const atom_content = atom("");
 export const atom_contentEdited = atom("");
