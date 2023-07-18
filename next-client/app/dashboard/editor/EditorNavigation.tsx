@@ -10,10 +10,10 @@ export default function EditorNavigation({ activeTab, handler }: Props) {
   return (
     <nav
       role="tablist"
-      className="border-b border-gray-300 flex gap-4 text-sm my-4"
+      className="border-b border-gray-300 dark:border-slate-700 flex gap-4 text-sm my-4"
     >
       <button
-        className={`${
+        className={`${tabStyle} ${
           activeTab === "frontmatter" && "border-b-2 border-blue-500"
         }`}
         onClick={() => handler("frontmatter")}
@@ -21,7 +21,9 @@ export default function EditorNavigation({ activeTab, handler }: Props) {
         FrontMatter
       </button>
       <button
-        className={`${activeTab === "content" && "border-b-2 border-blue-500"}`}
+        className={`${tabStyle} ${
+          activeTab === "content" && "border-b-2 border-blue-500"
+        }`}
         onClick={() => handler("content")}
       >
         Content
@@ -29,3 +31,5 @@ export default function EditorNavigation({ activeTab, handler }: Props) {
     </nav>
   );
 }
+
+const tabStyle = `-mb-[1px]`;
