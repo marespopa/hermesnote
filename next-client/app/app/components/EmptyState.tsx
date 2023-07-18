@@ -113,34 +113,57 @@ export default function EmptyState() {
   async function handleOpenFile() {
     const [fileHandle] = await window.showOpenFilePicker(PICKER_OPTIONS);
     const file = await fileHandle.getFile();
+
     setIsLoading(true);
-    await parseFile(file);
-    setIsLoading(false);
-    router.push("/app/editor");
+    parseFile(file)
+      .then(() => {
+        console.info("File has been loaded.");
+        router.push("/app/editor");
+      })
+      .catch((error) => {
+        console.error("File could not be read");
+        console.error(error);
+      })
+      .finally(() => setIsLoading(false));
   }
 
-  async function parseFile(file: File) {
-    if (!file) {
-      return;
-    }
+  function parseFile(file: File) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.result) {
-        const fileContent = String(reader.result);
-        const { data: frontMatter, content } = matter(fileContent);
+      reader.onload = async () => {
+        await loadFileData(reader, file.name);
+        resolve(reader.result);
+      };
 
+      reader.onerror = reject;
+      reader.readAsText(file);
+    });
+  }
+
+  async function loadFileData(reader: FileReader, fileName: string) {
+    const fileContent = String(reader.result);
+    const { data: frontMatter, content } = matter(fileContent);
+
+    let setterPromise = new Promise(function (resolve, reject) {
+      try {
         setFrontMatter({
-          fileName: file.name || "",
+          fileName: fileName || "",
           title: frontMatter?.title || "",
           description: frontMatter?.description || "",
           tags: frontMatter?.tags.join(","),
         });
         setContent(content);
         setContentEdited(content);
-      }
-    };
 
-    reader.readAsText(file);
+        console.info("File has been read.");
+        resolve("Data has been set");
+      } catch (error) {
+        console.error(error);
+        reject("Data could not be set");
+      }
+    });
+
+    return setterPromise;
   }
 }
