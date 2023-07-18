@@ -16,9 +16,7 @@ const CookieConsent = () => {
     setCookieConsentIsTrue(consentIsTrue);
   }, []);
 
-  const handleAccept = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
+  const handleAccept = () => {
     if (!cookieConsentIsTrue) {
       Cookies.set(USER_CONSENT_COOKIE_KEY, "true", {
         expires: USER_CONSENT_COOKIE_EXPIRE_DAYS,
@@ -51,7 +49,7 @@ const CookieConsent = () => {
         <div className="flex items-center justify-center md:justify-end">
           <Button
             variant="secondary"
-            handler={() => handleAccept}
+            handler={() => handleAccept()}
             label="Accept All"
           />
         </div>
