@@ -14,16 +14,14 @@ export default function EditorNavigation({ activeTab, handler }: Props) {
     >
       <button
         className={`${tabStyle} ${
-          activeTab === "frontmatter" && "border-b-2 border-blue-500"
+          activeTab === "frontmatter" && tabActiveStyle
         }`}
         onClick={() => handler("frontmatter")}
       >
         FrontMatter
       </button>
       <button
-        className={`${tabStyle} ${
-          activeTab === "content" && "border-b-2 border-blue-500"
-        }`}
+        className={`${tabStyle} ${activeTab === "content" && tabActiveStyle}`}
         onClick={() => handler("content")}
       >
         Content
@@ -33,3 +31,4 @@ export default function EditorNavigation({ activeTab, handler }: Props) {
 }
 
 const tabStyle = `-mb-[1px]`;
+const tabActiveStyle = `text-md border-b-2 border-blue-500`;

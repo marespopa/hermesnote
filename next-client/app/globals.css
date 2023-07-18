@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Fix jumpy page when scroll appear */
+html {
+  overflow-y: scroll;
+}
