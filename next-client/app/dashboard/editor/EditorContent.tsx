@@ -35,9 +35,11 @@ export default function EditorContent() {
           handleChange={(e) => setContentEdited(e.currentTarget.value)}
         />
       </div>
-      <div className="w-1/2 prose dark:prose-invert p-4 my-4 rounded-md bg-white dark:bg-slate-700">
+      <div className={previewStyles}>
         <ReactMarkdown>{contentEdited}</ReactMarkdown>
       </div>
     </div>
   );
 }
+
+const previewStyles = `w-1/2 prose dark:prose-li:marker:text-gray-300 dark:prose-invert p-4 my-4 rounded-md bg-white dark:bg-slate-700`;
