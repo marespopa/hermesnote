@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import EditorForm from "./EditorForm";
 import EditorHeader from "./EditorHeader";
 import EditorNavigation from "./EditorNavigation";

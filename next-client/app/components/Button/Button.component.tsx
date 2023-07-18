@@ -11,7 +11,10 @@ type Props = {
 export default function Button({ variant, label, handler, isDisabled }: Props) {
   return (
     <button
-      onClick={() => handler()}
+      onClick={(e) => {
+        e.preventDefault();
+        handler();
+      }}
       className={variantStyles(variant)}
       disabled={isDisabled}
     >
@@ -21,11 +24,13 @@ export default function Button({ variant, label, handler, isDisabled }: Props) {
 }
 
 const variantStyles = (variant: ButtonVariant) => {
-  const baseStyles = `rounded-md leading-tight px-6 py-3  text-white transition-colors ease-in disabled:bg-slate-50 disabled:text-slate-500`;
-  const primaryStyles = `${baseStyles} bg-blue-500 hover:bg-blue-600 focus:bg-blue-600`;
+  const baseStyles = `rounded-md leading-tight px-6 py-3  text-white transition-colors ease-in`;
+  const disabledStyles = ` disabled:opacity-50 disabled:pointer-events-none`;
+
+  const primaryStyles = `${baseStyles} bg-blue-500 hover:bg-blue-600 focus:bg-blue-600 ${disabledStyles}`;
   const defaultStyles = `${baseStyles} bg-gray-900 hover:bg-gray-800 focus:bg-gray-800
-                        dark:bg-slate-700 dark:hover:bg-slate-600 dark:focus:bg-slate-600`;
-  const secondaryStyles = `${baseStyles} bg-slate-800 hover:bg-slate-900 focus:bg-slate-900`;
+                        dark:bg-slate-700 dark:hover:bg-slate-600 dark:focus:bg-slate-600 ${disabledStyles}`;
+  const secondaryStyles = `${baseStyles} bg-slate-800 not:disabled:hover:bg-slate-900 focus:bg-slate-900 ${disabledStyles}`;
 
   switch (variant) {
     case "primary":

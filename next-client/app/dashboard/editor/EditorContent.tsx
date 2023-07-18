@@ -35,7 +35,7 @@ export default function EditorContent() {
           handleChange={(e) => setContentEdited(e.currentTarget.value)}
         />
       </div>
-      <div className={previewStyles}>
+      <div className={previewStyles} id={"pdfExport"}>
         <ReactMarkdown>{contentEdited}</ReactMarkdown>
       </div>
     </div>
