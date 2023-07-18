@@ -11,6 +11,7 @@ import {
 } from "@/app/atoms/atoms";
 import matter from "gray-matter";
 import Loading from "@/app/components/Loading/Loading";
+import DocumentationMessage from "../components/DocumentationMessage";
 
 type StatusResponse = {
   status: "error" | "success";
@@ -37,27 +38,21 @@ export default function EditorEmpty() {
   const [, setContentEdited] = useAtom(atom_contentEdited);
   const [isLoading, setIsLoading] = useState(false);
 
-  if (isLoading) {
-    return (
-      <Loading message={"Hang on tight. Your file is now being prepared..."} />
-    );
-  }
-
   return (
     <div>
-      <article className="my-16">
-        <h2 className="text-2xl leading-tight">Choose Your Path:</h2>
-        <h1 className="text-5xl leading-tight">
-          Editing Options in Hermes Notes
-        </h1>
-        <p className="w-1/2 my-8 leading-loose">
-          Discover the flexibility of Hermes Notes with two powerful options at
-          your fingertips. Open Existing Markdown File and Start from Scratch
-          offer effortless editing and creation experiences. Edit, save, export,
-          and update frontmatter for existing files, or begin fresh with a clean
-          slate.
-        </p>
-      </article>
+      {renderHeading()}
+      {!isLoading && renderActions()}
+      {!isLoading && <DocumentationMessage />}
+      {isLoading && (
+        <Loading
+          message={"Hang on tight. Your file is now being prepared..."}
+        />
+      )}
+    </div>
+  );
+
+  function renderActions() {
+    return (
       <section className="flex gap-8">
         <div className="flex-1 w-1/2">
           <InfoPanel
@@ -84,8 +79,26 @@ export default function EditorEmpty() {
           />
         </div>
       </section>
-    </div>
-  );
+    );
+  }
+
+  function renderHeading() {
+    return (
+      <article className="my-16">
+        <h2 className="text-2xl leading-tight">Choose Your Path:</h2>
+        <h1 className="text-5xl leading-tight">
+          Editing Options in Hermes Notes
+        </h1>
+        <p className="w-1/2 my-8 leading-loose">
+          Discover the flexibility of Hermes Notes with two powerful options at
+          your fingertips. Open Existing Markdown File and Start from Scratch
+          offer effortless editing and creation experiences. Edit, save, export,
+          and update frontmatter for existing files, or begin fresh with a clean
+          slate.
+        </p>
+      </article>
+    );
+  }
 
   function handleCreateFile() {
     setIsLoading(true);

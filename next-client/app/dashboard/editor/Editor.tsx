@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditorForm from "./EditorForm";
 import EditorHeader from "./EditorHeader";
 import EditorNavigation from "./EditorNavigation";
 import EditorContent from "./EditorContent";
-import Loading from "@/app/components/Loading/Loading";
 
 export type EditorTabs = "frontmatter" | "content";
 
@@ -13,7 +12,7 @@ export default function Editor() {
   const [tab, setTab] = useState<EditorTabs>("frontmatter");
 
   return (
-    <>
+    <div className="mb-8">
       <EditorHeader />
       <EditorNavigation
         activeTab={tab}
@@ -21,6 +20,6 @@ export default function Editor() {
       />
       {tab === "frontmatter" && <EditorForm />}
       {tab === "content" && <EditorContent />}
-    </>
+    </div>
   );
 }
