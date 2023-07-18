@@ -11,7 +11,7 @@ export default function NavigationLinks({}: Props) {
           <NavigationLink label="Home" href="/" />
         </li>
         <li>
-          <NavigationLink label="Docs" href="/documentation" />
+          <NavigationLink label="Documentation" href="/documentation" />
         </li>
         <li>
           <NavigationLink label="Pricing" href="/pricing" />

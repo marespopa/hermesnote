@@ -11,6 +11,11 @@ import {
 } from "@/app/atoms/atoms";
 import matter from "gray-matter";
 
+type StatusResponse = {
+  status: "error" | "success";
+  message: string;
+};
+
 export const PICKER_OPTIONS = {
   types: [
     {
@@ -116,24 +121,23 @@ export default function EmptyState() {
 
     setIsLoading(true);
     parseFile(file)
-      .then(() => {
-        console.info("File has been loaded.");
+      .then((data) => {
+        console.info(data.message);
         router.push("/app/editor");
       })
       .catch((error) => {
-        console.error("File could not be read");
         console.error(error);
       })
       .finally(() => setIsLoading(false));
   }
 
-  function parseFile(file: File) {
+  function parseFile(file: File): Promise<StatusResponse> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
 
       reader.onload = async () => {
-        await loadFileData(reader, file.name);
-        resolve(reader.result);
+        const result = await loadFileData(reader, file.name);
+        resolve(result);
       };
 
       reader.onerror = reject;
@@ -141,11 +145,11 @@ export default function EmptyState() {
     });
   }
 
-  async function loadFileData(reader: FileReader, fileName: string) {
+  function loadFileData(reader: FileReader, fileName: string) {
     const fileContent = String(reader.result);
     const { data: frontMatter, content } = matter(fileContent);
 
-    let setterPromise = new Promise(function (resolve, reject) {
+    let setterPromise = new Promise<StatusResponse>(function (resolve, reject) {
       try {
         setFrontMatter({
           fileName: fileName || "",
@@ -156,11 +160,15 @@ export default function EmptyState() {
         setContent(content);
         setContentEdited(content);
 
-        console.info("File has been read.");
-        resolve("Data has been set");
+        resolve({
+          status: "error",
+          message: "File has been loaded successfully",
+        });
       } catch (error) {
-        console.error(error);
-        reject("Data could not be set");
+        reject({
+          status: "error",
+          message: error,
+        });
       }
     });
 
