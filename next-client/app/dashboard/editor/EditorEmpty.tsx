@@ -37,6 +37,12 @@ export default function EditorEmpty() {
   const [, setContentEdited] = useAtom(atom_contentEdited);
   const [isLoading, setIsLoading] = useState(false);
 
+  if (isLoading) {
+    return (
+      <Loading message={"Hang on tight. Your file is now being prepared..."} />
+    );
+  }
+
   return (
     <div>
       <article className="my-16">
@@ -52,35 +58,32 @@ export default function EditorEmpty() {
           slate.
         </p>
       </article>
-      {!isLoading && (
-        <section className="flex gap-8">
-          <div className="flex-1 w-1/2">
-            <InfoPanel
-              title="Start from scratch"
-              description={`Begin a new Markdown file in Hermes Notes. Focus on your content
+      <section className="flex gap-8">
+        <div className="flex-1 w-1/2">
+          <InfoPanel
+            title="Start from scratch"
+            description={`Begin a new Markdown file in Hermes Notes. Focus on your content
                 without distractions, format your document, and export it as a PDF
                 when ready.`}
-              action={{
-                label: "New File",
-                handler: () => handleCreateFile(),
-              }}
-            />
-          </div>
-          <div className="flex-1 w-1/2">
-            <InfoPanel
-              title="Import Existing Markdown File"
-              description={`Access and edit your pre-existing Markdown files
+            action={{
+              label: "New File",
+              handler: () => handleCreateFile(),
+            }}
+          />
+        </div>
+        <div className="flex-1 w-1/2">
+          <InfoPanel
+            title="Import Existing Markdown File"
+            description={`Access and edit your pre-existing Markdown files
                           within Hermes Notes. Update frontmatter, make changes,
                           and save or export the file as a PDF.`}
-              action={{
-                label: "Open File",
-                handler: () => handleOpenFile(),
-              }}
-            />
-          </div>
-        </section>
-      )}
-      {isLoading && <Loading message={"Your file is now being prepared..."} />}
+            action={{
+              label: "Open File",
+              handler: () => handleOpenFile(),
+            }}
+          />
+        </div>
+      </section>
     </div>
   );
 
