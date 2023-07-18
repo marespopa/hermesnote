@@ -11,7 +11,7 @@ export default function Motto() {
           professional, <strong>Hermes Notes</strong> is here to simplify your
           Markdown editing and PDF exporting needs.
         </h3>
-        <Link href={"/app"}>
+        <Link href={"/dashboard"}>
           <Image
             className="mx-auto my-8"
             src={"/assets/icons/markdown-icon.png"}

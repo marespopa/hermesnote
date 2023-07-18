@@ -1,11 +1,11 @@
 import { containerStyle } from "../constants/styles";
 import DocumentationMessage from "./components/DocumentationMessage";
-import EmptyState from "./components/EmptyState";
+import EditorEmpty from "./editor/EditorEmpty";
 
 export default function AppPage() {
   return (
     <div className={containerStyle}>
-      <EmptyState />
+      <EditorEmpty />
       <DocumentationMessage />
     </div>
   );

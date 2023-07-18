@@ -2,6 +2,7 @@
 
 import { atom_frontMatter } from "@/app/atoms/atoms";
 import Input from "@/app/components/Input";
+import Loading from "@/app/components/Loading/Loading";
 import Textarea from "@/app/components/Textarea";
 import { useAtom } from "jotai";
 import { FormEvent, useEffect, useState } from "react";
@@ -23,7 +24,7 @@ export default function EditorForm() {
   };
 
   if (!isMounted) {
-    return "Loading...";
+    return <Loading />;
   }
 
   return (

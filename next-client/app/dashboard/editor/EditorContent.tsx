@@ -7,6 +7,7 @@ import {
   atom_contentEdited,
   atom_hasChanges,
 } from "@/app/atoms/atoms";
+import Loading from "@/app/components/Loading/Loading";
 
 export default function EditorContent() {
   const [content] = useAtom(atom_content);
@@ -22,7 +23,7 @@ export default function EditorContent() {
   useEffect(() => setIsMounted(true), []);
 
   if (!isMounted) {
-    return "Loading...";
+    return <Loading />;
   }
 
   return (

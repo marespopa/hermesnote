@@ -24,7 +24,7 @@ export default function EditorHeader() {
           <Button
             variant="default"
             label="Back to Main"
-            handler={() => router.push("/app")}
+            handler={() => router.push("/dashboard")}
           />
           <Button variant="primary" label="Save As" handler={exportToMD} />
         </div>

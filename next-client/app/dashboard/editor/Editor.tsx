@@ -5,6 +5,7 @@ import EditorForm from "./EditorForm";
 import EditorHeader from "./EditorHeader";
 import EditorNavigation from "./EditorNavigation";
 import EditorContent from "./EditorContent";
+import Loading from "@/app/components/Loading/Loading";
 
 export type EditorTabs = "frontmatter" | "content";
 
