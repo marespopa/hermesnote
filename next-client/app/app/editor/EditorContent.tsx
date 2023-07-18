@@ -12,11 +12,18 @@ export default function EditorContent() {
   const [content] = useAtom(atom_content);
   const [contentEdited, setContentEdited] = useAtom(atom_contentEdited);
   const [, setHasChanges] = useAtom(atom_hasChanges);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setHasChanges(content !== contentEdited);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [content, contentEdited]);
+
+  useEffect(() => setIsMounted(true), []);
+
+  if (!isMounted) {
+    return "Loading...";
+  }
 
   return (
     <div className="flex gap-4">

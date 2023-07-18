@@ -4,10 +4,13 @@ import { atom_frontMatter } from "@/app/atoms/atoms";
 import Input from "@/app/components/Input";
 import Textarea from "@/app/components/Textarea";
 import { useAtom } from "jotai";
-import { FormEvent } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 export default function EditorForm() {
   const [frontMatterData, setFrontMatterData] = useAtom(atom_frontMatter);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => setIsMounted(true), []);
 
   const handleChange = (e: FormEvent<any>, field: string) => {
     const element = e.currentTarget as HTMLInputElement;
@@ -18,6 +21,10 @@ export default function EditorForm() {
       [field]: value,
     });
   };
+
+  if (!isMounted) {
+    return "Loading...";
+  }
 
   return (
     <form className="flex gap-16 mt-8">
