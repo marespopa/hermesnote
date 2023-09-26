@@ -1,16 +1,4 @@
-import { MouseEvent, useEffect, useRef } from "react";
-import Button from "../Button";
-
-const isClickInsideRectangle = (e: MouseEvent, element: HTMLElement) => {
-  const r = element.getBoundingClientRect();
-
-  return (
-    e.clientX > r.left &&
-    e.clientX < r.right &&
-    e.clientY > r.top &&
-    e.clientY < r.bottom
-  );
-};
+import { useEffect, useRef } from "react";
 
 type Props = {
   isOpened: boolean;
