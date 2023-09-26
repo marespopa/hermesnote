@@ -28,6 +28,7 @@
     "jotai": "^2.2.2",
     "js-cookie": "^3.0.5",
     "jspdf": "^2.5.1",
+    "jspdf-html2canvas": "^1.5.1",
     "next": "13.4.7",
     "next-themes": "^0.2.1",
     "postcss": "8.4.24",
