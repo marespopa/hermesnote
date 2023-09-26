@@ -1,6 +1,7 @@
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 import { FileMetadata } from "./../types/markdown";
 import { saveFile } from "./save-utils";
-import html2PDF from "jspdf-html2canvas";
 
 const MarkdownExport = {
   exportMarkdown,
@@ -48,19 +49,43 @@ function exportMarkdown(
   saveFile({ blob, fileName });
 }
 
-function exportToPDF(elementId: string, fileName: string) {
+function exportToPDF(elementId: string, fileName: string = "file.pdf") {
   const reportElement = document.querySelector(elementId) as HTMLElement;
 
   if (!reportElement) {
     return Promise.reject("Something went wrong");
   }
 
-  return html2PDF(reportElement, {
-    jsPDF: {
-      format: "a4",
-    },
-    imageType: "image/jpeg",
-    output: "./pdf/generate.pdf",
+  return html2canvas(reportElement).then((canvas: any) => {
+    const doc = formatPDF();
+    doc.save(fileName);
+
+    function formatPDF() {
+      const imgWidth = 208;
+      const pageHeight = 295;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+      heightLeft -= pageHeight;
+      const doc = new jsPDF("p", "mm");
+      doc.addImage(canvas, "PNG", 0, position, imgWidth, imgHeight, "", "FAST");
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        doc.addPage();
+        doc.addImage(
+          canvas,
+          "PNG",
+          0,
+          position,
+          imgWidth,
+          imgHeight,
+          "",
+          "FAST"
+        );
+        heightLeft -= pageHeight;
+      }
+      return doc;
+    }
   });
 }
 

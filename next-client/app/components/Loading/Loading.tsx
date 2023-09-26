@@ -8,7 +8,7 @@ type Props = {
 
 export default function Loading({ message = "Loading..." }: Props) {
   return (
-    <div className="text-center my-2">
+    <div className="text-center mt-2 mb-4">
       <div role="status" className="flex gap-2 items-center justify-center">
         <svg
           className="h-6 w-6 animate-[spin_800ms_linear_infinite]"
