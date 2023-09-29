@@ -31,17 +31,12 @@ export default function RootLayout({
           </div>
         </CustomProviders>
         <CookieConsent />
-
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-TDBZQNKQR5" />
-        <Script id="google-analytics">
-          {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
- 
-          gtag('config', 'G-TDBZQNKQR5');
-        `}
-        </Script>
+        <Script
+          defer
+          async
+          data-host="hermesmd.netlify.app"
+          src="https://liteanalytics.com/lite.js"
+        ></Script>
       </body>
     </html>
   );
