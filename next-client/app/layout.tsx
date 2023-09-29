@@ -4,6 +4,7 @@ import CustomProviders from "@/app/components/CustomProviders";
 import Header from "./components/Header";
 import Footer from "./components/Footer/Footer.component";
 import CookieConsent from "./components/CookieConsent";
+import Script from "next/script";
 
 const mainFont = Montserrat({ subsets: ["latin"] });
 
@@ -30,6 +31,17 @@ export default function RootLayout({
           </div>
         </CustomProviders>
         <CookieConsent />
+
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-TDBZQNKQR5" />
+        <Script id="google-analytics">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+ 
+          gtag('config', 'G-TDBZQNKQR5');
+        `}
+        </Script>
       </body>
     </html>
   );
