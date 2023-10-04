@@ -29,6 +29,7 @@ const TextareaResizable = ({
         value={value}
         onChange={handleChange}
         placeholder={placeholder}
+        spellCheck={true}
       />
     </div>
   );

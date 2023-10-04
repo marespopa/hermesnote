@@ -1,13 +1,13 @@
 import TextareaResizable from "@/app/components/TextareaResizable";
 import React, { useEffect, useState } from "react";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import {
   atom_content,
   atom_contentEdited,
   atom_hasChanges,
 } from "@/app/atoms/atoms";
 import Loading from "@/app/components/Loading/Loading";
+import EditorPreview from "./EditorPreview";
 
 export default function EditorContent() {
   const [content] = useAtom(atom_content);
@@ -35,11 +35,7 @@ export default function EditorContent() {
           handleChange={(e) => setContentEdited(e.currentTarget.value)}
         />
       </div>
-      <div className={previewStyles} id={"pdfExport"}>
-        <ReactMarkdown>{contentEdited}</ReactMarkdown>
-      </div>
+      <EditorPreview content={contentEdited} />
     </div>
   );
 }
-
-const previewStyles = `w-1/2 prose dark:prose-li:marker:text-gray-300 dark:prose-invert p-4 my-4 rounded-md bg-white dark:bg-slate-700`;
