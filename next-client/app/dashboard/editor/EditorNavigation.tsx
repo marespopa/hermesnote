@@ -13,18 +13,18 @@ export default function EditorNavigation({ activeTab, handler }: Props) {
       className="border-b border-gray-300 dark:border-slate-700 flex gap-4 text-sm my-4"
     >
       <button
+        className={`${tabStyle} ${activeTab === "content" && tabActiveStyle}`}
+        onClick={() => handler("content")}
+      >
+        Content
+      </button>
+      <button
         className={`${tabStyle} ${
           activeTab === "frontmatter" && tabActiveStyle
         }`}
         onClick={() => handler("frontmatter")}
       >
-        FrontMatter
-      </button>
-      <button
-        className={`${tabStyle} ${activeTab === "content" && tabActiveStyle}`}
-        onClick={() => handler("content")}
-      >
-        Content
+        Properties
       </button>
     </nav>
   );

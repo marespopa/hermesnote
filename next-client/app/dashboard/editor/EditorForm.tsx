@@ -30,7 +30,7 @@ export default function EditorForm() {
   return (
     <form className="flex gap-16 mt-8">
       <section className="flex-1">
-        <h3 className="text-2xl mt-4">FrontMatter Info</h3>
+        <h3 className="text-2xl mt-4">Document Properties</h3>
         <Input
           label="File Name"
           name="fileName"
@@ -58,25 +58,33 @@ export default function EditorForm() {
         />
       </section>
       <section className="flex-1 p-4 bg-sky-200 dark:bg-slate-900 leading-relaxed rounded-md">
-        <h2 className="text-2xl">What is FrontMatter?</h2>
+        <h2 className="text-2xl">What is Document Properties?</h2>
         <p className="mt-2">
-          Frontmatter is metadata that provides essential information about your
-          Markdown file. It sits at the beginning of your document and is
-          enclosed within triple dashes (---).
+          These fields, which will be saved as frontmatter, contain essential
+          information about your Markdown file. Frontmatter is a section that
+          sits at the beginning of your document, enclosed within triple dashes
+          (---).
         </p>
         <p className="mt-2">
-          Each field in the Frontmatter Form represents a specific piece of
-          information:
+          It typically includes metadata such as the document&apos;s title,
+          description, tags, and other relevant details. Frontmatter helps
+          organize and provide context to your Markdown content, making it more
+          structured and informative.
+        </p>
+        <p className="mt-2">
+          Each field in the Document Properties Form represents a specific piece
+          of information:
         </p>
         <h4 className="font-bold text-xl mt-4">Filename</h4>
         <p className="mt-2">
-          Enter a unique name for your Markdown file. This name helps you
-          identify and organize your files within Hermes Notes.
+          Enter a unique name for your Markdown file. This name will serve as
+          the name of the exported MD/PDF file.
         </p>
         <h4 className="font-bold text-xl mt-4">Title</h4>
         <p className="mt-2">
-          Enter a unique name for your Markdown file. This name helps you
-          identify and organize your files within Hermes Notes.
+          This field represents the title or name of your Markdown file as part
+          of the frontmatter. It&apos;s used to provide a meaningful name for
+          your document.
         </p>
         <h4 className="font-bold text-xl mt-4">Description</h4>
         <p className="mt-2">

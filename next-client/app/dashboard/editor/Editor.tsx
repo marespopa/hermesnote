@@ -6,10 +6,10 @@ import EditorHeader from "./EditorHeader";
 import EditorNavigation from "./EditorNavigation";
 import EditorContent from "./EditorContent";
 
-export type EditorTabs = "frontmatter" | "content";
+export type EditorTabs = "content" | "frontmatter";
 
 export default function Editor() {
-  const [tab, setTab] = useState<EditorTabs>("frontmatter");
+  const [tab, setTab] = useState<EditorTabs>("content");
 
   return (
     <div className="mb-8">
@@ -18,8 +18,8 @@ export default function Editor() {
         activeTab={tab}
         handler={(selectedTab: EditorTabs) => setTab(selectedTab)}
       />
-      {tab === "frontmatter" && <EditorForm />}
       {tab === "content" && <EditorContent />}
+      {tab === "frontmatter" && <EditorForm />}
     </div>
   );
 }
