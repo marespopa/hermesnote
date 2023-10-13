@@ -2,18 +2,18 @@
 
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import InfoPanel from "../components/InfoPanel";
 import { useAtom } from "jotai";
 import {
   atom_content,
   atom_contentEdited,
   atom_frontMatter,
 } from "@/app/atoms/atoms";
+import Loading from "@/app/components/Loading";
+import DocumentationMessage from "@/app/features/dashboard/components/DocumentationMessage";
+import InfoPanel from "@/app/features/dashboard/components/InfoPanel";
+import { MarkdownTemplate } from "@/app/templates";
 import matter from "gray-matter";
-import Loading from "@/app/components/Loading/Loading";
-import DocumentationMessage from "../components/DocumentationMessage";
 import toast from "react-hot-toast";
-import MarkdownTemplates from "@/app/templates";
 
 type StatusResponse = {
   status: "error" | "success";
@@ -39,6 +39,8 @@ export default function EditorEmpty() {
   const [, setContent] = useAtom(atom_content);
   const [, setContentEdited] = useAtom(atom_contentEdited);
   const [isLoading, setIsLoading] = useState(false);
+  const [isTemplateSelectModalVisible, setIsTemplateSelectModalVisible] =
+    useState(false);
   const [disabledButtonsState, setDisabledButtonsState] = useState({
     existing: false,
     new: false,
@@ -95,8 +97,8 @@ export default function EditorEmpty() {
             description={`When you start a new document in Hermes Notes, choose a Markdown template.
                           Customize it, add your content, and export it as a PDF when ready`}
             action={{
-              label: "Software Task Template",
-              handler: () => handleTemplateOpen(),
+              label: "Select a Template",
+              handler: () => handleSelectTemplate(),
               disabled: disabledButtonsState.template,
             }}
           />
@@ -203,8 +205,11 @@ export default function EditorEmpty() {
     return setterPromise;
   }
 
-  function handleTemplateOpen() {
-    const template = MarkdownTemplates.feature;
+  function handleSelectTemplate() {
+    setIsTemplateSelectModalVisible(true);
+  }
+
+  function loadFileFromTemplate(template: MarkdownTemplate) {
     setDisabledButtonsState({ ...disabledButtonsState, template: true });
     setIsLoading(true);
     setFrontMatter({

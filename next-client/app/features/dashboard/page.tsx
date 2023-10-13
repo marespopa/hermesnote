@@ -1,8 +1,8 @@
 "use client";
 
+import Loading from "@/app/components/Loading";
+import { containerStyle } from "@/app/constants/styles";
 import { useState, useEffect } from "react";
-import Loading from "../components/Loading";
-import { containerStyle } from "../constants/styles";
 import EditorEmpty from "./editor/EditorEmpty";
 
 export default function AppPage() {
