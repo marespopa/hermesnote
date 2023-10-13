@@ -15,11 +15,11 @@ export function useKey(key: string, cb: (event: KeyboardEvent) => void) {
         key === "ctrle" && event.key === "e" && event.ctrlKey;
 
       if (isSaveCommand) {
-        callback.current(event);
         cancelDefaultBrowserBehaviour(event);
+        callback.current(event);
       } else if (isExportCommand) {
-        callback.current(event);
         cancelDefaultBrowserBehaviour(event);
+        callback.current(event);
       }
     }
 

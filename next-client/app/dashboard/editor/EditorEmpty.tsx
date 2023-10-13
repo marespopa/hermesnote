@@ -13,6 +13,7 @@ import matter from "gray-matter";
 import Loading from "@/app/components/Loading/Loading";
 import DocumentationMessage from "../components/DocumentationMessage";
 import toast from "react-hot-toast";
+import MarkdownTemplates from "@/app/templates";
 
 type StatusResponse = {
   status: "error" | "success";
@@ -38,6 +39,11 @@ export default function EditorEmpty() {
   const [, setContent] = useAtom(atom_content);
   const [, setContentEdited] = useAtom(atom_contentEdited);
   const [isLoading, setIsLoading] = useState(false);
+  const [disabledButtonsState, setDisabledButtonsState] = useState({
+    existing: false,
+    new: false,
+    template: false,
+  });
 
   return (
     <div>
@@ -55,7 +61,7 @@ export default function EditorEmpty() {
   function renderActions() {
     return (
       <section className="flex gap-8">
-        <div className="flex-1 w-1/2">
+        <div className={panelStyle}>
           <InfoPanel
             title="Start from scratch"
             description={`Begin a new Markdown file in Hermes Notes. Focus on your content
@@ -64,10 +70,12 @@ export default function EditorEmpty() {
             action={{
               label: "New File",
               handler: () => handleCreateFile(),
+              disabled: disabledButtonsState.new,
             }}
           />
         </div>
-        <div className="flex-1 w-1/2">
+
+        <div className={panelStyle}>
           <InfoPanel
             title="Import Existing Markdown File"
             description={`Access and edit your pre-existing Markdown files
@@ -76,6 +84,20 @@ export default function EditorEmpty() {
             action={{
               label: "Open File",
               handler: () => handleOpenFile(),
+              disabled: disabledButtonsState.existing,
+            }}
+          />
+        </div>
+
+        <div className={panelStyle}>
+          <InfoPanel
+            title="Begin with a Markdown Template"
+            description={`When you start a new document in Hermes Notes, choose a Markdown template.
+                          Customize it, add your content, and export it as a PDF when ready`}
+            action={{
+              label: "Software Task Template",
+              handler: () => handleTemplateOpen(),
+              disabled: disabledButtonsState.template,
             }}
           />
         </div>
@@ -111,6 +133,7 @@ export default function EditorEmpty() {
     });
     setContent("# Title");
     setContentEdited("# Title");
+    setDisabledButtonsState({ ...disabledButtonsState, new: true });
     router.push("/dashboard/editor");
   }
 
@@ -118,7 +141,9 @@ export default function EditorEmpty() {
     const [fileHandle] = await window.showOpenFilePicker(PICKER_OPTIONS);
     const file = await fileHandle.getFile();
 
+    setDisabledButtonsState({ ...disabledButtonsState, existing: true });
     setIsLoading(true);
+
     parseFile(file)
       .then(() => {
         toast.success("File has been loaded");
@@ -128,7 +153,10 @@ export default function EditorEmpty() {
         toast.success("File could not be loaded");
         console.error(error);
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setDisabledButtonsState({ ...disabledButtonsState, existing: false });
+        setIsLoading(false);
+      });
   }
 
   function parseFile(file: File): Promise<StatusResponse> {
@@ -174,4 +202,22 @@ export default function EditorEmpty() {
 
     return setterPromise;
   }
+
+  function handleTemplateOpen() {
+    const template = MarkdownTemplates.feature;
+    setDisabledButtonsState({ ...disabledButtonsState, template: true });
+    setIsLoading(true);
+    setFrontMatter({
+      fileName: template.filename || "",
+      title: template.frontMatter?.title || "",
+      description: template.frontMatter?.description || "",
+      tags: template.frontMatter?.tags,
+    });
+    setContent(template.content);
+    setContentEdited(template.content);
+
+    router.push("/dashboard/editor");
+  }
 }
+
+const panelStyle = "flex-1 w-1/3";
