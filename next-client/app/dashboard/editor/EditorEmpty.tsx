@@ -9,11 +9,12 @@ import {
   atom_frontMatter,
 } from "@/app/atoms/atoms";
 import Loading from "@/app/components/Loading";
-import DocumentationMessage from "@/app/features/dashboard/components/DocumentationMessage";
-import InfoPanel from "@/app/features/dashboard/components/InfoPanel";
 import { MarkdownTemplate } from "@/app/templates";
 import matter from "gray-matter";
 import toast from "react-hot-toast";
+import TemplateSelectionModal from "../../templates/TemplateSelectionModal";
+import DocumentationMessage from "../components/DocumentationMessage";
+import InfoPanel from "../components/InfoPanel";
 
 type StatusResponse = {
   status: "error" | "success";
@@ -102,6 +103,12 @@ export default function EditorEmpty() {
               disabled: disabledButtonsState.template,
             }}
           />
+          {isTemplateSelectModalVisible && (
+            <TemplateSelectionModal
+              isOpen={isTemplateSelectModalVisible}
+              handleClose={() => setIsTemplateSelectModalVisible(false)}
+            ></TemplateSelectionModal>
+          )}
         </div>
       </section>
     );
