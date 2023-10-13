@@ -29,6 +29,7 @@ export default function EditorPreviewTrigger(props: Props) {
       <DialogModal
         isOpened={isPdfPreviewOpen}
         onClose={() => hidePdfPreviewModal()}
+        styles={`dark:bg-white dark:text-gray-700`}
       >
         <div className="h-full">
           <div className={previewContainerStyles} id="pdfReport">

@@ -1,5 +1,9 @@
-import { FrontMatterGeneric } from "../types/markdown";
-import FeatureTemplate from "./files/feature";
+import { FrontMatterGeneric } from "@/app/types/markdown";
+import FeatureTemplate from "./files/software-feature-task-template";
+import MonthlyBudgetTemplate from "./files/budget-monthly-template";
+import YearlyBudgetTemplate from "./files/budget-yearly-template";
+import ToDoListTemplate from "./files/todo-list-template";
+import ProjectManagementTemplate from "./files/project-management-template";
 
 export type MarkdownTemplate = {
   filename: string;
@@ -7,8 +11,12 @@ export type MarkdownTemplate = {
   content: string;
 };
 
-const MarkdownTemplateList = {
-  feature: FeatureTemplate,
-};
+const MarkdownTemplateList = [
+  ToDoListTemplate,
+  FeatureTemplate,
+  ProjectManagementTemplate,
+  MonthlyBudgetTemplate,
+  YearlyBudgetTemplate,
+];
 
 export default MarkdownTemplateList;

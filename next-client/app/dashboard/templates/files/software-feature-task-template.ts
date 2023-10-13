@@ -1,17 +1,12 @@
-import { FrontMatterGeneric } from "@/app/types/markdown";
 import { MarkdownTemplate } from "..";
 
 const FeatureTemplate: MarkdownTemplate = {
-  filename: "FeatureTemplate",
+  filename: "feature-template.md",
   frontMatter: {
     title: "Feature Development Checklist",
     description: `This checklist template is designed for software engineers and
                   developers to guide them through the professional feature development
-                  process. It provides a step-by-step checklist of essential tasks and
-                   to ensure a successful feature from inception to delivery.
-                   You can use it to track your progress, manage tasks, and stay
-                  during your software development projects. The template also includes
-                  an option for adding specific tasks and notes as needed.`,
+                  process.`,
     tags: "software engineering,checklist,guide,template",
   },
   content: `# Software Engineer Task Checklist

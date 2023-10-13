@@ -4,9 +4,10 @@ type Props = {
   isOpened: boolean;
   onClose: () => void;
   children: React.ReactNode;
+  styles?: string;
 };
 
-const DialogModal = ({ isOpened, onClose, children }: Props) => {
+const DialogModal = ({ isOpened, onClose, children, styles = "" }: Props) => {
   const ref = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -27,7 +28,7 @@ const DialogModal = ({ isOpened, onClose, children }: Props) => {
     >
       <dialog
         ref={ref}
-        className="h-full my-auto sm:h-4/5 p-4 text-gray-700 sm:p-0 w-full sm:w-2/3 bg-white rounded-md"
+        className={`h-full my-auto sm:h-4/5 p-4 text-gray-700 dark:text-white sm:p-0 w-full sm:w-2/3 bg-white dark:bg-slate-600 rounded-md ${styles}`}
         onCancel={onClose}
       >
         <div className="relative p-4">

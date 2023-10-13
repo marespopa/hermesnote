@@ -24,7 +24,7 @@ export default function EditorForm() {
   };
 
   if (!isMounted) {
-    return <Loading />;
+    return <Loading message="The template is now being read..." />;
   }
 
   return (

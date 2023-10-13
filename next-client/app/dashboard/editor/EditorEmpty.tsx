@@ -9,12 +9,11 @@ import {
   atom_frontMatter,
 } from "@/app/atoms/atoms";
 import Loading from "@/app/components/Loading";
-import { MarkdownTemplate } from "@/app/templates";
 import matter from "gray-matter";
 import toast from "react-hot-toast";
-import TemplateSelectionModal from "../../templates/TemplateSelectionModal";
-import DocumentationMessage from "../components/DocumentationMessage";
 import InfoPanel from "../components/InfoPanel";
+import DocumentationMessage from "../components/DocumentationMessage";
+import TemplateSelectionModal from "../templates/TemplateSelectionModal";
 
 type StatusResponse = {
   status: "error" | "success";
@@ -103,10 +102,17 @@ export default function EditorEmpty() {
               disabled: disabledButtonsState.template,
             }}
           />
+
           {isTemplateSelectModalVisible && (
             <TemplateSelectionModal
               isOpen={isTemplateSelectModalVisible}
-              handleClose={() => setIsTemplateSelectModalVisible(false)}
+              handleClose={() => {
+                setDisabledButtonsState({
+                  ...disabledButtonsState,
+                  template: false,
+                });
+                setIsTemplateSelectModalVisible(false);
+              }}
             ></TemplateSelectionModal>
           )}
         </div>
@@ -121,13 +127,15 @@ export default function EditorEmpty() {
         <h1 className="text-5xl leading-tight">
           Editing Options in Hermes Notes
         </h1>
-        <p className="w-1/2 my-8 leading-loose">
-          Discover the flexibility of Hermes Notes with two powerful options at
-          your fingertips. Open Existing Markdown File and Start from Scratch
-          offer effortless editing and creation experiences. Edit, save, export,
-          and update frontmatter for existing files, or begin fresh with a clean
-          slate.
-        </p>
+        {!isLoading && (
+          <p className="w-1/2 my-8 leading-loose">
+            Discover the flexibility of Hermes Notes with two powerful options
+            at your fingertips. Open Existing Markdown File and Start from
+            Scratch offer effortless editing and creation experiences. Edit,
+            save, export, and update frontmatter for existing files, or begin
+            fresh with a clean slate.
+          </p>
+        )}
       </article>
     );
   }
@@ -213,22 +221,8 @@ export default function EditorEmpty() {
   }
 
   function handleSelectTemplate() {
-    setIsTemplateSelectModalVisible(true);
-  }
-
-  function loadFileFromTemplate(template: MarkdownTemplate) {
     setDisabledButtonsState({ ...disabledButtonsState, template: true });
-    setIsLoading(true);
-    setFrontMatter({
-      fileName: template.filename || "",
-      title: template.frontMatter?.title || "",
-      description: template.frontMatter?.description || "",
-      tags: template.frontMatter?.tags,
-    });
-    setContent(template.content);
-    setContentEdited(template.content);
-
-    router.push("/dashboard/editor");
+    setIsTemplateSelectModalVisible(true);
   }
 }
 
