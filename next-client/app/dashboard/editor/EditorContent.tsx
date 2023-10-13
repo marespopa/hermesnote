@@ -4,13 +4,17 @@ import { useAtom } from "jotai";
 import {
   atom_content,
   atom_contentEdited,
+  atom_frontMatter,
   atom_hasChanges,
 } from "@/app/atoms/atoms";
 import Loading from "@/app/components/Loading/Loading";
 import EditorPreview from "./EditorPreview";
+import { useKey } from "@/app/hooks/use-key";
+import MarkdownExport from "@/app/services/markdown-export";
 
 export default function EditorContent() {
   const [content] = useAtom(atom_content);
+  const [frontMatter] = useAtom(atom_frontMatter);
   const [contentEdited, setContentEdited] = useAtom(atom_contentEdited);
   const [, setHasChanges] = useAtom(atom_hasChanges);
   const [isMounted, setIsMounted] = useState(false);
@@ -21,6 +25,9 @@ export default function EditorContent() {
   }, [content, contentEdited]);
 
   useEffect(() => setIsMounted(true), []);
+  useKey("ctrls", () =>
+    MarkdownExport.exportMarkdown(contentEdited, frontMatter)
+  );
 
   if (!isMounted) {
     return <Loading />;

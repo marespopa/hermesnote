@@ -12,6 +12,7 @@ import {
 import matter from "gray-matter";
 import Loading from "@/app/components/Loading/Loading";
 import DocumentationMessage from "../components/DocumentationMessage";
+import toast from "react-hot-toast";
 
 type StatusResponse = {
   status: "error" | "success";
@@ -119,11 +120,12 @@ export default function EditorEmpty() {
 
     setIsLoading(true);
     parseFile(file)
-      .then((data) => {
-        console.info(data.message);
+      .then(() => {
+        toast.success("File has been loaded");
         router.push("/dashboard/editor");
       })
       .catch((error) => {
+        toast.success("File could not be loaded");
         console.error(error);
       })
       .finally(() => setIsLoading(false));

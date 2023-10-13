@@ -35,13 +35,13 @@ function formatFrontMatter(metadata: FileMetadata) {
 
 function exportMarkdown(
   content: string | undefined,
-  frontMatter: FileMetadata,
-  fileName: string
+  frontMatter: FileMetadata
 ) {
   if (!content) {
     return;
   }
 
+  const fileName = frontMatter?.fileName || "file.md";
   const blob = new Blob([formatFrontMatter(frontMatter), content], {
     type: "text/markdown",
   });

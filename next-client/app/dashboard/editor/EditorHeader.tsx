@@ -45,6 +45,6 @@ export default function EditorHeader() {
   );
 
   function exportToMD() {
-    MarkdownExport.exportMarkdown(content, frontMatter, frontMatter.fileName);
+    MarkdownExport.exportMarkdown(content, frontMatter);
   }
 }

@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+
 export const saveFile = ({
   blob,
   fileName,
@@ -6,9 +8,21 @@ export const saveFile = ({
   fileName: string;
 }) => {
   if ("showSaveFilePicker" in window) {
-    return exportNativeFileSystem({ blob, fileName });
+    return exportNativeFileSystem({ blob, fileName })
+      .then(() => {
+        toast.success("File has been saved.");
+      })
+      .catch((err) => {
+        if (err?.name === "AbortError") {
+          toast("The save was cancelled", { icon: "📄" });
+
+          return;
+        }
+        toast.error("The file could not saved");
+      });
   }
 
+  toast.success("File has been saved.");
   return download({ blob, fileName });
 };
 

@@ -15,4 +15,5 @@ export type FileMetadata = {
   title: string;
   description: string;
   tags: string;
+  fileName?: string;
 };

@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer/Footer.component";
 import CookieConsent from "./components/CookieConsent";
 import Script from "next/script";
+import { Toaster } from "react-hot-toast";
 
 const mainFont = Montserrat({ subsets: ["latin"] });
 
@@ -21,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={mainFont.className}>
+        <Toaster position="top-center" reverseOrder={false} />
         <CustomProviders>
           <div className="min-h-screen flex flex-col bg-sky-50 dark:bg-slate-800">
             <Header />

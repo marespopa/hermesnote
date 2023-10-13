@@ -6,6 +6,8 @@ import ReactMarkdown from "react-markdown";
 import { useAtom } from "jotai";
 import { atom_contentEdited, atom_frontMatter } from "@/app/atoms/atoms";
 import MarkdownExport from "@/app/services/markdown-export";
+import toast from "react-hot-toast";
+import { useKey } from "@/app/hooks/use-key";
 
 type Props = {};
 
@@ -13,6 +15,8 @@ export default function EditorPreviewTrigger(props: Props) {
   const [isPdfPreviewOpen, setIsPdfPreviewOpen] = useState(false);
   const [contentEdited] = useAtom(atom_contentEdited);
   const [frontMatter] = useAtom(atom_frontMatter);
+
+  useKey("ctrle", () => showPdfPreviewModal());
 
   return (
     <>
@@ -48,8 +52,13 @@ export default function EditorPreviewTrigger(props: Props) {
     const reportName = frontMatter.fileName.replace(".md", ".pdf");
 
     MarkdownExport.exportToPDF("#pdfReport", reportName)
-      .then(() => console.info("File has been exported"))
-      .catch((error) => console.error(error));
+      .then(() => {
+        toast.success("File has been exported");
+      })
+      .catch((error) => {
+        toast.error("File could not be exported");
+        console.error(error);
+      });
   }
 
   function showPdfPreviewModal() {
