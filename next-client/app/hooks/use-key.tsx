@@ -9,9 +9,6 @@ export function useKey(key: string, cb: (event: KeyboardEvent) => void) {
 
   useEffect(() => {
     function handle(event: KeyboardEvent) {
-      event.preventDefault();
-      event.stopPropagation();
-
       const isSaveCommand =
         key === "ctrls" && event.key === "s" && event.ctrlKey;
       const isExportCommand =
@@ -19,12 +16,19 @@ export function useKey(key: string, cb: (event: KeyboardEvent) => void) {
 
       if (isSaveCommand) {
         callback.current(event);
+        cancelDefaultBrowserBehaviour(event);
       } else if (isExportCommand) {
         callback.current(event);
+        cancelDefaultBrowserBehaviour(event);
       }
     }
 
     document.addEventListener("keydown", handle);
     return () => document.removeEventListener("keydown", handle);
   }, [key]);
+
+  function cancelDefaultBrowserBehaviour(event: KeyboardEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
 }
