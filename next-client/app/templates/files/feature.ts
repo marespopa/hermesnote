@@ -14,69 +14,71 @@ const FeatureTemplate: MarkdownTemplate = {
                   an option for adding specific tasks and notes as needed.`,
     tags: "software engineering,checklist,guide,template",
   },
-  content: `
-  
-# Professional Feature Development Checklist
+  content: `# Software Engineer Task Checklist
+  **Steps for Successful Task Completion**
 
-Developing a software feature involves several steps to ensure it's completed professionally. Here's a checklist to help you take a feature from inception to delivery.
+  As a senior software engineer, following a structured approach is essential to ensure the successful completion of tasks.
 
-## Step 1: Requirement Analysis
+  - [ ] **Task Summary:**
+\`\`\`
+Provide a brief summary of the current task.
+\`\`\`
 
-- [ ] Understand the Requirements
-- [ ] Clarify Ambiguities
+  - [ ] **Requirement Analysis:** 
+\`\`\`
+Thoroughly understand the task requirements and clarify any ambiguities. 
+Ensure a comprehensive grasp of the task's goals and constraints.
+\`\`\`
 
-## Step 2: Design and Planning
+  - [ ] **Task Breakdown:** 
+\`\`\`
+Break the task into smaller, manageable sub-tasks or user stories. 
+This helps in estimating and planning.
+\`\`\`
 
-- [ ] Architectural Design
-- [ ] Task Breakdown
-- [ ] Planning
+  - [ ] **Design and Architecture:** 
 
-## Step 3: Implementation
+\`\`\`
+Create a high-level design or architectural plan. 
+Consider how the task fits into the overall system.
+\`\`\`
 
-- [ ] Follow Coding Standards
-- [ ] Write Unit Tests
-- [ ] Code Reviews
-- [ ] Use Version Control
+  - [ ] **Coding Standards:** 
+\`\`\`
+Follow coding standards and best practices applicable 
+to the project and programming language.
+\`\`\`
 
-## Step 4: Testing
+  - [ ] **Testing:** 
+\`\`\`
+Write unit tests for the code you're implementing. 
+Ensure robust code and thorough test coverage.
+\`\`\`
 
-- [ ] Perform Unit Testing
-- [ ] Conduct Integration Testing
-- [ ] Regression Testing
+  - [ ] **Code Reviews:** 
+\`\`\`
+Collaborate with peers for code reviews. 
+Address feedback and make necessary improvements.
+\`\`\`
 
-## Step 5: Quality Assurance
+  - [ ] ** Testing:** 
+\`\`\`
+Verify that the task integrates seamlessly with the existing system, 
+and solve any bugs that QA reports;
+\`\`\`
 
-- [ ] User Acceptance Testing (UAT)
-- [ ] Performance Testing
+  - [ ] **Documentation:** 
+\`\`\`
+Ensure comprehensive documentation, 
+including user guides and code documentation.
+\`\`\`
 
-## Step 6: Documentation
+  - [ ] **Deployment:** 
+\`\`\`
+Deploy the task to a staging environment for final testing.
+\`\`\`
 
-- [ ] Create User Documentation
-- [ ] Document Code
-
-## Step 7: Deployment
-
-- [ ] Deploy to Staging Environment
-- [ ] Deploy to Production
-
-## Step 8: Monitoring
-
-- [ ] Implement Monitoring Tools
-- [ ] Collect Feedback
-
-## Step 9: Post-Release Support
-
-- [ ] Address Bug Fixes
-- [ ] Plan Feature Improvements
-
-### Task-specific Notes
-
-- [ ] Task 1:
-- [ ] Task 2:
-- [ ] Task 3:
-
-By using this checklist, you can keep track of the steps involved in professional feature development and add specific tasks as needed.
-  `,
+ By following these steps, senior software engineers can ensure the successful completion of tasks, meeting project goals and delivering high-quality results.`,
 };
 
 export default FeatureTemplate;
