@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  atom_content,
   atom_contentEdited,
   atom_frontMatter,
   atom_hasChanges,
@@ -14,6 +15,7 @@ import EditorPreviewTrigger from "./EditorPreviewTrigger";
 export default function EditorHeader() {
   const [hasChanges] = useAtom(atom_hasChanges);
   const [content] = useAtom(atom_contentEdited);
+  const [, setFileContent] = useAtom(atom_content);
   const [frontMatter] = useAtom(atom_frontMatter);
 
   const router = useRouter();
@@ -46,5 +48,6 @@ export default function EditorHeader() {
 
   function exportToMD() {
     MarkdownExport.exportMarkdown(content, frontMatter);
+    setFileContent(content);
   }
 }
