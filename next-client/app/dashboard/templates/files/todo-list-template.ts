@@ -3,7 +3,7 @@ import { MarkdownTemplate } from "..";
 const ToDoListTemplate: MarkdownTemplate = {
   filename: "todo-list.md",
   frontMatter: {
-    title: "ToDo List Template",
+    title: "To Do List",
     description: `A simple checklist for tasks you need to complete.`,
     tags: "todo, list, productivity",
   },

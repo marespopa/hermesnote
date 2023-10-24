@@ -41,6 +41,18 @@ const TemplateSelectionModal = ({ isOpen, handleClose }: Props) => {
 
   return (
     <DialogModal isOpened={isOpen} onClose={handleClose}>
+      {isLoadingTemplate && <Loading />}
+      {!isLoadingTemplate && (
+        <>
+          {renderSearchBar()}
+          {renderTable()}
+        </>
+      )}
+    </DialogModal>
+  );
+
+  function renderSearchBar() {
+    return (
       <Input
         name="Search"
         value={searchTerm}
@@ -52,10 +64,8 @@ const TemplateSelectionModal = ({ isOpen, handleClose }: Props) => {
           setSearchTerm(value);
         }}
       />
-      {isLoadingTemplate && <Loading />}
-      {!isLoadingTemplate && renderTable()}
-    </DialogModal>
-  );
+    );
+  }
 
   function renderTable() {
     return (

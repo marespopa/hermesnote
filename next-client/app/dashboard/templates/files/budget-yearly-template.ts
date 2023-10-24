@@ -3,7 +3,7 @@ import { MarkdownTemplate } from "..";
 const YearlyBudgetTemplate: MarkdownTemplate = {
   filename: "yearly-budget-template.md",
   frontMatter: {
-    title: " Yearly Budget Template",
+    title: " Yearly Budget",
     description: `Use this template to make a plan for your yearly budget. Come back to it periodically to update and maintain a clear overview of your budget.`,
     tags: "budget,yearly budget,economy,expenses",
   },
