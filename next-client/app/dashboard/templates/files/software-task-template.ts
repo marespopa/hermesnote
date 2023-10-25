@@ -12,11 +12,11 @@ const SoftwareTaskTemplate: MarkdownTemplate = {
   },
   content: `
 *as of [2023/10/25]*
-# [Issue-3] Task Title
+# [Issue-1] Task Title
 
 ## Links
-- [Story](link here)
-- [Docs](link here)
+- [Story](linkHere)
+- [Docs](linkHere)
 
 ## Description
 Write details about the story implementation.
@@ -27,7 +27,7 @@ Write details about the story implementation.
 ### Progress
 - 2023/10/25
   - Implemented X feature.
-- 2023/10/25
+- 2023/10/26
   - Started working on Y component.
 
 ### Questions

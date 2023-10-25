@@ -65,37 +65,9 @@ export default function EditorEmpty() {
       <section className="flex gap-8">
         <div className={panelStyle}>
           <InfoPanel
-            title="Start from scratch"
-            description={`Begin a new Markdown file in Hermes Notes. Focus on your content
-                without distractions, format your document, and export it as a PDF
-                when ready.`}
-            action={{
-              label: "New File",
-              handler: () => handleCreateFile(),
-              disabled: disabledButtonsState.new,
-            }}
-          />
-        </div>
-
-        <div className={panelStyle}>
-          <InfoPanel
-            title="Import Existing Markdown File"
-            description={`Access and edit your pre-existing Markdown files
-                          within Hermes Notes. Update frontmatter, make changes,
-                          and save or export the file as a PDF.`}
-            action={{
-              label: "Open File",
-              handler: () => handleOpenFile(),
-              disabled: disabledButtonsState.existing,
-            }}
-          />
-        </div>
-
-        <div className={panelStyle}>
-          <InfoPanel
             title="Begin with a Markdown Template"
-            description={`When you start a new document in Hermes Notes, choose a Markdown template.
-                          Customize it, add your content, and export it as a PDF when ready`}
+            description={`Start by choosing a Markdown template.
+                          Customize it, add your content, and export it as a PDF when ready.`}
             action={{
               label: "Select a Template",
               handler: () => handleSelectTemplate(),
@@ -115,6 +87,34 @@ export default function EditorEmpty() {
               }}
             ></TemplateSelectionModal>
           )}
+        </div>
+
+        <div className={panelStyle}>
+          <InfoPanel
+            title="Import Existing Markdown File"
+            description={`Access and edit your pre-existing Markdown files
+                          within Hermes Notes. Update frontmatter, make changes,
+                          and save or export the file as a PDF.`}
+            action={{
+              label: "Open File",
+              handler: () => handleOpenFile(),
+              disabled: disabledButtonsState.existing,
+            }}
+          />
+        </div>
+
+        <div className={panelStyle}>
+          <InfoPanel
+            title="Start from scratch"
+            description={`Begin a new Markdown file in Hermes Notes. Focus on your content
+                without distractions, format your document, and export it as a PDF
+                when ready.`}
+            action={{
+              label: "New File",
+              handler: () => handleCreateFile(),
+              disabled: disabledButtonsState.new,
+            }}
+          />
         </div>
       </section>
     );
