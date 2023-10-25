@@ -1,4 +1,4 @@
-import "./globals.css";
+import "./globals.scss";
 import { Montserrat } from "next/font/google";
 import CustomProviders from "@/app/components/CustomProviders";
 import Header from "./components/Header";

@@ -3,7 +3,6 @@ import { toString } from "mdast-util-to-string";
 
 export function headingTree() {
   return (node: any, file: any) => {
-    console.dir(file);
     file.data.headings = getHeadings(node);
   };
 }

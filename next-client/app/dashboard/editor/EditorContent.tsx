@@ -1,5 +1,5 @@
-import TextareaResizable from "@/app/components/TextareaResizable";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAtom } from "jotai";
 import {
   atom_content,
@@ -12,11 +12,13 @@ import EditorPreview from "./EditorPreview";
 import { useKey } from "@/app/hooks/use-key";
 import MarkdownExport from "@/app/services/markdown-export";
 import { getHeadingsFromMarkdown } from "@/app/services/markdown-utils";
+import TextareaResizable from "@/app/components/TextareaResizable";
 import EditorTableOfContents from "./EditorTableOfContents";
 import CloseIcon from "@/app/components/Icons/CloseIcon";
 import PenIcon from "@/app/components/Icons/PenIcon";
 
 export default function EditorContent() {
+  const router = useRouter();
   const [content] = useAtom(atom_content);
   const [frontMatter] = useAtom(atom_frontMatter);
   const [contentEdited, setContentEdited] = useAtom(atom_contentEdited);
@@ -24,6 +26,7 @@ export default function EditorContent() {
   const [isMounted, setIsMounted] = useState(false);
   const [isToggled, setIsToggled] = useState(false);
   const [headings, setHeadings] = useState({});
+
   useEffect(() => {
     setHasChanges(content !== contentEdited);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -34,11 +37,15 @@ export default function EditorContent() {
     MarkdownExport.exportMarkdown(contentEdited, frontMatter)
   );
 
+  useKey("home", () => {
+    setIsMounted(false);
+    router.push("/dashboard");
+  });
+
   useEffect(() => {
     async function fetchData() {
       try {
         const result = (await getHeadingsFromMarkdown(contentEdited)) as any;
-        console.dir(result);
         setHeadings(result);
       } catch (e) {
         console.error(e);

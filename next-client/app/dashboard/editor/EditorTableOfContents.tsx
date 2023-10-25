@@ -71,7 +71,7 @@ const EditorTableOfContents = ({ headings }: Props) => {
 
           return (
             <div key={`${level} ${id} ${title}`} className={`${inlinePadding}`}>
-              <a href={anchor}>{`- ${title}`}</a>
+              <a href={anchor}>{level > 0 ? `― ${title}` : title}</a>
             </div>
           );
         })}

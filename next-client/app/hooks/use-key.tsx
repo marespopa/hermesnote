@@ -10,14 +10,18 @@ export function useKey(key: string, cb: (event: KeyboardEvent) => void) {
   useEffect(() => {
     function handle(event: KeyboardEvent) {
       const isSaveCommand =
-        key === "ctrls" && event.key === "s" && event.ctrlKey;
+        key === "ctrls" &&
+        event.key === "s" &&
+        (event.metaKey || event.ctrlKey);
       const isExportCommand =
-        key === "ctrle" && event.key === "e" && event.ctrlKey;
+        key === "ctrle" &&
+        event.key === "e" &&
+        (event.metaKey || event.ctrlKey);
+      const isHomeCommand = key === "home" && event.key === "Home";
 
-      if (isSaveCommand) {
-        cancelDefaultBrowserBehaviour(event);
-        callback.current(event);
-      } else if (isExportCommand) {
+      const isKnownCommand = isHomeCommand || isSaveCommand || isExportCommand;
+
+      if (isKnownCommand) {
         cancelDefaultBrowserBehaviour(event);
         callback.current(event);
       }
