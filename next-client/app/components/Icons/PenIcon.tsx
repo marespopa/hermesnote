@@ -15,8 +15,8 @@ export default function PenIcon({ alt, size = 16 }: Props) {
     <Image
       src={`${
         isDarkTheme
-          ? "/assets/icons/pen-icon_dark.svg"
-          : "/assets/icons/pen-icon.svg"
+          ? "/assets/icons/pencil-icon_dark.svg"
+          : "/assets/icons/pencil-icon.svg"
       }`}
       width={size}
       height={size}
