@@ -54,7 +54,7 @@ export default function EditorContent() {
   return (
     <>
       <div className="flex gap-4">
-        <div className={`${isToggled ? "hidden" : "w-1/2"}`}>
+        <div className={`${isToggled ? "hidden" : "w-1/2"} relative`}>
           {!isToggled && renderHideEditorToggle()}
 
           <TextareaResizable
