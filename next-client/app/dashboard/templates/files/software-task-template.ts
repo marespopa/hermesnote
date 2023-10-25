@@ -10,32 +10,37 @@ const SoftwareTaskTemplate: MarkdownTemplate = {
     description: `The Software Task Template streamlines software development task tracking, offering sections for task details, links, work description, progress updates, notes, and questions.`,
     tags: "software engineering,task,guide,template",
   },
-  content: `*as of ${date}*
-  # [Task#] Task Title
+  content: `
+*as of [2023/10/25]*
+# [Issue-3] Task Title
 
-  ## Links
-  - [Story](link here)
-  - [Docs](link here)
+## Links
+- [Story](link here)
+- [Docs](link here)
 
-  ## Description
-  Write details about the story implementation.
+## Description
+Write details about the story implementation.
 
-  ## Progress
-  - ${date} Implemented X feature.
-  - ${date} Started working on Y component.
+---
+## Implementation
 
-  ## Questions
-  Write here any uncertainty
+### Progress
+- 2023/10/25
+  - Implemented X feature.
+- 2023/10/25
+  - Started working on Y component.
 
-  ---
-  ## Notes
-  \`\`\` javascript
-  Add here any notes about the story, or you can even add code 
-  snippets in here:
+### Questions
+- Write here any uncertainty
 
-  const found = array1.find((element) => element > 10);
-  \`\`\`
-  `,
+### Notes
+\`\`\` javascript
+Add here any notes about the story, or you can even add code 
+snippets in here:
+
+const found = array1.find((element) => element > 10);
+\`\`\`
+`,
 };
 
 export default SoftwareTaskTemplate;

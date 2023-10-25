@@ -35,6 +35,7 @@ export default function Hero() {
             src="/assets/hero/niceday@2x.jpg"
             alt="Markdown for a nice day"
             height={400}
+            priority={true}
             width={600}
           />
         </div>

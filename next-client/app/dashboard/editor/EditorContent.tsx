@@ -11,8 +11,10 @@ import Loading from "@/app/components/Loading/Loading";
 import EditorPreview from "./EditorPreview";
 import { useKey } from "@/app/hooks/use-key";
 import MarkdownExport from "@/app/services/markdown-export";
-import Image from "next/image";
-import { useTheme } from "next-themes";
+import { getHeadingsFromMarkdown } from "@/app/services/markdown-utils";
+import EditorTableOfContents from "./EditorTableOfContents";
+import CloseIcon from "@/app/components/Icons/CloseIcon";
+import PenIcon from "@/app/components/Icons/PenIcon";
 
 export default function EditorContent() {
   const [content] = useAtom(atom_content);
@@ -21,9 +23,7 @@ export default function EditorContent() {
   const [, setHasChanges] = useAtom(atom_hasChanges);
   const [isMounted, setIsMounted] = useState(false);
   const [isToggled, setIsToggled] = useState(false);
-  const { resolvedTheme } = useTheme();
-  const isDarkTheme = resolvedTheme === "dark";
-
+  const [headings, setHeadings] = useState({});
   useEffect(() => {
     setHasChanges(content !== contentEdited);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -34,26 +34,42 @@ export default function EditorContent() {
     MarkdownExport.exportMarkdown(contentEdited, frontMatter)
   );
 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const result = (await getHeadingsFromMarkdown(contentEdited)) as any;
+        console.dir(result);
+        setHeadings(result);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    fetchData();
+  }, [contentEdited]);
+
   if (!isMounted) {
     return <Loading />;
   }
 
   return (
-    <div className="flex gap-4">
-      <div className={`${isToggled ? "hidden" : "w-1/2 relative"}`}>
-        {!isToggled && renderHideEditorToggle()}
+    <>
+      <div className="flex gap-4">
+        <div className={`${isToggled ? "hidden" : "w-1/2"}`}>
+          {!isToggled && renderHideEditorToggle()}
 
-        <TextareaResizable
-          name="content"
-          value={contentEdited}
-          handleChange={(e) => setContentEdited(e.currentTarget.value)}
-        />
+          <TextareaResizable
+            name="content"
+            value={contentEdited}
+            handleChange={(e) => setContentEdited(e.currentTarget.value)}
+          />
+        </div>
+        <div className={`${isToggled ? "w-full" : "w-1/2"} relative`}>
+          {isToggled && renderShowEditorToggle()}
+          <EditorPreview content={contentEdited} />
+          <EditorTableOfContents headings={headings}></EditorTableOfContents>
+        </div>
       </div>
-      <div className={`${isToggled ? "w-full" : "w-1/2"} relative`}>
-        {isToggled && renderShowEditorToggle()}
-        <EditorPreview content={contentEdited} />
-      </div>
-    </div>
+    </>
   );
 
   function renderShowEditorToggle(): React.ReactNode {
@@ -62,16 +78,7 @@ export default function EditorContent() {
         className="absolute right-4 top-8 cursor-pointer"
         onClick={() => setIsToggled(!isToggled)}
       >
-        <Image
-          src={`${
-            isDarkTheme
-              ? "/assets/icons/pencil-icon_dark.svg"
-              : "/assets/icons/pencil-icon.svg"
-          }`}
-          width={16}
-          height={16}
-          alt="Toggle Editor"
-        />
+        <PenIcon alt="Toggle Editor" />
       </span>
     );
   }
@@ -82,16 +89,7 @@ export default function EditorContent() {
         className="absolute right-4 top-8 cursor-pointer"
         onClick={() => setIsToggled(!isToggled)}
       >
-        <Image
-          src={`${
-            isDarkTheme
-              ? "/assets/icons/close-icon_dark.svg"
-              : "/assets/icons/close-icon.svg"
-          }`}
-          width={16}
-          height={16}
-          alt="Toggle Editor"
-        />
+        <CloseIcon alt="Toggle Editor" />
       </span>
     );
   }
