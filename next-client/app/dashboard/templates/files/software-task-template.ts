@@ -22,7 +22,6 @@ const SoftwareTaskTemplate: MarkdownTemplate = {
 Write details about the story implementation.
 
 ---
-
 ## Implementation
 
 ### Progress
