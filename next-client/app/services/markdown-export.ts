@@ -56,22 +56,19 @@ function exportToPDF(elementId: string, fileName: string = "file.pdf") {
     return Promise.reject("Something went wrong");
   }
 
-  return html2canvas(reportElement).then((canvas: any) => {
-    const doc = formatPDF();
-    doc.save(fileName);
+  return html2canvas(reportElement, { scrollY: -window.scrollY }).then(
+    (canvas: any) => {
+      const doc = formatPDF();
+      doc.save(fileName);
 
-    function formatPDF() {
-      const imgWidth = 208;
-      const pageHeight = 295;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
-      heightLeft -= pageHeight;
-      const doc = new jsPDF("p", "mm");
-      doc.addImage(canvas, "PNG", 0, position, imgWidth, imgHeight, "", "FAST");
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        doc.addPage();
+      function formatPDF() {
+        const imgWidth = 208;
+        const pageHeight = 295;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        let heightLeft = imgHeight;
+        let position = 0;
+        heightLeft -= pageHeight;
+        const doc = new jsPDF("p", "mm");
         doc.addImage(
           canvas,
           "PNG",
@@ -82,11 +79,25 @@ function exportToPDF(elementId: string, fileName: string = "file.pdf") {
           "",
           "FAST"
         );
-        heightLeft -= pageHeight;
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight;
+          doc.addPage();
+          doc.addImage(
+            canvas,
+            "PNG",
+            0,
+            position,
+            imgWidth,
+            imgHeight,
+            "",
+            "FAST"
+          );
+          heightLeft -= pageHeight;
+        }
+        return doc;
       }
-      return doc;
     }
-  });
+  );
 }
 
 export default MarkdownExport;
