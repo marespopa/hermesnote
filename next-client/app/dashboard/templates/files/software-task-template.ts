@@ -11,7 +11,7 @@ const SoftwareTaskTemplate: MarkdownTemplate = {
     tags: "software engineering,task,guide,template",
   },
   content: `
-*as of [2023/10/25]*
+*as of [${date}]*
 # [Issue-1] Task Title
 
 ## Links
@@ -22,13 +22,12 @@ const SoftwareTaskTemplate: MarkdownTemplate = {
 Write details about the story implementation.
 
 ---
+
 ## Implementation
 
 ### Progress
-- 2023/10/25
+- ${date}
   - Implemented X feature.
-- 2023/10/26
-  - Started working on Y component.
 
 ### Questions
 - Write here any uncertainty
