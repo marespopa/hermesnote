@@ -7,7 +7,7 @@ export function getDate() {
 
   const withSlashes = [year, month, day].join("/");
 
-  return `[${withSlashes}]`;
+  return `${withSlashes}`;
 }
 
 export function getYear() {
