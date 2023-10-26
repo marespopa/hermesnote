@@ -85,7 +85,7 @@ export default function EditorContent() {
         className="absolute right-4 top-8 cursor-pointer"
         onClick={() => setIsToggled(!isToggled)}
       >
-        <PenIcon alt="Toggle Editor" />
+        <PenIcon tooltip="Show Editor" alt="Toggle Editor" />
       </span>
     );
   }
@@ -96,7 +96,7 @@ export default function EditorContent() {
         className="absolute right-4 top-8 cursor-pointer"
         onClick={() => setIsToggled(!isToggled)}
       >
-        <CloseIcon alt="Toggle Editor" />
+        <CloseIcon tooltip="Hide the editor pane" alt="Toggle Editor" />
       </span>
     );
   }

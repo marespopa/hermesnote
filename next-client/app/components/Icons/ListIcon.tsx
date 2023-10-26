@@ -3,10 +3,11 @@ import React from "react";
 
 type Props = {
   alt: string;
+  tooltip: string;
   size?: number;
 };
 
-export default function ListIcon({ alt, size = 16 }: Props) {
+export default function ListIcon({ alt, tooltip, size = 16 }: Props) {
   return (
     <Image
       className="cursor-pointer"
@@ -14,6 +15,7 @@ export default function ListIcon({ alt, size = 16 }: Props) {
       width={size}
       height={size}
       alt={alt}
+      title={tooltip}
     />
   );
 }

@@ -27,7 +27,7 @@ const EditorTableOfContents = ({ headings }: Props) => {
         onClick={() => setIsToggled(true)}
       >
         <span>Table of contents</span>
-        <CloseIcon alt="Close Table" />
+        <CloseIcon tooltip="Close this dialog" alt="Close Table" />
       </h3>
       {headings?.length > 0 ? renderTableOfContents(headings) : <>No content</>}
     </div>
@@ -38,9 +38,12 @@ const EditorTableOfContents = ({ headings }: Props) => {
       <span
         className="absolute -right-[16px] top-0 cursor-pointer rounded-full bg-green-500 hover:bg-green-600 focus:bg-green-600 shadow-md"
         onClick={() => setIsToggled(false)}
-        title="Show table of contents"
       >
-        <ListIcon alt="Table of Contents" size={32} />
+        <ListIcon
+          tooltip="Show table of contents"
+          alt="Table of Contents"
+          size={32}
+        />
       </span>
     );
   }

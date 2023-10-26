@@ -4,10 +4,11 @@ import React from "react";
 
 type Props = {
   alt: string;
+  tooltip: string;
   size?: number;
 };
 
-export default function CloseIcon({ alt, size = 16 }: Props) {
+export default function CloseIcon({ alt, tooltip, size = 16 }: Props) {
   const { resolvedTheme } = useTheme();
   const isDarkTheme = resolvedTheme === "dark";
 
@@ -22,6 +23,7 @@ export default function CloseIcon({ alt, size = 16 }: Props) {
       width={size}
       height={size}
       alt={alt}
+      title={tooltip}
     />
   );
 }
