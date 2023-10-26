@@ -8,6 +8,7 @@ import { atom_contentEdited, atom_frontMatter } from "@/app/atoms/atoms";
 import MarkdownExport from "@/app/services/markdown-export";
 import toast from "react-hot-toast";
 import { useKey } from "@/app/hooks/use-key";
+import MarkdownPreview from "../components/MarkdownPreview";
 
 type Props = {};
 
@@ -34,7 +35,7 @@ export default function EditorPreviewTrigger(props: Props) {
         <div className="h-full">
           <div className={previewContainerStyles} id="pdfReport">
             <section className={previewStyles}>
-              <ReactMarkdown>{contentEdited}</ReactMarkdown>
+              <MarkdownPreview content={contentEdited} />
             </section>
           </div>
           <div className="fixed bottom-2 right-2 sm:bottom-8 sm:right-8">
@@ -72,4 +73,4 @@ export default function EditorPreviewTrigger(props: Props) {
 }
 
 const previewContainerStyles = `mt-8`;
-const previewStyles = `prose mx-auto`;
+const previewStyles = `prose mx-auto prose-pre:bg-transparent prose-pre:px-0`;
