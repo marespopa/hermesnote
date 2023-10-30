@@ -73,4 +73,4 @@ export default function EditorPreviewTrigger(props: Props) {
 }
 
 const previewContainerStyles = `mt-8`;
-const previewStyles = `prose mx-auto prose-pre:bg-transparent prose-pre:px-0 prose-pre:text-gray-700`;
+const previewStyles = `prose mx-auto prose-pre:bg-transparent prose-pre:px-0 prose-pre:text-gray-600`;
