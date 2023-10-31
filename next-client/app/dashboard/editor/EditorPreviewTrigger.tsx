@@ -53,7 +53,7 @@ export default function EditorPreviewTrigger(props: Props) {
   function handlePdfExport() {
     const reportName = frontMatter.fileName.replace(".md", ".pdf");
 
-    MarkdownExport.downloadComponentInPDF("#pdfReport", reportName)
+    MarkdownExport.exportToPDF("#pdfReport", reportName)
       .then(() => {
         toast.success("File has been exported");
       })
