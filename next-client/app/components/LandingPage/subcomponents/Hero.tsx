@@ -25,7 +25,7 @@ export default function Hero() {
           </p>
           <Button
             variant="primary-large"
-            label="Try for free"
+            label="Get started"
             handler={() => router.push("/dashboard")}
           ></Button>
         </div>
