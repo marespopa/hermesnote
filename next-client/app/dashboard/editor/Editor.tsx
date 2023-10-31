@@ -13,7 +13,10 @@ export default function Editor() {
 
   return (
     <div className="mb-8">
-      <EditorHeader />
+      <EditorHeader
+        activeTab={tab}
+        navigate={(selectedTab: EditorTabs) => setTab(selectedTab)}
+      />
       <EditorNavigation
         activeTab={tab}
         handler={(selectedTab: EditorTabs) => setTab(selectedTab)}

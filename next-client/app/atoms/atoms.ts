@@ -10,6 +10,6 @@ export const atom_isSaved = atom(false);
 export const atom_frontMatter = atomWithStorage("frontmatter", {
   title: "",
   description: "",
-  fileName: "file.md",
+  fileName: "file",
   tags: "",
 });

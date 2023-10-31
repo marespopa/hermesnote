@@ -4,7 +4,7 @@ import { MarkdownTemplate } from "..";
 const date = getDate();
 
 const SoftwareTaskTemplate: MarkdownTemplate = {
-  filename: "software-task.md",
+  filename: "software-task",
   frontMatter: {
     title: "Software Task",
     description: `The Software Task Template streamlines software development task tracking, offering sections for task details, links, work description, progress updates, notes, and questions.`,

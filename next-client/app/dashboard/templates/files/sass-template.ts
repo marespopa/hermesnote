@@ -1,7 +1,7 @@
 import { MarkdownTemplate } from "..";
 
 const SASSTemplate: MarkdownTemplate = {
-  filename: "sass-documentation.md",
+  filename: "sass-documentation",
   frontMatter: {
     title: "SASS Documentation",
     description: `With this template, you can efficiently create and organize documentation to ensure your users have a smooth and informed experience with your SaaS product.`,

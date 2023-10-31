@@ -1,7 +1,7 @@
 import { MarkdownTemplate } from "..";
 
 const ProjectManagementTemplate: MarkdownTemplate = {
-  filename: "project-management-template.md",
+  filename: "project-management-template",
   frontMatter: {
     title: "Project Management",
     description: `Ideal for managing and planning projects effectively`,

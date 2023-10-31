@@ -1,7 +1,7 @@
 import { MarkdownTemplate } from "..";
 
 const ExampleTemplate: MarkdownTemplate = {
-  filename: "filename.md",
+  filename: "filename",
   frontMatter: {
     title: "Title",
     description: `description`,

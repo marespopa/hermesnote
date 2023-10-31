@@ -1,6 +1,6 @@
 "use client";
 
-import { atom_frontMatter } from "@/app/atoms/atoms";
+import { atom_frontMatter, atom_hasChanges } from "@/app/atoms/atoms";
 import Input from "@/app/components/Input";
 import Loading from "@/app/components/Loading/Loading";
 import Textarea from "@/app/components/Textarea";
@@ -8,6 +8,7 @@ import { useAtom } from "jotai";
 import { FormEvent, useEffect, useState } from "react";
 
 export default function EditorForm() {
+  const [, setHasChanges] = useAtom(atom_hasChanges);
   const [frontMatterData, setFrontMatterData] = useAtom(atom_frontMatter);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -17,10 +18,12 @@ export default function EditorForm() {
     const element = e.currentTarget as HTMLInputElement;
     const value = element.value;
 
+    console.log(`Update ${field} with ${value}`);
     setFrontMatterData({
       ...frontMatterData,
       [field]: value,
     });
+    setHasChanges(true);
   };
 
   if (!isMounted) {

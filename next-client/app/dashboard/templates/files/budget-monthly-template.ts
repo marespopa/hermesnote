@@ -5,7 +5,7 @@ const month = getMonth();
 const year = getYear();
 
 const MonthlyBudgetTemplate: MarkdownTemplate = {
-  filename: "expenses-template.md",
+  filename: "expenses-template",
   frontMatter: {
     title: "Monthly Budget",
     description: `Use this template to keep track of your monthly budget and maintain a clear overview of your budget.`,

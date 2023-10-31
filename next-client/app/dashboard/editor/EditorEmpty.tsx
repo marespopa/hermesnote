@@ -143,7 +143,7 @@ export default function EditorEmpty() {
   function handleCreateFile() {
     setIsLoading(true);
     setFrontMatter({
-      fileName: "file.md",
+      fileName: "file",
       title: "File",
       description: "",
       tags: "",
