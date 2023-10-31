@@ -12,7 +12,7 @@ export default function Hero() {
       <section className="flex flex-wrap mt-4 sm:mt-8 md:mt-16 items-center">
         <div className="w-full sm:w-1/2 prose dark:prose-invert">
           <h1 className="text-5xl mt-8 leading-tight">
-            Effortlessly Create, Edit, and Export Markdown Files
+            A free to use, online Markdown editor
           </h1>
           <p className="text-xl">
             Hermes Notes understands the importance of effortless file
@@ -20,8 +20,8 @@ export default function Hero() {
           </p>
           <p className="text-lg">
             That&apos;s why we&apos;ve designed our app to provide a seamless
-            experience when it comes to opening, saving, and exporting your
-            Markdown files.
+            experience when it comes to opening, editing, saving, and exporting
+            your Markdown files.
           </p>
           <Button
             variant="primary-large"
