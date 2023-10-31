@@ -32,12 +32,11 @@ Write details about the story implementation.
 - Write here any uncertainty
 
 ### Notes
-\`\`\` javascript
-Add here any notes about the story, or you can even add code 
+Add here any notes about the story, or you can even add code
 snippets in here:
-
+~~~
 const found = array1.find((element) => element > 10);
-\`\`\`
+~~~
 `,
 };
 
