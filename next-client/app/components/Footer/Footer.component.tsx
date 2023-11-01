@@ -8,7 +8,7 @@ export default function Footer() {
     >
       <div className="container max-w-screen-xl mx-auto">
         <div className="flex justify-between w-full">
-          <span>HermesNote. @All rights reserved.</span>
+          <span>HermesNotes @All rights reserved.</span>
           <nav>
             <ul className="flex space-x-4 divide-x">
               <li>
