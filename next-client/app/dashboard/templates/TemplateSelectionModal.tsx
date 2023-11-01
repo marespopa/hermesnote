@@ -120,7 +120,7 @@ const TemplateSelectionModal = ({ isOpen, handleClose }: Props) => {
                 return (
                   <span
                     key={index}
-                    className="py-2 px-4 shadow-md no-underline rounded-full bg-blue-500 text-white text-xs"
+                    className="py-2 px-4 shadow-md no-underline rounded-full bg-cyan-500 text-white text-xs"
                   >
                     {tag}
                   </span>

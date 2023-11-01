@@ -36,7 +36,7 @@ const EditorTableOfContents = ({ headings }: Props) => {
   function renderToggle() {
     return (
       <span
-        className="absolute -right-[16px] top-0 cursor-pointer rounded-full bg-teal-500 hover:bg-teal-600 focus:bg-teal-600 shadow-md"
+        className="absolute -right-[16px] top-0 cursor-pointer rounded-full bg-cyan-500 hover:bg-cyan-600 focus:bg-cyan-600 shadow-md"
         onClick={() => setIsToggled(false)}
       >
         <ListIcon
