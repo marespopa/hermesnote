@@ -1,25 +1,26 @@
+"use client";
+
 import { containerStyle } from "@/app/constants/styles";
-import Image from "next/image";
 import Link from "next/link";
+import Button from "../../Button";
+import { useRouter } from "next/navigation";
 
 export default function Motto() {
+  const router = useRouter();
+
   return (
     <div className={containerStyle}>
       <section className="text-center w-1/2 mx-auto">
-        <h3 className="text-2xl">
-          Whether you&apos;re a writer, blogger, developer, or business
-          professional, <strong>Hermes Notes</strong> is here to simplify your
-          Markdown editing and PDF exporting needs.
+        <h3 className="text-2xl mb-4">
+          Ready to simplify your Markdown workflow and supercharge your
+          productivity? Start using Hermes Notes today for effortless Markdown
+          editing and PDF exporting.
         </h3>
-        <Link href={"/dashboard"}>
-          <Image
-            className="mx-auto my-8"
-            src={"/assets/icons/markdown-icon.png"}
-            height={100}
-            width={100}
-            alt="MD"
-          />
-        </Link>
+        <Button
+          variant="primary-large"
+          label="Get Started!"
+          handler={() => router.push("/dashboard")}
+        ></Button>
       </section>
     </div>
   );

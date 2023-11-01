@@ -15,17 +15,17 @@ export default function Hero() {
             A free to use, online Markdown editor
           </h1>
           <p className="text-xl">
-            Hermes Notes understands the importance of effortless file
-            management in your Markdown editing process.
+            Hermes Notes is dedicated to enhancing your Markdown editing and
+            viewing experience.
           </p>
           <p className="text-lg">
-            That&apos;s why we&apos;ve designed our app to provide a seamless
-            experience when it comes to opening, editing, saving, and exporting
-            your Markdown files.
+            We&apos;ve tailored our app to provide a straightforward and
+            efficient process for creating, editing, and exporting your Markdown
+            content.
           </p>
           <Button
             variant="primary-large"
-            label="Get started"
+            label="Try Hermes Notes"
             handler={() => router.push("/dashboard")}
           ></Button>
         </div>

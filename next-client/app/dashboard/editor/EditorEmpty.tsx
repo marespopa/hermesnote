@@ -63,60 +63,72 @@ export default function EditorEmpty() {
   function renderActions() {
     return (
       <section className="flex gap-8">
-        <div className={panelStyle}>
-          <InfoPanel
-            title="Begin with a Markdown Template"
-            description={`Start by choosing a Markdown template.
-                          Customize it, add your content, and export it as a PDF when ready.`}
-            action={{
-              label: "Select a Template",
-              handler: () => handleSelectTemplate(),
-              disabled: disabledButtonsState.template,
-            }}
-          />
-
-          {isTemplateSelectModalVisible && (
-            <TemplateSelectionModal
-              isOpen={isTemplateSelectModalVisible}
-              handleClose={() => {
-                setDisabledButtonsState({
-                  ...disabledButtonsState,
-                  template: false,
-                });
-                setIsTemplateSelectModalVisible(false);
-              }}
-            ></TemplateSelectionModal>
-          )}
-        </div>
-
-        <div className={panelStyle}>
-          <InfoPanel
-            title="Import Existing Markdown File"
-            description={`Access and edit your pre-existing Markdown files
-                          within Hermes Notes. Update frontmatter, make changes,
-                          and save or export the file as a PDF.`}
-            action={{
-              label: "Open File",
-              handler: () => handleOpenFile(),
-              disabled: disabledButtonsState.existing,
-            }}
-          />
-        </div>
-
-        <div className={panelStyle}>
-          <InfoPanel
-            title="Start from scratch"
-            description={`Begin a new Markdown file in Hermes Notes. Focus on your content
-                without distractions, format your document, and export it as a PDF
-                when ready.`}
-            action={{
-              label: "New File",
-              handler: () => handleCreateFile(),
-              disabled: disabledButtonsState.new,
-            }}
-          />
-        </div>
+        {renderSelectTemplateOption()}
+        {renderNewFileOption()}
+        {renderImportFileOption()}
       </section>
+    );
+  }
+
+  function renderSelectTemplateOption() {
+    return (
+      <div className={panelStyle}>
+        <InfoPanel
+          title="Begin with a Markdown Template"
+          description={`Personalize it, insert your content, and save it as a Markdown file or export it as a PDF when you're ready.`}
+          action={{
+            label: "Select a Template",
+            handler: () => handleSelectTemplate(),
+            disabled: disabledButtonsState.template,
+          }}
+        />
+
+        {isTemplateSelectModalVisible && (
+          <TemplateSelectionModal
+            isOpen={isTemplateSelectModalVisible}
+            handleClose={() => {
+              setDisabledButtonsState({
+                ...disabledButtonsState,
+                template: false,
+              });
+              setIsTemplateSelectModalVisible(false);
+            }}
+          ></TemplateSelectionModal>
+        )}
+      </div>
+    );
+  }
+
+  function renderNewFileOption() {
+    return (
+      <div className={panelStyle}>
+        <InfoPanel
+          title="Start from scratch"
+          description={`Focus on your content, structure your document, and save or export it as either a Markdown or PDF file when you're ready.`}
+          action={{
+            label: "New File",
+            handler: () => handleCreateFile(),
+            disabled: disabledButtonsState.new,
+          }}
+        />
+      </div>
+    );
+  }
+
+  function renderImportFileOption() {
+    return (
+      <div className={panelStyle}>
+        <InfoPanel
+          title="Import Existing Markdown File"
+          description={`Access and edit your existing Markdown files.
+                          Update frontmatter, make changes, and choose to save or export the file in either Markdown or PDF format.`}
+          action={{
+            label: "Open File",
+            handler: () => handleOpenFile(),
+            disabled: disabledButtonsState.existing,
+          }}
+        />
+      </div>
     );
   }
 
@@ -129,10 +141,10 @@ export default function EditorEmpty() {
         </h1>
         {!isLoading && (
           <p className="w-1/2 my-8 leading-loose">
-            Discover the flexibility of Hermes Notes with two powerful options
-            at your fingertips. Open Existing Markdown File and Start from
-            Scratch offer effortless editing and creation experiences. Edit,
-            save, export, and update frontmatter for existing files, or begin
+            Explore the versatility of Hermes Notes through three
+            straightforward options. Choose from a template, open an existing
+            file, or start with a blank canvas. Effortlessly edit, save, export,
+            and update both frontmatter and content for existing files, or begin
             fresh with a clean slate.
           </p>
         )}

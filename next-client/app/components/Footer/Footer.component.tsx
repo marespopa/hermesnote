@@ -10,13 +10,13 @@ export default function Footer() {
         <div className="flex justify-between w-full">
           <span>HermesNote. @All rights reserved.</span>
           <nav>
-            <ul className="flex gap-2">
+            <ul className="flex space-x-4 divide-x">
               <li>
                 <Link className={linkStyle} href={"/terms"}>
                   Terms of Service
                 </Link>
               </li>
-              <li>
+              <li className="pl-4">
                 <Link className={linkStyle} href={"/privacy-policy"}>
                   Privacy Policy
                 </Link>
