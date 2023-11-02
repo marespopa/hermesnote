@@ -7,8 +7,7 @@ const SASSTemplate: MarkdownTemplate = {
     description: `With this template, you can efficiently create and organize documentation to ensure your users have a smooth and informed experience with your SaaS product.`,
     tags: "documentation,sass,software,startup",
   },
-  content: `
-# [Product Name] Documentation
+  content: `# [Product Name] Documentation
 
 Welcome to the official documentation for [Product Name]. This comprehensive guide will help you get started with our SaaS product and make the most of its features.
 ---

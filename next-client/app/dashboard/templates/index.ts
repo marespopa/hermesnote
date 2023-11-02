@@ -1,6 +1,4 @@
 import { FrontMatterGeneric } from "@/app/types/markdown";
-import MonthlyBudgetTemplate from "./files/budget-monthly-template";
-import YearlyBudgetTemplate from "./files/budget-yearly-template";
 import ToDoListTemplate from "./files/todo-list-template";
 import ProjectManagementTemplate from "./files/project-management-template";
 import SoftwareTaskTemplate from "./files/software-task-template";
@@ -17,8 +15,6 @@ const MarkdownTemplateList = [
   SoftwareTaskTemplate,
   ProjectManagementTemplate,
   SASSTemplate,
-  MonthlyBudgetTemplate,
-  YearlyBudgetTemplate,
 ];
 
 export default MarkdownTemplateList;

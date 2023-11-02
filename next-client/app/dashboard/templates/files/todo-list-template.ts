@@ -7,27 +7,26 @@ const ToDoListTemplate: MarkdownTemplate = {
     description: `A simple checklist for tasks you need to complete.`,
     tags: "todo, list, productivity",
   },
-  content: `
-  # To-Do List ✏️
+  content: `# To-Do List ✏️
   
   Use this to-do list to keep track of tasks and stay organized.
   
-  - ⬜Task 1
-  - ⬜Task 2
-  - ⬜Task 3
-  - ⬜Task 4
-  - ⬜Task 5
-  - ⬜Task 6
+  - ⬜ Task 1
+  - ⬜ Task 2
+  - ⬜ Task 3
+  - ⬜ Task 4
+  - ⬜ Task 5
+  - ⬜ Task 6
   
   ## Priority Tasks 🎯
   
-  - ⬜High Priority Task
-  - ⬜Another High Priority Task
+  - ⬜ High Priority Task
+  - ⬜ Another High Priority Task
   
   ## Completed Tasks 💯
   
-  - ✅Completed Task 1
-  - ✅Completed Task 2
+  - ✅ Completed Task 1
+  - ✅ Completed Task 2
   
   ## Notes 📋
   

@@ -10,8 +10,7 @@ const SoftwareTaskTemplate: MarkdownTemplate = {
     description: `The Software Task Template streamlines software development task tracking, offering sections for task details, links, work description, progress updates, notes, and questions.`,
     tags: "software engineering,task,guide,template",
   },
-  content: `
-*as of [${date}]*
+  content: `*as of [${date}]*
 # [Issue-1] Task Title
 
 ## Links

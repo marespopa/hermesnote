@@ -7,8 +7,7 @@ const ProjectManagementTemplate: MarkdownTemplate = {
     description: `Ideal for managing and planning projects effectively`,
     tags: "project, project management, productivity",
   },
-  content: `
-  # Project Management Template
+  content: `# Project Management Template
   
   Use this template to manage and organize your project effectively.
   
