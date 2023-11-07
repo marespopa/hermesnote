@@ -2,9 +2,9 @@ import { containerStyle } from "@/app/constants/styles";
 
 export default function Features() {
   return (
-    <section className={sectionStyle}>
+    <section className={sectionStyle} data-testid="Features">
       <div className={containerStyle}>
-        <div className={gridStyle}>
+        <div className={gridStyle} data-testid="FeaturesList">
           <div className={gridItemStyle}>
             <h2 className={headingStyle}>Create and Edit .md Files</h2>
             <p className={paragraphStyle}>
