@@ -2,6 +2,7 @@ import "./globals.scss";
 import MainPage from "./components/MainPage";
 
 export const metadata = {
+  metadataBase: "https://hermesmd.netlify.app/",
   title: "Hermes Notes",
   description: "A free to use, online markdown editor",
   applicationName: "Hermes Notes",
