@@ -16,6 +16,7 @@ import TextareaResizable from "@/app/components/TextareaResizable";
 import EditorTableOfContents from "./EditorTableOfContents";
 import CloseIcon from "@/app/components/Icons/CloseIcon";
 import PenIcon from "@/app/components/Icons/PenIcon";
+import EmojiControl from "../components/EmojiControl";
 
 export default function EditorContent() {
   const router = useRouter();
@@ -63,7 +64,7 @@ export default function EditorContent() {
       <div className="flex gap-4">
         <div className={`${isToggled ? "hidden" : "w-1/2"} relative`}>
           {!isToggled && renderHideEditorToggle()}
-
+          <EmojiControl handleAction={handleAddEmoji} />
           <TextareaResizable
             name="content"
             value={contentEdited}
@@ -78,6 +79,14 @@ export default function EditorContent() {
       </div>
     </>
   );
+
+  function handleAddEmoji(data: any) {
+    console.dir(data);
+
+    const newContent = contentEdited + data;
+
+    setContentEdited(newContent);
+  }
 
   function renderShowEditorToggle(): React.ReactNode {
     return (
