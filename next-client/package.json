@@ -4,10 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:integration": "next dev -p 3001",
+    "e2e": "start-server-and-test dev http://localhost:3000 \"cypress open --e2e\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.9",
@@ -20,6 +23,7 @@
     "@types/react-dom": "18.2.6",
     "@types/react-syntax-highlighter": "^15.5.9",
     "autoprefixer": "10.4.14",
+    "cypress": "^13.4.0",
     "eslint": "8.43.0",
     "eslint-config-next": "13.4.7",
     "gray-matter": "^4.0.3",
