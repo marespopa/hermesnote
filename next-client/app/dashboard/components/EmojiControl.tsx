@@ -1,5 +1,6 @@
 import EmojiIcon from "@/app/components/Icons/EmojiIcon";
 import PenIcon from "@/app/components/Icons/PenIcon";
+import { useKey } from "@/app/hooks/use-key";
 import EmojiPicker, { Theme } from "emoji-picker-react";
 import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
@@ -15,6 +16,12 @@ export default function EmojiControl({ handleAction }: Props) {
   const pickerTheme = resolvedTheme === "dark" ? "dark" : "light";
 
   useEffect(() => setIsMounted(true), []);
+
+  useKey("escape", () => {
+    if (isVisible) {
+      setIsVisible(false);
+    }
+  });
 
   if (!isMounted) {
     return <></>;

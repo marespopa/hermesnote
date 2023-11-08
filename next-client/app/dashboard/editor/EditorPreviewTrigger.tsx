@@ -10,9 +10,7 @@ import toast from "react-hot-toast";
 import { useKey } from "@/app/hooks/use-key";
 import MarkdownPreview from "../components/MarkdownPreview";
 
-type Props = {};
-
-export default function EditorPreviewTrigger(props: Props) {
+export default function EditorPreviewTrigger() {
   const [isPdfPreviewOpen, setIsPdfPreviewOpen] = useState(false);
   const [contentEdited] = useAtom(atom_contentEdited);
   const [frontMatter] = useAtom(atom_frontMatter);

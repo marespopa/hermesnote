@@ -1,6 +1,8 @@
 import { useRef, useEffect } from "react";
 
-export function useKey(key: string, cb: (event: KeyboardEvent) => void) {
+export type KeyEvents = "ctrls" | "ctrle" | "home" | "escape";
+
+export function useKey(key: KeyEvents, cb: (event: KeyboardEvent) => void) {
   const callback = useRef(cb);
 
   useEffect(() => {
@@ -18,8 +20,9 @@ export function useKey(key: string, cb: (event: KeyboardEvent) => void) {
         event.key === "e" &&
         (event.metaKey || event.ctrlKey);
       const isHomeCommand = key === "home" && event.key === "Home";
-
-      const isKnownCommand = isHomeCommand || isSaveCommand || isExportCommand;
+      const isEscapeCommand = key === "escape" && event.key === "Escape";
+      const isKnownCommand =
+        isHomeCommand || isSaveCommand || isExportCommand || isEscapeCommand;
 
       if (isKnownCommand) {
         cancelDefaultBrowserBehaviour(event);

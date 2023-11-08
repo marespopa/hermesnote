@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAtom } from "jotai";
 import {
@@ -27,7 +27,6 @@ export default function EditorContent() {
   const [isMounted, setIsMounted] = useState(false);
   const [isToggled, setIsToggled] = useState(false);
   const [headings, setHeadings] = useState({});
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [cursorPosition, setCursorPosition] = useState(0);
 
   useEffect(() => {
