@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAtom } from "jotai";
 import {
@@ -27,6 +27,8 @@ export default function EditorContent() {
   const [isMounted, setIsMounted] = useState(false);
   const [isToggled, setIsToggled] = useState(false);
   const [headings, setHeadings] = useState({});
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [cursorPosition, setCursorPosition] = useState(0);
 
   useEffect(() => {
     setHasChanges(content !== contentEdited);
@@ -69,6 +71,7 @@ export default function EditorContent() {
             name="content"
             value={contentEdited}
             handleChange={(e) => setContentEdited(e.currentTarget.value)}
+            handleCursorPositionUpdate={(pos: number) => setCursorPosition(pos)}
           />
         </div>
         <div className={`${isToggled ? "w-full" : "w-1/2"} relative`}>
@@ -80,10 +83,13 @@ export default function EditorContent() {
     </>
   );
 
-  function handleAddEmoji(data: any) {
-    console.dir(data);
-
-    const newContent = contentEdited + data;
+  function handleAddEmoji(emoji: any) {
+    let textBeforeCursorPosition = contentEdited.substring(0, cursorPosition);
+    let textAfterCursorPosition = contentEdited.substring(
+      cursorPosition,
+      contentEdited.length
+    );
+    const newContent = `${textBeforeCursorPosition}${emoji}${textAfterCursorPosition}`;
 
     setContentEdited(newContent);
   }

@@ -6,6 +6,7 @@ interface Props {
   value: string | undefined;
   placeholder?: string;
   handleChange: (e: React.FormEvent<HTMLTextAreaElement>) => void;
+  handleCursorPositionUpdate: (pos: number) => void;
 }
 
 const TextareaResizable = ({
@@ -13,6 +14,7 @@ const TextareaResizable = ({
   value = " ",
   placeholder,
   handleChange,
+  handleCursorPositionUpdate,
 }: Props) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -28,6 +30,7 @@ const TextareaResizable = ({
         name={name}
         value={value}
         onChange={handleChange}
+        onBlur={(e) => handleCursorPositionUpdate(e.target.selectionStart)}
         placeholder={placeholder}
         spellCheck={true}
       />
