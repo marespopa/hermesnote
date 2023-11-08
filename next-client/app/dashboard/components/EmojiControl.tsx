@@ -1,7 +1,8 @@
 import EmojiIcon from "@/app/components/Icons/EmojiIcon";
 import PenIcon from "@/app/components/Icons/PenIcon";
-import EmojiPicker from "emoji-picker-react";
-import React, { useState } from "react";
+import EmojiPicker, { Theme } from "emoji-picker-react";
+import { useTheme } from "next-themes";
+import React, { useEffect, useState } from "react";
 
 type Props = {
   handleAction: (data: any) => void;
@@ -9,6 +10,15 @@ type Props = {
 
 export default function EmojiControl({ handleAction }: Props) {
   const [isVisible, setIsVisible] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+  const { resolvedTheme } = useTheme();
+  const pickerTheme = resolvedTheme === "dark" ? "dark" : "light";
+
+  useEffect(() => setIsMounted(true), []);
+
+  if (!isMounted) {
+    return <></>;
+  }
 
   return (
     <section
@@ -30,6 +40,7 @@ export default function EmojiControl({ handleAction }: Props) {
         >
           <div onClick={(e) => e.stopPropagation()}>
             <EmojiPicker
+              theme={pickerTheme as Theme}
               onEmojiClick={(data) => {
                 handleAction(data.emoji);
                 setIsVisible(!isVisible);
@@ -42,4 +53,4 @@ export default function EmojiControl({ handleAction }: Props) {
   );
 }
 
-const sectionStyle = `z-10 fixed top-48 left-0 bg-cyan-100 hover:bg-cyan-200 focus:bg-cyan-200 dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:bg-slate-700 p-2 h-12 w-12 rounded-r-md border border-cyan-300 dark:border-slate-500 cursor-pointer`;
+const sectionStyle = `z-10 fixed top-48 left-0 bg-slate-200 hover:bg-slate-300 focus:bg-slate-300 dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:bg-slate-700 p-2 h-12 w-12 rounded-r-md border border-slate-300 dark:border-slate-500 cursor-pointer`;
