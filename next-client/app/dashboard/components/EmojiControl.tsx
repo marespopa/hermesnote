@@ -42,4 +42,4 @@ export default function EmojiControl({ handleAction }: Props) {
   );
 }
 
-const sectionStyle = `z-10 fixed top-48 left-8 bg-cyan-100 hover:bg-cyan-200 focus:bg-cyan-200 dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:bg-slate-700 p-2 h-12 w-12 rounded-md border border-cyan-300 dark:border-slate-500 cursor-pointer`;
+const sectionStyle = `z-10 fixed top-48 left-0 bg-cyan-100 hover:bg-cyan-200 focus:bg-cyan-200 dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:bg-slate-700 p-2 h-12 w-12 rounded-r-md border border-cyan-300 dark:border-slate-500 cursor-pointer`;
