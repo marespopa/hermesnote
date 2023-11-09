@@ -141,6 +141,7 @@ export default function EditorContent() {
     const [fileHandle] = await window.showOpenFilePicker(PICKER_OPTIONS);
     const file = await fileHandle.getFile();
 
+    setIsLoading(true);
     parseFile(file)
       .then(() => {
         toast.success("File has been loaded");
