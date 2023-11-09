@@ -1,5 +1,10 @@
 import toast from "react-hot-toast";
 
+export type StatusResponse = {
+  status: "error" | "success";
+  message: string;
+};
+
 export const saveFile = ({
   blob,
   fileName,

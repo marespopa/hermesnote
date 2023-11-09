@@ -18,7 +18,6 @@ export default function EditorForm() {
     const element = e.currentTarget as HTMLInputElement;
     const value = element.value;
 
-    console.log(`Update ${field} with ${value}`);
     setFrontMatterData({
       ...frontMatterData,
       [field]: value,

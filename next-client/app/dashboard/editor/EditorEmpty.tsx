@@ -14,11 +14,7 @@ import toast from "react-hot-toast";
 import InfoPanel from "../components/InfoPanel";
 import DocumentationMessage from "../components/DocumentationMessage";
 import TemplateSelectionModal from "../templates/TemplateSelectionModal";
-
-type StatusResponse = {
-  status: "error" | "success";
-  message: string;
-};
+import { StatusResponse } from "@/app/services/save-utils";
 
 export const PICKER_OPTIONS = {
   types: [

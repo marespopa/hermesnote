@@ -151,7 +151,8 @@ const TemplateSelectionModal = ({ isOpen, handleClose }: Props) => {
     });
     setContent(template.content);
     setContentEdited(template.content);
-
+    setIsLoadingTemplate(false);
+    handleClose();
     router.push("/dashboard/editor");
   }
 };

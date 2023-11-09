@@ -24,7 +24,7 @@ const DialogModal = ({ isOpened, onClose, children, styles = "" }: Props) => {
     <div
       className={`${
         isOpened ? "visible" : "hidden"
-      } fixed top-0 left-0 w-full h-full z-10 overflow-y-auto bg-gray-700`}
+      } fixed top-0 left-0 w-full h-full z-10 overflow-y-auto bg-gray-700 opacity-80`}
     >
       <dialog
         ref={ref}

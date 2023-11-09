@@ -28,16 +28,15 @@ export default function EmojiControl({ handleAction }: Props) {
   }
 
   return (
-    <section
+    <div
       data-testid="EmojiControl"
-      className={sectionStyle}
       onClick={(e) => {
         e.stopPropagation();
         setIsVisible(!isVisible);
       }}
     >
       <span>
-        <EmojiIcon tooltip="Emoji Picker" alt="Toggle Emoji Picker" size={48} />
+        <EmojiIcon tooltip="Emoji Picker" alt="Toggle Emoji Picker" size={24} />{" "}
       </span>
       {isVisible && (
         <div
@@ -56,8 +55,6 @@ export default function EmojiControl({ handleAction }: Props) {
           </div>
         </div>
       )}
-    </section>
+    </div>
   );
 }
-
-const sectionStyle = `z-10 fixed top-48 left-0 bg-slate-200 hover:bg-slate-300 focus:bg-slate-300 dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:bg-slate-700 p-2 h-12 w-12 rounded-r-md border border-slate-300 dark:border-slate-500 cursor-pointer`;
