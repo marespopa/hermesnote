@@ -1,3 +1,4 @@
+import { useIsDarkTheme } from "@/app/hooks/use-dark-theme";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -9,9 +10,8 @@ type Props = {
 };
 
 export default function CloseIcon({ alt, tooltip, size = 16 }: Props) {
-  const { resolvedTheme } = useTheme();
   const [isMounted, setIsMounted] = useState(false);
-  const isDarkTheme = resolvedTheme === "dark";
+  const isDarkTheme = useIsDarkTheme();
 
   useEffect(() => setIsMounted(true), []);
 

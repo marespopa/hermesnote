@@ -57,7 +57,7 @@ const MarkdownPreview = ({ content }: Props) => {
               {...rest}
               style={nord}
               language={match[1]}
-              PreTag="code"
+              PreTag="div"
             >
               {String(children).replace(/\n$/, "")}
             </SyntaxHighlighter>

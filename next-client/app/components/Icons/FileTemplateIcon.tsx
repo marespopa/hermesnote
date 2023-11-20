@@ -1,3 +1,4 @@
+import { useIsDarkTheme } from "@/app/hooks/use-dark-theme";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -10,8 +11,7 @@ type Props = {
 
 export default function FileTemplateIcon({ alt, tooltip, size = 16 }: Props) {
   const [isMounted, setIsMounted] = useState(false);
-  const { resolvedTheme } = useTheme();
-  const isDarkTheme = resolvedTheme === "dark";
+  const isDarkTheme = useIsDarkTheme();
 
   useEffect(() => setIsMounted(true), []);
 
