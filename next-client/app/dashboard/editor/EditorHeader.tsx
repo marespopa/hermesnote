@@ -42,7 +42,7 @@ export default function EditorHeader({ activeTab, navigate }: Props) {
               </span>
             )}
           </h1>
-          <h2 className="text-sm leading-tight">{`${fileName}.md`}</h2>
+          <h2 className="text-sm leading-tight">{`${fileName.endsWith('.md') ? fileName : (fileName + '.md')}`}</h2>
         </div>
         <div className="flex flex-col items-end">
           <div className="flex gap-4">
