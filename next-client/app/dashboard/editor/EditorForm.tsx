@@ -36,7 +36,7 @@ export default function EditorForm({ isOpened, handleClose }: Props) {
   }
 
   return (
-    <DialogModal isOpened={isOpened} onClose={handleClose} styles="max-w-xl">
+    <DialogModal isOpened={isOpened} onClose={handleClose} styles="max-w-2xl">
       <form className="mt-8 max-w-xl">
         <h3 className="text-2xl mt-4">Document Properties</h3>
         <p className="mt-2">
