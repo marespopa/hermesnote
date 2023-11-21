@@ -12,16 +12,17 @@ import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import EditorPreviewTrigger from "./EditorPreviewTrigger";
 import PenIcon from "@/app/components/Icons/PenIcon";
-import { EditorTabs } from "./Editor";
-import { useEffect } from "react";
+import { useState } from "react";
+import { createPortal } from "react-dom";
+import EditorForm from "./EditorForm";
 
-type Props = { activeTab: EditorTabs; navigate: (arg: EditorTabs) => void };
-
-export default function EditorHeader({ activeTab, navigate }: Props) {
+export default function EditorHeader() {
   const [hasChanges] = useAtom(atom_hasChanges);
   const [content] = useAtom(atom_contentEdited);
   const [, setFileContent] = useAtom(atom_content);
   const [frontMatter] = useAtom(atom_frontMatter);
+  const [isFormatterDialogOpen, setIsFormatterDialogOpen] = useState(false);
+
   const router = useRouter();
   const fileTitle = frontMatter.title;
   const fileName = frontMatter.fileName;
@@ -33,16 +34,15 @@ export default function EditorHeader({ activeTab, navigate }: Props) {
         <div className="flex gap-2 flex-col">
           <h1 className="text-3xl leading-tight flex gap-2 items-center">
             <span>{hasTitle && `${fileTitle}`}</span>
-            {activeTab === "content" && (
-              <span
-                className="cursor-pointer"
-                onClick={() => navigate("frontmatter")}
-              >
+            {
+              <span className="cursor-pointer" onClick={() => showFileDialog()}>
                 <PenIcon tooltip="File Settings" size={16} alt="Edit Title" />
               </span>
-            )}
+            }
           </h1>
-          <h2 className="text-sm leading-tight">{`${fileName.endsWith('.md') ? fileName : (fileName + '.md')}`}</h2>
+          <h2 className="text-sm leading-tight">{`${
+            fileName.endsWith(".md") ? fileName : fileName + ".md"
+          }`}</h2>
         </div>
         <div className="flex flex-col items-end">
           <div className="flex gap-4">
@@ -63,8 +63,16 @@ export default function EditorHeader({ activeTab, navigate }: Props) {
           </span>
         </div>
       </div>
+      <EditorForm
+        isOpened={isFormatterDialogOpen}
+        handleClose={() => setIsFormatterDialogOpen(false)}
+      />
     </>
   );
+
+  function showFileDialog() {
+    setIsFormatterDialogOpen(true);
+  }
 
   function exportToMD() {
     MarkdownExport.exportMarkdown(content, frontMatter);
