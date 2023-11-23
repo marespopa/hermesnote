@@ -1,34 +1,60 @@
 "use client";
 
 import { atom_frontMatter, atom_hasChanges } from "@/app/atoms/atoms";
+import Button from "@/app/components/Button";
 import DialogModal from "@/app/components/DialogModal";
 import Input from "@/app/components/Input";
 import Loading from "@/app/components/Loading/Loading";
 import Textarea from "@/app/components/Textarea";
 import { useAtom } from "jotai";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 interface Props {
   isOpened: boolean;
   handleClose: () => void;
 }
 
+type SaveState = "none" | "saving" | "saved";
+type Timeout = ReturnType<typeof setTimeout> | null;
+
 export default function EditorForm({ isOpened, handleClose }: Props) {
   const [, setHasChanges] = useAtom(atom_hasChanges);
   const [frontMatterData, setFrontMatterData] = useAtom(atom_frontMatter);
   const [isMounted, setIsMounted] = useState(false);
+  const [saveState, setSaveState] = useState<SaveState>("none");
+  const savingTimeout = useRef<Timeout>(null);
+  const savedTimeout = useRef<Timeout>(null);
 
   useEffect(() => setIsMounted(true), []);
 
   const handleChange = (e: FormEvent<any>, field: string) => {
+    function finishSaving() {
+      setFrontMatterData({
+        ...frontMatterData,
+        [field]: value,
+      });
+      savedTimeout.current = setTimeout(() => setSaveState("saved"), 800);
+      savingTimeout.current = setTimeout(() => setSaveState("none"), 2800);
+    }
+
+    function startSaving() {
+      if (savingTimeout.current) {
+        clearTimeout(savingTimeout.current);
+      }
+
+      if (savedTimeout.current) {
+        clearTimeout(savedTimeout.current);
+      }
+
+      setSaveState("saving");
+      setHasChanges(true);
+    }
+
     const element = e.currentTarget as HTMLInputElement;
     const value = element.value;
 
-    setFrontMatterData({
-      ...frontMatterData,
-      [field]: value,
-    });
-    setHasChanges(true);
+    startSaving();
+    finishSaving();
   };
 
   if (!isMounted) {
@@ -38,12 +64,13 @@ export default function EditorForm({ isOpened, handleClose }: Props) {
   return (
     <DialogModal isOpened={isOpened} onClose={handleClose} styles="max-w-2xl">
       <form className="mt-8 max-w-xl">
-        <h3 className="text-2xl mt-4">Document Properties</h3>
-        <p className="mt-2">
+        <h3 className="text-2xl mt-4 flex gap-2 items-center justify-between">
+          <span>Document Properties</span>
+          <span className="text-xs">{renderSaveState()}</span>
+        </h3>
+        <p className="mt-2 my-4 text-sm text-gray-500 dark:text-gray-300">
           These fields, which will be saved as frontmatter, contain essential
-          information about your Markdown file. Frontmatter is a section that
-          sits at the beginning of your document, enclosed within triple dashes
-          (---).
+          information about your Markdown file.
         </p>
         <Input
           label="File Name"
@@ -71,7 +98,20 @@ export default function EditorForm({ isOpened, handleClose }: Props) {
           handleChange={(e) => handleChange(e, "tags")}
           helperText="Separate tags by using comma ,"
         />
+        <Button variant="primary" handler={handleClose} label="Close"></Button>
       </form>
     </DialogModal>
   );
+
+  function renderSaveState() {
+    if (saveState === "saving") {
+      return <>⏳saving...</>;
+    }
+
+    if (saveState === "saved") {
+      return <>✅saved.</>;
+    }
+
+    return <></>;
+  }
 }

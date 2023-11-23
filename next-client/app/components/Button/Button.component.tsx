@@ -5,17 +5,24 @@ type Props = {
   variant: ButtonVariant;
   label: string;
   handler: () => void;
+  styles?: string;
   isDisabled?: boolean;
 };
 
-export default function Button({ variant, label, handler, isDisabled }: Props) {
+export default function Button({
+  variant,
+  label,
+  handler,
+  styles,
+  isDisabled,
+}: Props) {
   return (
     <button
       onClick={(e) => {
         e.preventDefault();
         handler();
       }}
-      className={variantStyles(variant)}
+      className={`${variantStyles(variant)} ${styles}`}
       disabled={isDisabled}
     >
       {label}
