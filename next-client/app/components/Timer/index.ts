@@ -1,3 +1,3 @@
-import Timer from './Timer.component'
+import { TimerContainer } from "./Timer.container";
 
-export default Timer
+export default TimerContainer;
