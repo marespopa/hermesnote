@@ -4,20 +4,23 @@ import useSound from "use-sound";
 import TimerComponent from "./Timer.component";
 
 interface Props {
-  pomodoroTime: number; // minutes
-  shortRestTime: number; // minutes
-  longRestTime: number; // minutes
-  cycles: number;
+  settings: {
+    pomodoroTime: number; // minutes
+    shortRestTime: number; // minutes
+    longRestTime: number; // minutes
+    cycles: number;
+  };
 }
 
-export function TimerContainer({
-  pomodoroTime,
-  shortRestTime,
-  longRestTime,
-  cycles,
-}: Props): JSX.Element {
-  const [playSound_stop] = useSound("/resources/sounds/boop.mp3");
-  const [playSound_start] = useSound("/resources/sounds/start-sound.mp3");
+export function TimerContainer({ settings }: Props): JSX.Element {
+  const [playSound_stop] = useSound("/resources/sounds/notification.mp3");
+  const [playSound_pause] = useSound("/resources/sounds/boop.mp3");
+  const [playSound_start] = useSound("/resources/sounds/start-tick.wav");
+
+  const pomodoroTime = settings.pomodoroTime * 60;
+  const shortRestTime = settings.shortRestTime * 60;
+  const longRestTime = settings.longRestTime * 60;
+  const cycles = settings.cycles;
 
   const [mainTime, setMainTime] = useState(pomodoroTime);
   const [isTimerCounting, setIsTimerCounting] = useState(false);
@@ -123,6 +126,9 @@ export function TimerContainer({
   }
 
   function togglePauseFn(): () => void {
-    return () => setIsTimerCounting(!isTimerCounting);
+    return () => {
+      setIsTimerCounting(!isTimerCounting);
+      isTimerCounting ? playSound_pause() : playSound_start();
+    };
   }
 }

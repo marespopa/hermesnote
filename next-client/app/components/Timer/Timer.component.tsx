@@ -1,9 +1,19 @@
 import { getFormattedTimeFromMs } from "@/app/services/date-utils";
-import { FaRegWindowMaximize, FaRegWindowMinimize } from "react-icons/fa6";
+import {
+  FaGear,
+  FaHourglassStart,
+  FaMugHot,
+  FaPause,
+  FaPlay,
+  FaRegWindowMaximize,
+  FaRegWindowMinimize,
+  FaTerminal,
+} from "react-icons/fa6";
 
 import Button from "../Button";
 import { useEffect, useState } from "react";
 import { useDocumentTitle } from "@/app/hooks/use-document-title";
+import TimerSettingsTrigger from "./TimerSettingsTrigger";
 
 type Props = {
   isWorking: boolean;
@@ -57,34 +67,16 @@ const TimerComponent = ({
         </span>
       </h2>
       {!isTimerMinimized && renderDetails()}
+      {!isTimerMinimized && <TimerSettingsTrigger />}
     </section>
   );
 
   function renderDetails() {
     return (
       <>
-        <div className="flex gap-4 mt-4 justify-center">
-          <Button
-            label="WORK"
-            handler={() => startWorkInterval()}
-            variant="default"
-          ></Button>
-          <Button
-            variant="default"
-            label="REST"
-            handler={() => startRestInterval(false)}
-          ></Button>
+        <div>{renderControlButtons()}</div>
 
-          {isPauseButtonVisible && (
-            <Button
-              variant="default"
-              label={isTimerCounting ? "PAUSE" : "GO"}
-              handler={togglePauseFn()}
-            ></Button>
-          )}
-        </div>
-
-        <div className="mt-2">
+        <div className="mt-2 pb-8">
           <p className="text-xs italic">
             One finished cycle consists in four finished pomodoros
           </p>
@@ -99,6 +91,63 @@ const TimerComponent = ({
           </div>
         </div>
       </>
+    );
+  }
+
+  function renderControlButtons() {
+    return (
+      <div className="flex gap-4 mt-4 justify-center">
+        {!isResting && !isWorking && !isTimerCounting && (
+          <Button
+            label={
+              <>
+                START <FaPlay />
+              </>
+            }
+            handler={() => startWorkInterval()}
+            variant="small"
+          ></Button>
+        )}
+        {isResting && (
+          <Button
+            label={
+              <>
+                WORK <FaTerminal />
+              </>
+            }
+            handler={() => startWorkInterval()}
+            variant="small"
+          ></Button>
+        )}
+        {isWorking && (
+          <Button
+            variant="small"
+            label={
+              <>
+                BREAK <FaMugHot />
+              </>
+            }
+            handler={() => startRestInterval(false)}
+          ></Button>
+        )}
+        {isPauseButtonVisible && (
+          <Button
+            variant="small"
+            label={
+              isTimerCounting ? (
+                <>
+                  PAUSE <FaPause />
+                </>
+              ) : (
+                <>
+                  GO <FaPlay />
+                </>
+              )
+            }
+            handler={togglePauseFn()}
+          ></Button>
+        )}
+      </div>
     );
   }
 
@@ -130,8 +179,8 @@ function getHeadingText(
   return "Pomodoro Timer";
 }
 
-const timerPopStyles = `bg-gray-300 shadow-sm px-2 md:px-4 py-3 my-4 rounded-md border border-gray-400
+const timerPopStyles = `bg-slate-200 shadow-sm py-2 md:px-4 pt-2 my-4 rounded-md
                         w-full sm:w-1/2 z-10 md:w-1/4 sm:fixed sm:right-4 sm:bottom-2
-                        dark:bg-gray-600 dark:text-white dark:border-gray-700 sm:opacity-95`;
+                        dark:bg-slate-700 dark:text-white opacity-95 relative`;
 
 export default TimerComponent;

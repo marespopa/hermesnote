@@ -22,7 +22,7 @@ const ThemeSwitcher = () => {
     <label
       htmlFor={elementName}
       data-testid={"ThemeSwitcher"}
-      className="flex bg-cyan-300 dark:bg-slate-700 w-8 h-8 align-middle justify-center cursor-pointer rounded-lg"
+      className="flex bg-emerald-300 dark:bg-slate-700 w-8 h-8 align-middle justify-center cursor-pointer rounded-lg"
     >
       <input
         type="checkbox"

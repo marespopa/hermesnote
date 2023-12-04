@@ -17,7 +17,7 @@ const NavigationLink = ({ label, href, isEmphasized = false }: Props) => {
     : "text-gray-500 dark:text-gray-300";
 
   const emphasizeStyle = isEmphasized
-    ? `rounded-md transition ease-in-out p-2 bg-cyan-200 dark:bg-cyan-600 hover:bg-cyan-300 focus:bg-cyan-300 dark:hover:bg-cyan-700 dark:focus:bg-cyan-700`
+    ? `text-white rounded-md transition ease-in-out p-2 bg-emerald-500 dark:bg-emerald-600 hover:bg-emerald-600 focus:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:bg-emerald-700`
     : ``;
 
   return (

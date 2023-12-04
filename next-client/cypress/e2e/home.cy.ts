@@ -22,7 +22,7 @@ describe("Homepage spec", () => {
     // It has CTA button
     cy.contains("Try Hermes Notes").should("be.visible");
 
-    // It has sfeatures section
+    // It has features section
     cy.scrollTo(0, 500);
     cy.get('[data-testid="Features"]');
     cy.get('[data-testid="FeaturesList"] div')

@@ -42,7 +42,7 @@ const MainPage = ({ children }: Props) => {
       <body className={mainFont.className}>
         <Toaster position="top-center" reverseOrder={false} />
         <CustomProviders>
-          <div className="min-h-screen flex flex-col bg-sky-50 dark:bg-slate-800">
+          <div className="min-h-screen flex flex-col bg-emerald-50 dark:bg-slate-800">
             <Header />
 
             <div className="flex-1 sm:px-4 md:px-0">{children}</div>

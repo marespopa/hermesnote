@@ -41,13 +41,13 @@ const MarkdownPreview = ({ content }: Props) => {
           const { children } = props;
           const anchor = getAnchor(children);
 
-          return <h2 id={anchor}>{children}</h2>;
+          return <h5 id={anchor}>{children}</h5>;
         },
         h6(props) {
           const { children } = props;
           const anchor = getAnchor(children);
 
-          return <h2 id={anchor}>{children}</h2>;
+          return <h6 id={anchor}>{children}</h6>;
         },
         code(props) {
           const { children, className, node, ...rest } = props;

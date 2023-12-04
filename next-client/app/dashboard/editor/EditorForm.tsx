@@ -5,6 +5,9 @@ import Button from "@/app/components/Button";
 import DialogModal from "@/app/components/DialogModal";
 import Input from "@/app/components/Input";
 import Loading from "@/app/components/Loading/Loading";
+import SaveStateText, {
+  SaveState,
+} from "@/app/components/SaveStateText/SaveStateText";
 import Textarea from "@/app/components/Textarea";
 import { useAtom } from "jotai";
 import { FormEvent, useEffect, useRef, useState } from "react";
@@ -14,7 +17,6 @@ interface Props {
   handleClose: () => void;
 }
 
-type SaveState = "none" | "saving" | "saved";
 type Timeout = ReturnType<typeof setTimeout> | null;
 
 export default function EditorForm({ isOpened, handleClose }: Props) {
@@ -66,7 +68,7 @@ export default function EditorForm({ isOpened, handleClose }: Props) {
       <form className="mt-8 max-w-xl">
         <h3 className="text-2xl mt-4 flex gap-2 items-center justify-between">
           <span>Document Properties</span>
-          <span className="text-xs">{renderSaveState()}</span>
+          <SaveStateText status={saveState} />
         </h3>
         <p className="mt-2 my-4 text-sm text-gray-500 dark:text-gray-300">
           These fields, which will be saved as frontmatter, contain essential
@@ -102,16 +104,4 @@ export default function EditorForm({ isOpened, handleClose }: Props) {
       </form>
     </DialogModal>
   );
-
-  function renderSaveState() {
-    if (saveState === "saving") {
-      return <>⏳saving...</>;
-    }
-
-    if (saveState === "saved") {
-      return <>✅saved.</>;
-    }
-
-    return <></>;
-  }
 }

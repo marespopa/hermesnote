@@ -16,7 +16,7 @@ export default function Motto() {
           productivity? Start using Hermes Notes today for effortless Markdown
           editing and PDF exporting.
         </h3>
-        <div className="my-4">
+        <div className="mt-8 mb-16">
           <Button
             variant="primary-large"
             label="Get Started!"

@@ -5,6 +5,11 @@ interface Props {
   placeholder?: string;
   helperText?: string;
   handleChange: (e: React.FormEvent<HTMLInputElement>) => void;
+  type?: "number" | "text";
+  validation?: {
+    min: number;
+    max: number;
+  };
 }
 
 const Input = ({
@@ -14,6 +19,8 @@ const Input = ({
   placeholder,
   helperText,
   handleChange,
+  type = "text",
+  validation,
 }: Props) => {
   return (
     <div className="my-4">
@@ -22,14 +29,16 @@ const Input = ({
           {label}
         </span>
         <input
-          className="bg-white dark:bg-slate-700 px-2 py-2 rounded-md border-2 border-gray-300 dark:border-gray-600 outline-none focus:border-blue-500"
-          type="text"
+          className="bg-white dark:bg-slate-700 px-2 py-2 rounded-md border-2 border-gray-300 dark:border-gray-600 outline-none focus:border-emerald-500"
+          type={type}
           aria-label={label}
           id={name}
           name={name}
           value={value}
           onChange={handleChange}
           placeholder={placeholder}
+          min={validation?.min}
+          max={validation?.max}
         />
       </label>
       {helperText && (

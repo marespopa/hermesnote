@@ -1,3 +1,5 @@
+"use client";
+
 import CloseIcon from "@/app/components/Icons/CloseIcon";
 import ListIcon from "@/app/components/Icons/ListIcon";
 import React, { useState } from "react";
@@ -16,27 +18,10 @@ interface TOCItem {
 const EditorTableOfContents = ({ headings }: Props) => {
   const [isToggled, setIsToggled] = useState(true);
 
-  if (isToggled) {
-    return renderToggle();
-  }
-
-  return (
-    <div className="fixed opacity-90 p-4 rounded-sm right-4 bottom-4 w- max-w-sm bg-gray-300 dark:bg-slate-500">
-      <h3
-        className={"flex justify-between gap-4"}
-        onClick={() => setIsToggled(true)}
-      >
-        <span>Table of contents</span>
-        <CloseIcon tooltip="Close this dialog" alt="Close Table" />
-      </h3>
-      {headings?.length > 0 ? renderTableOfContents(headings) : <>No content</>}
-    </div>
-  );
-
   function renderToggle() {
     return (
       <span
-        className="absolute -right-[16px] top-0 cursor-pointer rounded-full bg-cyan-500 hover:bg-cyan-600 focus:bg-cyan-600 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:bg-cyan-700 shadow-md"
+        className="absolute -right-[16px] top-0 cursor-pointer rounded-full bg-emerald-500 hover:bg-emerald-600 focus:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:bg-emerald-700 shadow-md"
         onClick={() => setIsToggled(false)}
       >
         <ListIcon
@@ -67,20 +52,39 @@ const EditorTableOfContents = ({ headings }: Props) => {
           return "pl-0";
       }
     }
+
     return (
       <div className="overflow-y-auto max-h-40 mt-4 pr-2 text-sm flex flex-col gap-2">
         {tableOfContents.map(({ level, id, title, anchor }) => {
           const inlinePadding = getPadding(level);
+          const anchorText = level > 0 ? `― ${title}` : title;
 
           return (
             <div key={`${level} ${id} ${title}`} className={`${inlinePadding}`}>
-              <a href={anchor}>{level > 0 ? `― ${title}` : title}</a>
+              <a href={anchor}>{anchorText}</a>
             </div>
           );
         })}
       </div>
     );
   }
+
+  if (isToggled) {
+    return renderToggle();
+  }
+
+  return (
+    <div className="fixed shadow-sm opacity-95 p-4 rounded-md right-4 bottom-64 max-w-sm bg-slate-200 dark:bg-slate-700">
+      <h3
+        className={"flex justify-between gap-4"}
+        onClick={() => setIsToggled(true)}
+      >
+        <span>Table of contents</span>
+        <CloseIcon tooltip="Close this dialog" alt="Close Table" />
+      </h3>
+      {headings?.length > 0 ? renderTableOfContents(headings) : <>No content</>}
+    </div>
+  );
 };
 
 export default EditorTableOfContents;

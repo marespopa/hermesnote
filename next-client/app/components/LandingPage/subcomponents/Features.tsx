@@ -35,6 +35,6 @@ export default function Features() {
 
 const sectionStyle = `mt-4 sm:mt-8 md:mt-32 my-16`;
 const gridStyle = `flex gap-4`;
-const gridItemStyle = `w-full sm:w-1/3 py-8 md:py-16 px-8 md:px-8 bg-sky-100 dark:bg-slate-900 rounded-md`;
+const gridItemStyle = `w-full sm:w-1/3 py-8 md:py-16 px-8 md:px-8 bg-slate-100 dark:bg-slate-900 rounded-md`;
 const headingStyle = `text-2xl leading-tight text-gray-700 dark:text-white`;
 const paragraphStyle = `mt-4 text-gray-600 dark:text-gray-200`;
