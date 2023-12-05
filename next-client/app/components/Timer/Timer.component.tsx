@@ -1,7 +1,5 @@
 import { getFormattedTimeFromMs } from "@/app/services/date-utils";
 import {
-  FaGear,
-  FaHourglassStart,
   FaMugHot,
   FaPause,
   FaPlay,
