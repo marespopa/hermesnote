@@ -14,6 +14,8 @@ import Button from "../Button";
 import { useEffect, useState } from "react";
 import { useDocumentTitle } from "@/app/hooks/use-document-title";
 import TimerSettingsTrigger from "./TimerSettingsTrigger";
+import { useAtom } from "jotai";
+import { atom_frontMatter } from "@/app/atoms/atoms";
 
 type Props = {
   isWorking: boolean;
@@ -41,17 +43,27 @@ const TimerComponent = ({
   const [isTimerMinimized, setIsTimerMinimized] = useState(true);
   const isPauseButtonVisible = isWorking || isResting;
   const [_, setDocumentTitle] = useDocumentTitle("Hermes Notes");
+  const [frontMatter] = useAtom(atom_frontMatter);
+  const fileTitle = frontMatter.title || "File";
 
   useEffect(() => {
     const title = getHeadingText(
       isWorking,
       isResting,
       isTimerCounting,
-      mainTime
+      mainTime,
+      fileTitle
     );
 
     setDocumentTitle(title);
-  }, [isResting, isTimerCounting, isWorking, mainTime, setDocumentTitle]);
+  }, [
+    isResting,
+    isTimerCounting,
+    isWorking,
+    mainTime,
+    fileTitle,
+    setDocumentTitle,
+  ]);
 
   return (
     <section className={`${timerPopStyles}`}>
@@ -60,7 +72,13 @@ const TimerComponent = ({
         onClick={() => toggleTimerWindow()}
       >
         <span>
-          {getHeadingText(isWorking, isResting, isTimerCounting, mainTime)}
+          {getHeadingText(
+            isWorking,
+            isResting,
+            isTimerCounting,
+            mainTime,
+            fileTitle
+          )}
         </span>
         <span>
           {isTimerMinimized ? <FaRegWindowMaximize /> : <FaRegWindowMinimize />}
@@ -160,23 +178,26 @@ function getHeadingText(
   isWorking: boolean,
   isResting: boolean,
   isTimerCounting: boolean,
-  time: number // in Minutes
+  time: number, // in Minutes
+  fileTitle: string
 ) {
   const formattedTime = getFormattedTimeFromMs(time * 1000);
 
   if (isTimerCounting) {
-    return `${isWorking ? `Working` : `On a break`} - ${formattedTime} left`;
+    return `${
+      isWorking ? `Working` : `On a break`
+    } - ${formattedTime} left - ${fileTitle}`;
   }
 
   if (isWorking) {
-    return "Working - Paused";
+    return `Working - Paused - ${fileTitle}`;
   }
 
   if (isResting) {
-    return "On a break - Paused";
+    return `On a break - Paused - ${fileTitle}`;
   }
 
-  return "Pomodoro Timer";
+  return `${fileTitle}`;
 }
 
 const timerPopStyles = `bg-slate-200 shadow-sm py-2 md:px-4 pt-2 my-4 rounded-md
