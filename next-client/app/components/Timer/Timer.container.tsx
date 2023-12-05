@@ -126,6 +126,7 @@ export function TimerContainer({ settings }: Props): JSX.Element {
     setIsResting(false);
     setCompletedCycles(0);
     setCyclesStateManager([]);
+    setNumberOfPomodoros(0);
     setMainTime(pomodoroTime);
     playSound_reset();
   }
