@@ -15,7 +15,6 @@ import { useDocumentTitle } from "@/app/hooks/use-document-title";
 import TimerSettingsTrigger from "./TimerSettingsTrigger";
 import { useAtom } from "jotai";
 import { atom_frontMatter } from "@/app/atoms/atoms";
-import { getButtonStylesFromColor } from "@/app/services/style-utils";
 
 type Props = {
   isWorking: boolean;
@@ -143,20 +142,18 @@ const TimerComponent = ({
         )}
         {isWorking && (
           <Button
-            variant="small"
+            variant="small--warning"
             label={
               <>
                 BREAK <FaMugHot />
               </>
             }
-            styles={getButtonStylesFromColor("amber")}
             handler={() => startRestInterval(false)}
           ></Button>
         )}
         {isPauseButtonVisible && (
           <Button
-            variant="small"
-            styles={isTimerCounting ? getButtonStylesFromColor("cyan") : ""}
+            variant={isTimerCounting ? "small" : "small--info"}
             label={
               isTimerCounting ? (
                 <>
@@ -173,14 +170,13 @@ const TimerComponent = ({
         )}
         {(isPauseButtonVisible || isTimerCounting) && (
           <Button
-            variant="small"
+            variant="small--error"
             label={
               <>
                 RESET <FaRecycle />
               </>
             }
             handler={() => resetPomodoro()}
-            styles={getButtonStylesFromColor("rose")}
           ></Button>
         )}
       </div>
