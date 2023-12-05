@@ -171,7 +171,7 @@ const TimerComponent = ({
             handler={togglePauseFn()}
           ></Button>
         )}
-        {isTimerCounting && (
+        {(isPauseButtonVisible || isTimerCounting) && (
           <Button
             variant="small"
             label={
