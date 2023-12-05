@@ -16,6 +16,7 @@ export function TimerContainer({ settings }: Props): JSX.Element {
   const [playSound_stop] = useSound("/resources/sounds/notification.mp3");
   const [playSound_pause] = useSound("/resources/sounds/boop.mp3");
   const [playSound_start] = useSound("/resources/sounds/start-tick.wav");
+  const [playSound_reset] = useSound("/resources/sounds/reset.wav");
 
   const pomodoroTime = settings.pomodoroTime * 60;
   const shortRestTime = settings.shortRestTime * 60;
@@ -43,6 +44,15 @@ export function TimerContainer({ settings }: Props): JSX.Element {
     },
     isTimerCounting ? 1000 : null
   );
+
+  const resetPomodoro = useCallback(resetPomodoroFn, [
+    setIsTimerCounting,
+    setIsWorking,
+    setIsResting,
+    setMainTime,
+    pomodoroTime,
+    playSound_reset,
+  ]);
 
   const startWorkInterval = useCallback(startWorkIntervalFn, [
     setIsTimerCounting,
@@ -102,12 +112,21 @@ export function TimerContainer({ settings }: Props): JSX.Element {
     mainTime,
     startWorkInterval,
     startRestInterval,
+    resetPomodoro,
     togglePauseFn,
     numberOfPomodoros,
     completedCycles,
   };
 
   return <TimerComponent {...timerProps} />;
+
+  function resetPomodoroFn() {
+    setIsTimerCounting(false);
+    setIsWorking(false);
+    setIsResting(false);
+    setMainTime(pomodoroTime);
+    playSound_reset();
+  }
 
   function startWorkIntervalFn() {
     setIsTimerCounting(true);

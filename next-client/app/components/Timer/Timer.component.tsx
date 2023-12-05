@@ -3,6 +3,7 @@ import {
   FaMugHot,
   FaPause,
   FaPlay,
+  FaRecycle,
   FaRegWindowMaximize,
   FaRegWindowMinimize,
   FaTerminal,
@@ -14,6 +15,7 @@ import { useDocumentTitle } from "@/app/hooks/use-document-title";
 import TimerSettingsTrigger from "./TimerSettingsTrigger";
 import { useAtom } from "jotai";
 import { atom_frontMatter } from "@/app/atoms/atoms";
+import { getButtonStylesFromColor } from "@/app/services/style-utils";
 
 type Props = {
   isWorking: boolean;
@@ -22,6 +24,7 @@ type Props = {
   mainTime: number;
   startWorkInterval: () => void;
   startRestInterval: (long: boolean) => void;
+  resetPomodoro: () => void;
   togglePauseFn: () => () => void;
   numberOfPomodoros: number;
   completedCycles: number;
@@ -34,6 +37,7 @@ const TimerComponent = ({
   mainTime,
   startWorkInterval,
   startRestInterval,
+  resetPomodoro,
   togglePauseFn,
   numberOfPomodoros,
   completedCycles,
@@ -45,13 +49,14 @@ const TimerComponent = ({
   const fileTitle = frontMatter.title || "File";
 
   useEffect(() => {
-    const title = getHeadingText(
+    const pomodoroSettings = {
       isWorking,
       isResting,
       isTimerCounting,
-      mainTime,
-      fileTitle
-    );
+      time: mainTime,
+    };
+
+    const title = getHeadingText(pomodoroSettings, fileTitle, true);
 
     setDocumentTitle(title);
   }, [
@@ -63,20 +68,21 @@ const TimerComponent = ({
     setDocumentTitle,
   ]);
 
+  const pomodoroSettings = {
+    isWorking,
+    isResting,
+    isTimerCounting,
+    time: mainTime,
+  };
+
   return (
     <section className={`${timerPopStyles}`}>
       <h2
         className="font-bold flex justify-between cursor-pointer"
         onClick={() => toggleTimerWindow()}
       >
-        <span>
-          {getHeadingText(
-            isWorking,
-            isResting,
-            isTimerCounting,
-            mainTime,
-            fileTitle
-          )}
+        <span className="font-mono">
+          {getHeadingText(pomodoroSettings, fileTitle, false)}
         </span>
         <span>
           {isTimerMinimized ? <FaRegWindowMaximize /> : <FaRegWindowMinimize />}
@@ -143,12 +149,14 @@ const TimerComponent = ({
                 BREAK <FaMugHot />
               </>
             }
+            styles={getButtonStylesFromColor("amber")}
             handler={() => startRestInterval(false)}
           ></Button>
         )}
         {isPauseButtonVisible && (
           <Button
             variant="small"
+            styles={isTimerCounting ? getButtonStylesFromColor("cyan") : ""}
             label={
               isTimerCounting ? (
                 <>
@@ -163,6 +171,18 @@ const TimerComponent = ({
             handler={togglePauseFn()}
           ></Button>
         )}
+        {isTimerCounting && (
+          <Button
+            variant="small"
+            label={
+              <>
+                RESET <FaRecycle />
+              </>
+            }
+            handler={() => resetPomodoro()}
+            styles={getButtonStylesFromColor("rose")}
+          ></Button>
+        )}
       </div>
     );
   }
@@ -173,29 +193,34 @@ const TimerComponent = ({
 };
 
 function getHeadingText(
-  isWorking: boolean,
-  isResting: boolean,
-  isTimerCounting: boolean,
-  time: number, // in Minutes
-  fileTitle: string
+  pomodoro: {
+    isWorking: boolean;
+    isResting: boolean;
+    isTimerCounting: boolean;
+    time: number; // in Minutes
+  },
+  fileTitle: string,
+  isDocumentTitle: boolean
 ) {
+  const { isWorking, isResting, isTimerCounting, time } = pomodoro;
   const formattedTime = getFormattedTimeFromMs(time * 1000);
+  const usageBasedText = isDocumentTitle ? `/ ${fileTitle}` : "";
 
   if (isTimerCounting) {
-    return `${
-      isWorking ? `Working` : `On a break`
-    } - ${formattedTime} left - ${fileTitle}`;
+    return `${formattedTime} - ${
+      isWorking ? `Work` : `Break`
+    } ${usageBasedText}`;
   }
 
   if (isWorking) {
-    return `Working - Paused - ${fileTitle}`;
+    return `Work - Paused ${usageBasedText}`;
   }
 
   if (isResting) {
-    return `On a break - Paused - ${fileTitle}`;
+    return `Break - Paused ${usageBasedText}`;
   }
 
-  return `${fileTitle}`;
+  return isDocumentTitle ? `${fileTitle}` : "Pomodoro Timer";
 }
 
 const timerPopStyles = `bg-slate-200 shadow-sm py-2 md:px-4 pt-2 my-4 rounded-md
