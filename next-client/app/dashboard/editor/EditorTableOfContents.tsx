@@ -74,7 +74,7 @@ const EditorTableOfContents = ({ headings }: Props) => {
   }
 
   return (
-    <div className="fixed shadow-sm opacity-95 p-4 rounded-md right-4 bottom-64 max-w-sm bg-slate-200 dark:bg-slate-700">
+    <div className="fixed shadow-sm opacity-95 p-4 rounded-md right-4 bottom-64 max-w-sm bg-slate-200 dark:bg-slate-600">
       <h3
         className={"flex justify-between gap-4"}
         onClick={() => setIsToggled(true)}
