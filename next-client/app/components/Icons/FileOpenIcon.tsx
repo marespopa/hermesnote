@@ -1,5 +1,4 @@
 import { useIsDarkTheme } from "@/app/hooks/use-dark-theme";
-import { useTheme } from "next-themes";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 

@@ -8,7 +8,7 @@ type Props = {
   size?: number;
 };
 
-export default function PenIcon({ alt, tooltip, size = 16 }: Props) {
+export default function EyeIcon({ alt, tooltip, size = 16 }: Props) {
   const [isMounted, setIsMounted] = useState(false);
   const isDarkTheme = useIsDarkTheme();
 
@@ -20,10 +20,11 @@ export default function PenIcon({ alt, tooltip, size = 16 }: Props) {
 
   return (
     <Image
+      className="cursor-pointer"
       src={`${
         isDarkTheme
-          ? "/assets/icons/pencil-icon_dark.svg"
-          : "/assets/icons/pencil-icon.svg"
+          ? "/assets/icons/eye-icon_dark.svg"
+          : "/assets/icons/eye-icon.svg"
       }`}
       width={size}
       height={size}

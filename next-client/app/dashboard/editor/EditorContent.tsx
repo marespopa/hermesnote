@@ -22,6 +22,10 @@ import { PICKER_OPTIONS } from "./EditorEmpty";
 import { StatusResponse } from "@/app/services/save-utils";
 import matter from "gray-matter";
 import TemplateSelectionModal from "../templates/TemplateSelectionModal";
+import EditorTextarea from "./EditorTextarea";
+import EyeIcon from "@/app/components/Icons/EyeIcon";
+
+type PanelState = "both" | "editor" | "preview";
 
 export default function EditorContent() {
   const router = useRouter();
@@ -32,11 +36,10 @@ export default function EditorContent() {
   const [, setContent] = useAtom(atom_content);
   const [, setHasChanges] = useAtom(atom_hasChanges);
   const [isMounted, setIsMounted] = useState(false);
-  const [isToggled, setIsToggled] = useState(false);
   const [headings, setHeadings] = useState({});
   const [cursorPosition, setCursorPosition] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [panelState, setPanelState] = useState<PanelState>("both");
   const [isTemplateSelectModalVisible, setIsTemplateSelectModalVisible] =
     useState(false);
 
@@ -75,6 +78,18 @@ export default function EditorContent() {
     return <Loading />;
   }
 
+  function getClassByPanelState(panel: string) {
+    if (panelState === "both") {
+      return "w-1/2";
+    }
+
+    if (panel === panelState) {
+      return "w-full";
+    }
+
+    return "hidden";
+  }
+
   return (
     <>
       <EditorSidebar
@@ -86,17 +101,26 @@ export default function EditorContent() {
         }}
       />
       <div className="flex gap-4">
-        <div className={`${isToggled ? "hidden" : "w-1/2"} relative`}>
-          {!isToggled && renderHideEditorToggle()}
-          <TextareaResizable
-            name="content"
-            value={contentEdited}
-            handleChange={(e) => setContentEdited(e.currentTarget.value)}
-            handleCursorPositionUpdate={(pos: number) => setCursorPosition(pos)}
+        <div
+          className={`${getClassByPanelState(
+            "editor"
+          )} relative transition ease-in-out delay-150`}
+        >
+          {panelState === "both" && renderHideEditorToggle()}
+          {panelState === "editor" && renderShowPreviewToggle()}
+          <EditorTextarea
+            contentEdited={contentEdited}
+            setContentEdited={setContentEdited}
+            setCursorPosition={setCursorPosition}
           />
         </div>
-        <div className={`${isToggled ? "w-full" : "w-1/2"} relative`}>
-          {isToggled && renderShowEditorToggle()}
+        <div
+          className={`${getClassByPanelState(
+            "preview"
+          )} relative transition ease-in-out delay-150`}
+        >
+          {panelState === "both" && renderHidePreviewToggle()}
+          {panelState === "preview" && renderShowEditorToggle()}
           <EditorPreview content={contentEdited} />
           <EditorTableOfContents headings={headings}></EditorTableOfContents>
         </div>
@@ -208,9 +232,35 @@ export default function EditorContent() {
     return (
       <span
         className="absolute right-4 top-8 cursor-pointer"
-        onClick={() => setIsToggled(!isToggled)}
+        onClick={() => setPanelState("both")}
       >
-        <PenIcon tooltip="Show Editor" alt="Toggle Editor" />
+        <PenIcon tooltip="Show Editor" alt="Toggle Editor" size={14} />
+      </span>
+    );
+  }
+
+  function renderShowPreviewToggle(): React.ReactNode {
+    return (
+      <span
+        className="absolute right-4 top-8 cursor-pointer"
+        onClick={() => setPanelState("both")}
+      >
+        <EyeIcon tooltip="Show Preview" alt="Toggle Preview" size={20} />
+      </span>
+    );
+  }
+
+  function renderHidePreviewToggle(): React.ReactNode {
+    return (
+      <span
+        className="absolute right-4 top-8 cursor-pointer"
+        onClick={() => setPanelState("editor")}
+      >
+        <CloseIcon
+          tooltip="Hide the preview pane"
+          alt="Toggle Preview"
+          size={14}
+        />
       </span>
     );
   }
@@ -219,9 +269,13 @@ export default function EditorContent() {
     return (
       <span
         className="absolute right-4 top-8 cursor-pointer"
-        onClick={() => setIsToggled(!isToggled)}
+        onClick={() => setPanelState("preview")}
       >
-        <CloseIcon tooltip="Hide the editor pane" alt="Toggle Editor" />
+        <CloseIcon
+          tooltip="Hide the editor pane"
+          alt="Toggle Editor"
+          size={14}
+        />
       </span>
     );
   }

@@ -1,8 +1,7 @@
 import EmojiIcon from "@/app/components/Icons/EmojiIcon";
-import PenIcon from "@/app/components/Icons/PenIcon";
+import { useIsDarkTheme } from "@/app/hooks/use-dark-theme";
 import { useKey } from "@/app/hooks/use-key";
 import EmojiPicker, { Theme } from "emoji-picker-react";
-import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
 
 type Props = {
@@ -12,8 +11,8 @@ type Props = {
 export default function EmojiControl({ handleAction }: Props) {
   const [isVisible, setIsVisible] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const { resolvedTheme } = useTheme();
-  const pickerTheme = resolvedTheme === "dark" ? "dark" : "light";
+  const isDarkTheme = useIsDarkTheme();
+  const pickerTheme = isDarkTheme ? "dark" : "light";
 
   useEffect(() => setIsMounted(true), []);
 

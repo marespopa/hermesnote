@@ -4,17 +4,17 @@ import React from "react";
 import logoLight from "/assets/logo-l.svg";
 import logoDark from "/assets/logo-d.svg";
 
-import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ThemeSwitcher from "./ThemeSwitcher/ThemeSwitcher";
 import NavigationLinks from "./Navigation/NavigationLinks";
+import { useIsDarkTheme } from "@/app/hooks/use-dark-theme";
 
 export default function Header() {
   const [mounted, setMounted] = useState(false);
-  const { resolvedTheme } = useTheme();
-  const logo = resolvedTheme === "dark" ? logoDark : logoLight;
+  const isDarkTheme = useIsDarkTheme();
+  const logo = isDarkTheme ? logoDark : logoLight;
 
   useEffect(() => {
     setMounted(true);
