@@ -9,6 +9,7 @@ import CustomProviders from "./CustomProviders";
 import Footer from "./Footer/Footer.component";
 import Header from "./Header";
 import { Montserrat } from "next/font/google";
+import Seo from "./Seo";
 const mainFont = Montserrat({ subsets: ["latin"] });
 
 type Props = {
@@ -22,6 +23,7 @@ const MainPage = ({ children }: Props) => {
   if (isBrowserMobile) {
     return (
       <html lang="en">
+        <Seo />
         <body
           className={`${mainFont.className} max-w-sm prose dark:prose-invert px-4 py-24 bg-white dark:bg-slate-800`}
         >
@@ -39,6 +41,7 @@ const MainPage = ({ children }: Props) => {
 
   return (
     <html lang="en">
+      <Seo />
       <body className={mainFont.className}>
         <Toaster position="top-center" reverseOrder={false} />
         <CustomProviders>
