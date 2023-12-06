@@ -1,14 +1,9 @@
----
-title: HermesNotes
-description: Reason behind making the app
-tags:
-  - planning
-  - motivation
----
+# Hermes Notes
 
-# Reason for the app
+A free to use, online markdown editor.
+Hermes Notes is dedicated to enhancing your Markdown editing and viewing experience.
 
-The app is designed to provide a seamless and efficient solution for creating Markdown files and exporting them to PDF format, catering specifically to the needs of users who frequently work with Markdown.
+The app provides a straightforward and efficient process for creating, editing, and exporting your Markdown content.
 
 ## Status
 
