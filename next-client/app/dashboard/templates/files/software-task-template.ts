@@ -6,7 +6,7 @@ const date = getDate();
 const SoftwareTaskTemplate: MarkdownTemplate = {
   filename: "task-1",
   frontMatter: {
-    title: "Task 1",
+    title: "Software Task",
     description: `The Software Task Template streamlines software development task tracking, offering sections for task details, links, work description, progress updates, notes, and questions.`,
     tags: "software engineering,task,guide,template",
   },
