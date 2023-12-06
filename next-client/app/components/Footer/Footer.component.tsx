@@ -16,9 +16,14 @@ export default function Footer() {
                   Terms of Service
                 </Link>
               </li>
-              <li className="pl-4">
+              <li className="pl-2">
                 <Link className={linkStyle} href={"/privacy-policy"}>
                   Privacy Policy
+                </Link>
+              </li>
+              <li className="pl-2">
+                <Link className={linkStyle} href="mailto:hello@marespopa.com">
+                  Email
                 </Link>
               </li>
             </ul>
