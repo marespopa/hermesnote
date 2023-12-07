@@ -104,7 +104,7 @@ export default function EditorContent() {
         <div
           className={`${getClassByPanelState(
             "editor"
-          )} relative transition ease-in-out delay-150 min-h-[300px]`}
+          )} relative transition ease-in-out delay-150`}
         >
           {panelState === "both" && renderHideEditorToggle()}
           {panelState === "editor" && renderShowPreviewToggle()}
@@ -118,9 +118,11 @@ export default function EditorContent() {
           className={`${getClassByPanelState(
             "preview"
           )} relative transition ease-in-out delay-150`}
-          onDoubleClick={() =>
-            setPanelState(panelState === "both" ? "preview" : "editor")
-          }
+          onDoubleClick={() => {
+            if (panelState === "preview") {
+              setPanelState("editor");
+            }
+          }}
         >
           {panelState === "both" && renderHidePreviewToggle()}
           {panelState === "preview" && renderShowEditorToggle()}
