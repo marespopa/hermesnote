@@ -104,7 +104,7 @@ export default function EditorContent() {
         <div
           className={`${getClassByPanelState(
             "editor"
-          )} relative transition ease-in-out delay-150`}
+          )} relative transition ease-in-out delay-150 min-h-[300px]`}
         >
           {panelState === "both" && renderHideEditorToggle()}
           {panelState === "editor" && renderShowPreviewToggle()}
