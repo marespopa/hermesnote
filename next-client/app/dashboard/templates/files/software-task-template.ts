@@ -16,7 +16,7 @@ const SoftwareTaskTemplate: MarkdownTemplate = {
 | Type      | Link                 |
 |-----------|----------------------|
 | **Story** | [LinkTitle](LinkURL) |
-| **Link**  | [LinkTitle](LinkURL) |
+| **Docs**  | [LinkTitle](LinkURL) |
 | **PR**    | [LinkTitle](LinkURL) |
 
 ## The problem 🤔
