@@ -27,7 +27,10 @@ export default function EditorForm({ isOpened, handleClose }: Props) {
   const savingTimeout = useRef<Timeout>(null);
   const savedTimeout = useRef<Timeout>(null);
 
-  useEffect(() => setIsMounted(true), []);
+  useEffect(() => {
+    setSaveState("none");
+    setIsMounted(true);
+  }, []);
 
   const handleChange = (e: FormEvent<any>, field: string) => {
     function finishSaving() {
@@ -36,16 +39,11 @@ export default function EditorForm({ isOpened, handleClose }: Props) {
         [field]: value,
       });
       savedTimeout.current = setTimeout(() => setSaveState("saved"), 800);
-      savingTimeout.current = setTimeout(() => setSaveState("none"), 2800);
     }
 
     function startSaving() {
       if (savingTimeout.current) {
         clearTimeout(savingTimeout.current);
-      }
-
-      if (savedTimeout.current) {
-        clearTimeout(savedTimeout.current);
       }
 
       setSaveState("saving");
@@ -68,7 +66,6 @@ export default function EditorForm({ isOpened, handleClose }: Props) {
       <form className="mt-8 max-w-xl">
         <h3 className="text-2xl mt-4 flex gap-2 items-center justify-between">
           <span>Document Properties</span>
-          <SaveStateText status={saveState} />
         </h3>
         <p className="mt-2 my-4 text-sm text-gray-500 dark:text-gray-300">
           These fields, which will be saved as frontmatter, contain essential
@@ -100,7 +97,15 @@ export default function EditorForm({ isOpened, handleClose }: Props) {
           handleChange={(e) => handleChange(e, "tags")}
           helperText="Separate tags by using comma ,"
         />
-        <Button variant="primary" handler={handleClose} label="Close"></Button>
+        <div className="flex gap-2 items-center">
+          <Button
+            variant="primary"
+            handler={handleClose}
+            label="Close"
+          ></Button>
+
+          <SaveStateText status={saveState} />
+        </div>
       </form>
     </DialogModal>
   );

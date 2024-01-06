@@ -12,7 +12,7 @@ export default function SaveStateText({ status }: Props) {
   }
 
   if (status === "saved") {
-    return <span className="text-xs">✅saved.</span>;
+    return <span className="text-xs">✅changes are saved.</span>;
   }
 
   return <></>;
