@@ -118,11 +118,6 @@ export default function EditorContent() {
           className={`${getClassByPanelState(
             "preview"
           )} relative transition ease-in-out delay-150`}
-          onDoubleClick={() => {
-            if (panelState === "preview") {
-              setPanelState("editor");
-            }
-          }}
         >
           {panelState === "both" && renderHidePreviewToggle()}
           {panelState === "preview" && renderShowEditorToggle()}
