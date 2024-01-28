@@ -3,9 +3,14 @@
 import Image from "next/image";
 import Button from "../../Button";
 import { useRouter } from "next/navigation";
+import { useIsDarkTheme } from "@/app/hooks/use-dark-theme";
 
 export default function Hero() {
   const router = useRouter();
+  const isDarkTheme = useIsDarkTheme();
+  const heroImage = isDarkTheme
+    ? "/assets/hero/niceday@2x-dark.jpg"
+    : "/assets/hero/niceday@2x.jpg";
 
   return (
     <div className="container max-w-screen-xl mx-auto">
@@ -32,11 +37,11 @@ export default function Hero() {
         <div className="w-full sm:w-1/2">
           <Image
             className="ml-auto"
-            src="/assets/hero/niceday@2x.jpg"
+            src={heroImage}
             alt="Markdown for a nice day"
-            height={400}
+            height={266}
             priority={true}
-            width={600}
+            width={400}
           />
         </div>
       </section>
