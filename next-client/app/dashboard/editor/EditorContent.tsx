@@ -204,7 +204,7 @@ export default function EditorContent() {
           fileName: fileName || "",
           title: frontMatter?.title || "",
           description: frontMatter?.description || "",
-          tags: frontMatter?.tags.join(","),
+          tags: frontMatter?.tags ? frontMatter?.tags.join(",") : "",
         });
         setContent(content);
         setContentEdited(content);
