@@ -206,7 +206,7 @@ export default function EditorEmpty() {
       try {
         setFrontMatter({
           fileName: fileName || "",
-          title: frontMatter?.title || "",
+          title: frontMatter?.title || fileName || "Untitled File",
           description: frontMatter?.description || "",
           tags: frontMatter?.tags ? frontMatter?.tags.join(",") : "",
         });
