@@ -214,7 +214,7 @@ export default function EditorEmpty() {
         setContentEdited(content);
 
         resolve({
-          status: "error",
+          status: "success",
           message: "File has been loaded successfully",
         });
       } catch (error) {
