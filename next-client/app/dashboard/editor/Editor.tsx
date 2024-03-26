@@ -11,6 +11,8 @@ import { useEffect } from "react";
 
 export default function Editor() {
   const [timerSettings] = useAtom(atom_timerSettings);
+  const searchParams = useSearchParams();
+  const isTimerVisible = searchParams.has("timer");
   const [frontMatter] = useAtom(atom_frontMatter);
   const fileTitle = frontMatter.title || "File";
   const [_, setDocumentTitle] = useDocumentTitle("Hermes Notes");
@@ -21,7 +23,7 @@ export default function Editor() {
 
   return (
     <div className="mb-8">
-      <Timer settings={timerSettings} />
+      {isTimerVisible && <Timer settings={timerSettings} />}
       <EditorHeader />
       <EditorContent />
     </div>
