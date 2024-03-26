@@ -5,10 +5,9 @@ import TimerComponent from "./Timer.component";
 
 interface Props {
   settings: {
-    pomodoroTime: number; // minutes
-    shortRestTime: number; // minutes
-    longRestTime: number; // minutes
-    cycles: number;
+    workSessionDurationInMin: number; // minutes
+    shortBreakSessionDurationInMin: number; // minutes
+    longBreakSessionDurationInMin: number; // minutes
   };
 }
 
@@ -18,10 +17,10 @@ export function TimerContainer({ settings }: Props): JSX.Element {
   const [playSound_start] = useSound("/resources/sounds/start-tick.wav");
   const [playSound_reset] = useSound("/resources/sounds/reset.wav");
 
-  const pomodoroTime = settings.pomodoroTime * 60;
-  const shortRestTime = settings.shortRestTime * 60;
-  const longRestTime = settings.longRestTime * 60;
-  const cycles = settings.cycles;
+  const pomodoroTime = settings.workSessionDurationInMin * 60;
+  const shortRestTime = settings.shortBreakSessionDurationInMin * 60;
+  const longRestTime = settings.longBreakSessionDurationInMin * 60;
+  const cycles = 4;
 
   const [mainTime, setMainTime] = useState(pomodoroTime);
   const [isTimerCounting, setIsTimerCounting] = useState(false);
