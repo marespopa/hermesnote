@@ -1,4 +1,7 @@
+import { getDate } from "@/app/services/date-utils";
 import { MarkdownTemplate } from "..";
+
+const date = getDate();
 
 const DailyStandupTemplate: MarkdownTemplate = {
   filename: "daily-standup",
@@ -7,7 +10,8 @@ const DailyStandupTemplate: MarkdownTemplate = {
     description: `A note about your daily standup status`,
     tags: "daily,engineering,status,meeting",
   },
-  content: `# 🗓️ Daily Standup Status
+  content: `**${date}**
+# 🗓️ Daily Standup Status
 
 ## 🕰️ What did you accomplish yesterday?
 

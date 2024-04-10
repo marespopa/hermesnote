@@ -46,8 +46,12 @@ export default function EditorEmpty() {
   return (
     <div>
       {renderHeading()}
-      {!isLoading && renderActions()}
-      {!isLoading && <DocumentationMessage />}
+      {!isLoading && (
+        <>
+          {renderActions()}
+          <DocumentationMessage />
+        </>
+      )}
       {isLoading && (
         <Loading
           message={"Hang on tight. Your file is now being prepared..."}
