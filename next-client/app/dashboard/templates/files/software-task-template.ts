@@ -19,7 +19,7 @@ const SoftwareTaskTemplate: MarkdownTemplate = {
 | **Docs**  | [LinkTitle](LinkURL) |
 | **PR**    | [LinkTitle](LinkURL) |
 
-## The problem 🤔
+## Description 📝
 This is where things get interesting. The better you define the problem or the goal/feature you need to implement, and why you need to do it, the easier all the following steps will be.
 
 - **Start with a high-level summary** - that way, readers can quickly decide if this is relevant to them or not and whether they should keep reading.
