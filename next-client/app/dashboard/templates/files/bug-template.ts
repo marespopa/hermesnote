@@ -3,7 +3,7 @@ import { MarkdownTemplate } from "..";
 const BugTemplate: MarkdownTemplate = {
   filename: "bug",
   frontMatter: {
-    title: " Bug Title",
+    title: "Bug Task",
     description: `A bug report template that focuses on the essentials.`,
     tags: "bug,task,daily,engineering,software",
   },
