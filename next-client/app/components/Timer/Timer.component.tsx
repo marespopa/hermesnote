@@ -7,7 +7,7 @@ import {
   FaRegWindowMaximize,
   FaRegWindowMinimize,
   FaTerminal,
-} from "react-icons/fa6";
+} from "react-icons/fa";
 
 import Button from "../Button";
 import { useEffect, useState } from "react";

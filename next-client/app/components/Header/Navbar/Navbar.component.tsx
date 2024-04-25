@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { FaBars } from "react-icons/fa6";
+import { FaBars } from "react-icons/fa";
 import logoLight from "/assets/logo-l.svg";
 import logoDark from "/assets/logo-d.svg";
 import { useIsDarkTheme } from "@/app/hooks/use-dark-theme";

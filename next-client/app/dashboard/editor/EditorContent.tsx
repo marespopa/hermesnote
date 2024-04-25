@@ -100,7 +100,7 @@ export default function EditorContent() {
           emoji: handleAddEmoji,
         }}
       />
-      <div className="flex gap-4">
+      <div className="flex gap-4 editor-area">
         <div
           className={`${getClassByPanelState(
             "editor"

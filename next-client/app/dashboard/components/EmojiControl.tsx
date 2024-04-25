@@ -1,4 +1,5 @@
 import EmojiIcon from "@/app/components/Icons/EmojiIcon";
+import Portal from "@/app/components/Portal";
 import { useIsDarkTheme } from "@/app/hooks/use-dark-theme";
 import { useKey } from "@/app/hooks/use-key";
 import EmojiPicker, { Theme } from "emoji-picker-react";
@@ -35,24 +36,26 @@ export default function EmojiControl({ handleAction }: Props) {
       }}
     >
       <span>
-        <EmojiIcon tooltip="Emoji Picker" alt="Toggle Emoji Picker" size={24} />{" "}
+        <EmojiIcon tooltip="Emoji Picker" alt="Toggle Emoji Picker" size={16} />{" "}
       </span>
       {isVisible && (
-        <div
-          className="fixed top-0 left-0 w-screen h-screen flex
+        <Portal>
+          <div
+            className="fixed top-0 left-0 w-screen h-screen flex
         items-center justify-center z-10 inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto"
-          onClick={() => setIsVisible(false)}
-        >
-          <div onClick={(e) => e.stopPropagation()}>
-            <EmojiPicker
-              theme={pickerTheme as Theme}
-              onEmojiClick={(data) => {
-                handleAction(data.emoji);
-                setIsVisible(!isVisible);
-              }}
-            />
+            onClick={() => setIsVisible(false)}
+          >
+            <div onClick={(e) => e.stopPropagation()}>
+              <EmojiPicker
+                theme={pickerTheme as Theme}
+                onEmojiClick={(data) => {
+                  handleAction(data.emoji);
+                  setIsVisible(!isVisible);
+                }}
+              />
+            </div>
           </div>
-        </div>
+        </Portal>
       )}
     </div>
   );

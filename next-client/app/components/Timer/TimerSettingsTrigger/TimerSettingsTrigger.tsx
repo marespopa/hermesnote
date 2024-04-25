@@ -4,9 +4,9 @@ import DialogModal from "@/app/components/DialogModal";
 import Button from "@/app/components/Button";
 import { useAtom } from "jotai";
 import { atom_timerSettings } from "@/app/atoms/atoms";
-import { FaGear } from "react-icons/fa6";
 import Input from "../../Input";
 import SaveStateText, { SaveState } from "../../SaveStateText/SaveStateText";
+import { FaCog } from "react-icons/fa";
 
 type Timeout = ReturnType<typeof setTimeout> | null;
 
@@ -60,7 +60,7 @@ export default function TimerSettingsTrigger() {
           }}
           label={
             <>
-              Settings <FaGear />
+              Settings <FaCog />
             </>
           }
         ></Button>
