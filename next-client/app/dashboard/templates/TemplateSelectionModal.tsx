@@ -13,6 +13,7 @@ import Button from "@/app/components/Button";
 import { useRouter } from "next/navigation";
 import Loading from "@/app/components/Loading";
 import Input from "@/app/components/Input";
+import { useWindowSize } from "@/app/hooks/use-mobile";
 
 type Props = {
   isOpen: boolean;
@@ -26,6 +27,9 @@ const TemplateSelectionModal = ({ isOpen, handleClose }: Props) => {
   const [, setContentEdited] = useAtom(atom_contentEdited);
   const [searchTerm, setSearchTerm] = useState("");
   const templates = MarkdownTemplateList;
+  const { width: windowWidth } = useWindowSize();
+  const isBrowserMobile = !!windowWidth && windowWidth < 768;
+  const showDescription = !isBrowserMobile;
   const filteredTemplates = templates.filter((template) => {
     const isTitleMatching = template.frontMatter.title
       .toLowerCase()
@@ -73,7 +77,7 @@ const TemplateSelectionModal = ({ isOpen, handleClose }: Props) => {
         <thead className="border-b font-medium dark:border-neutral-500">
           <tr>
             <th>Name</th>
-            <th>Description</th>
+            {showDescription && <th>Description</th>}
             <th>Tags</th>
             <th></th>
           </tr>
@@ -110,9 +114,7 @@ const TemplateSelectionModal = ({ isOpen, handleClose }: Props) => {
         key={template.frontMatter.title}
       >
         <td>{template.frontMatter.title}</td>
-
-        <td>{template.frontMatter.description}</td>
-
+        {showDescription && <td>{template.frontMatter.description}</td>}
         <td>
           {tags.length && (
             <div className="flex flex-wrap gap-2 py-4">
