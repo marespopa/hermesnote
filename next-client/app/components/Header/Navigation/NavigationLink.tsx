@@ -6,9 +6,15 @@ type Props = {
   label: string;
   href: string;
   isEmphasized?: boolean;
+  action?: () => void;
 };
 
-const NavigationLink = ({ label, href, isEmphasized = false }: Props) => {
+const NavigationLink = ({
+  label,
+  href,
+  isEmphasized = false,
+  action,
+}: Props) => {
   const currentRoute = usePathname();
   const isActive =
     href === "/" ? currentRoute === href : currentRoute.startsWith(href);
@@ -22,8 +28,9 @@ const NavigationLink = ({ label, href, isEmphasized = false }: Props) => {
 
   return (
     <Link
-      className={`${textColor} hover:underline focus:underline ${emphasizeStyle}`}
+      className={`${textColor} underline md:no-underline hover:underline focus:underline ${emphasizeStyle}`}
       href={href}
+      onClick={action}
     >
       {label}
     </Link>

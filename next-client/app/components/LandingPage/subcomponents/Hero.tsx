@@ -23,7 +23,7 @@ export default function Hero() {
   return (
     <div className="container max-w-screen-xl mx-auto">
       <section className="flex flex-wrap mt-4 sm:mt-8 md:mt-16 items-center">
-        <div className="w-full sm:w-1/2 prose dark:prose-invert">
+        <div className="w-full md:w-1/2 prose dark:prose-invert flex flex-col justify-center">
           <h1 className="text-5xl mt-8 leading-tight">
             A free to use, online Markdown editor
           </h1>
@@ -37,12 +37,13 @@ export default function Hero() {
             content.
           </p>
           <Button
+            styles="mx-auto md:ml-0 grow-0"
             variant="primary-large"
             label="Try Hermes Notes"
             handler={() => router.push("/dashboard")}
           ></Button>
         </div>
-        <div className="w-full sm:w-1/2">
+        <div className="hidden md:flex w-full sm:w-1/2">
           <Image
             className="ml-auto"
             src={heroImage}

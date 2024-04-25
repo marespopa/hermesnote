@@ -39,7 +39,7 @@ export default function EditorContent() {
   const [headings, setHeadings] = useState({});
   const [cursorPosition, setCursorPosition] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [panelState, setPanelState] = useState<PanelState>("both");
+  const [panelState, setPanelState] = useState<PanelState>("editor");
   const [isTemplateSelectModalVisible, setIsTemplateSelectModalVisible] =
     useState(false);
 
@@ -232,7 +232,7 @@ export default function EditorContent() {
     return (
       <span
         className="absolute right-4 top-8 cursor-pointer"
-        onClick={() => setPanelState("both")}
+        onClick={() => setPanelState("editor")}
       >
         <PenIcon tooltip="Show Editor" alt="Toggle Editor" size={14} />
       </span>
@@ -243,7 +243,7 @@ export default function EditorContent() {
     return (
       <span
         className="absolute right-4 top-8 cursor-pointer"
-        onClick={() => setPanelState("both")}
+        onClick={() => setPanelState("preview")}
       >
         <EyeIcon tooltip="Show Preview" alt="Toggle Preview" size={20} />
       </span>

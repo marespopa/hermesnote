@@ -26,7 +26,7 @@ const MainPage = ({ children }: Props) => {
           <div className="min-h-screen flex flex-col bg-emerald-50 dark:bg-slate-800">
             <Header />
 
-            <div className="flex-1 sm:px-4 md:px-0">{children}</div>
+            <div className="flex-1 sm:px-4 md:px-2">{children}</div>
 
             <Footer />
           </div>

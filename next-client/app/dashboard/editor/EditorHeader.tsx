@@ -13,7 +13,6 @@ import { useRouter } from "next/navigation";
 import EditorPreviewTrigger from "./EditorPreviewTrigger";
 import PenIcon from "@/app/components/Icons/PenIcon";
 import { useState } from "react";
-import { createPortal } from "react-dom";
 import EditorForm from "./EditorForm";
 
 export default function EditorHeader() {
@@ -30,7 +29,7 @@ export default function EditorHeader() {
 
   return (
     <>
-      <div className="mt-8 flex justify-between">
+      <div className="mt-8 flex flex-col md:flex-row justify-between">
         <div className="flex gap-2 flex-col">
           <h1 className="text-3xl leading-tight flex gap-2 items-center">
             <span>{hasTitle && `${fileTitle}`}</span>
@@ -44,8 +43,8 @@ export default function EditorHeader() {
             fileName.endsWith(".md") ? fileName : fileName + ".md"
           }`}</h2>
         </div>
-        <div className="flex flex-col items-end">
-          <div className="flex gap-4">
+        <div className="flex flex-col md:items-end mt-2 md:mt-0">
+          <div className="flex gap-4 flex-wrap">
             <Button
               variant="default"
               label="Back to Main"

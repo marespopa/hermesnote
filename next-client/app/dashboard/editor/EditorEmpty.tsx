@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import {
   atom_content,
@@ -15,6 +15,8 @@ import InfoPanel from "../components/InfoPanel";
 import DocumentationMessage from "../components/DocumentationMessage";
 import TemplateSelectionModal from "../templates/TemplateSelectionModal";
 import { StatusResponse } from "@/app/services/save-utils";
+import { useWindowSize } from "@/app/hooks/use-mobile";
+import Button from "@/app/components/Button";
 
 export const PICKER_OPTIONS = {
   types: [
@@ -42,6 +44,67 @@ export default function EditorEmpty() {
     new: false,
     template: false,
   });
+  const { width: windowWidth } = useWindowSize();
+  const isBrowserMobile = !!windowWidth && windowWidth < 768;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
+  if (isBrowserMobile) {
+    return (
+      <div>
+        <article className="my-8">
+          <h2 className="text-2xl leading-tight">Let&apos;s get started!</h2>
+
+          <div className="my-2 prose dark:prose-invert">
+            <h3>Start from scratch</h3>
+            <p>
+              Focus on your content, structure your document, and save or export
+              it as either a Markdown or PDF file when you&apos;re ready.
+            </p>
+            <Button
+              isDisabled={disabledButtonsState.new}
+              variant="primary"
+              handler={() => handleCreateFile()}
+              label="New File"
+            />
+          </div>
+          <div className="my-4 prose dark:prose-invert">
+            <h3>Start from a template</h3>
+            <p>
+              Personalize it, insert your content, and save it as a Markdown
+              file or export it as a PDF when you&apos;re ready.
+            </p>
+            <Button
+              isDisabled={disabledButtonsState.template}
+              variant="primary"
+              handler={() => handleSelectTemplate()}
+              label="Select a template"
+            />
+          </div>
+
+          {isTemplateSelectModalVisible && (
+            <TemplateSelectionModal
+              isOpen={isTemplateSelectModalVisible}
+              handleClose={() => {
+                setDisabledButtonsState({
+                  ...disabledButtonsState,
+                  template: false,
+                });
+                setIsTemplateSelectModalVisible(false);
+              }}
+            ></TemplateSelectionModal>
+          )}
+        </article>
+      </div>
+    );
+  }
 
   return (
     <div>

@@ -13,8 +13,8 @@ export default function NavigationLinks({}: Props) {
     content && content.length > 0 ? "/dashboard/editor" : "dashboard";
 
   return (
-    <nav>
-      <ul className="flex gap-8 items-center">
+    <nav className="mx-auto">
+      <ul className="flex flex-col md:flex-row space-x-4 gap-8 items-center">
         <li>
           <NavigationLink label="Home" href="/" />
         </li>
@@ -24,7 +24,6 @@ export default function NavigationLinks({}: Props) {
         <li>
           <NavigationLink label="Pricing" href="/pricing" />
         </li>
-
         <li>
           <NavigationLink label="App" href={path} isEmphasized={true} />
         </li>
