@@ -99,7 +99,9 @@ const EditorTableOfContents = ({ headings }: Props) => {
           {headings?.length > 0 ? (
             renderTableOfContents(headings)
           ) : (
-            <>No content</>
+            <p className="prose dark:invert-proxy text-xs">
+              At least one heading is needed for the table of contents
+            </p>
           )}
         </div>
       </div>
