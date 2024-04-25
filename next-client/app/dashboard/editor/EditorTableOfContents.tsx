@@ -1,5 +1,6 @@
 "use client";
 
+import DragBar from "@/app/components/DragBar/DragBar";
 import CloseIcon from "@/app/components/Icons/CloseIcon";
 import ListIcon from "@/app/components/Icons/ListIcon";
 import React, { useState } from "react";
@@ -56,7 +57,7 @@ const EditorTableOfContents = ({ headings }: Props) => {
     }
 
     return (
-      <div className="overflow-y-auto max-h-40 mt-4 pr-2 text-sm flex flex-col gap-2">
+      <div className="overflow-y-auto max-h-40 my-2 max-w-md pr-2 text-sm flex flex-col gap-2">
         {tableOfContents.map(({ level, id, title, anchor }) => {
           const inlinePadding = getPadding(level);
           const anchorText = level > 0 ? `― ${title}` : title;
@@ -85,19 +86,22 @@ const EditorTableOfContents = ({ headings }: Props) => {
   }
 
   return (
-    <Draggable grid={[16, 16]}>
-      <div className="fixed shadow-sm opacity-95 p-4 rounded-md right-4 bottom-64 max-w-sm bg-slate-200 dark:bg-slate-600">
-        <h3 className={"flex justify-between gap-4 cursor-move"}>
-          <span>Table of contents</span>
-          <span onClick={() => setIsToggled(true)}>
-            <CloseIcon tooltip="Close this dialog" alt="Close Table" />
-          </span>
-        </h3>
-        {headings?.length > 0 ? (
-          renderTableOfContents(headings)
-        ) : (
-          <>No content</>
-        )}
+    <Draggable grid={[16, 16]} handle=".toc__handle">
+      <div className="fixed shadow-sm opacity-90 rounded-md right-4 bottom-64 max-w-sm bg-slate-200 dark:bg-slate-600">
+        <DragBar id="toc__handle" />
+        <div className="px-4">
+          <h3 className={"my-2 flex justify-between gap-4"}>
+            <span>Table of contents</span>
+            <span onClick={() => setIsToggled(true)}>
+              <CloseIcon tooltip="Close this dialog" alt="Close Table" />
+            </span>
+          </h3>
+          {headings?.length > 0 ? (
+            renderTableOfContents(headings)
+          ) : (
+            <>No content</>
+          )}
+        </div>
       </div>
     </Draggable>
   );

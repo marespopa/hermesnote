@@ -7,6 +7,7 @@ import FileOpenIcon from "@/app/components/Icons/FileOpenIcon";
 import { useWindowSize } from "@/app/hooks/use-mobile";
 import Draggable from "react-draggable";
 import { FaHandRock } from "react-icons/fa";
+import DragBar from "@/app/components/DragBar/DragBar";
 
 type Props = {
   actions: {
@@ -35,11 +36,9 @@ const EditorSidebar = ({ actions }: Props) => {
   }
 
   return (
-    <Draggable handle=".handle" axis={"y"} grid={[32, 32]}>
+    <Draggable handle=".editor-sidebar__handle" axis={"y"} grid={[32, 32]}>
       <aside className={`${sidebarStyle}`}>
-        <div className="handle cursor-move w-full bg-emerald-100 dark:bg-emerald-500 py-2 px-4 text-center">
-          <FaHandRock size={16} className="mx-auto" />
-        </div>
+        <DragBar id="editor-sidebar__handle" />
         <ul className="flex flex-col flex-wrap gap-2">
           <li className={sidebarItemStyle} onClick={actions.newFile}>
             <FileNewIcon alt="New File" tooltip="Create a new file" size={16} />
@@ -63,7 +62,7 @@ const EditorSidebar = ({ actions }: Props) => {
   );
 };
 
-const sidebarStyle = `opacity-70 z-10 fixed top-48 -left-2 bg-slate-200 dark:bg-slate-600 rounded-r-md border border-slate-300 dark:border-slate-500`;
+const sidebarStyle = `opacity-90 z-10 fixed top-48 -left-2 bg-slate-200 dark:bg-slate-600 rounded-r-md border border-slate-300 dark:border-slate-500`;
 const sidebarItemStyle =
   "hover:bg-slate-300 p-2 focus:bg-slate-300 dark:hover:bg-slate-700 dark:focus:bg-slate-700 cursor-pointer flex items-center justify-center";
 
