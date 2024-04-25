@@ -3,6 +3,7 @@
 import CloseIcon from "@/app/components/Icons/CloseIcon";
 import ListIcon from "@/app/components/Icons/ListIcon";
 import React, { useState } from "react";
+import { Link as ScrollLink, animateScroll as scroll } from "react-scroll";
 
 type Props = {
   headings: any;
@@ -58,10 +59,19 @@ const EditorTableOfContents = ({ headings }: Props) => {
         {tableOfContents.map(({ level, id, title, anchor }) => {
           const inlinePadding = getPadding(level);
           const anchorText = level > 0 ? `― ${title}` : title;
+          const elementId = anchor.replace("#", "");
 
           return (
             <div key={`${level} ${id} ${title}`} className={`${inlinePadding}`}>
-              <a href={anchor}>{anchorText}</a>
+              <ScrollLink
+                className="cursor-pointer"
+                to={elementId}
+                smooth={true}
+                offset={-32}
+                duration={500}
+              >
+                {anchorText}
+              </ScrollLink>
             </div>
           );
         })}
