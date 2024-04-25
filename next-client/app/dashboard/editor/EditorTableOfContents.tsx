@@ -3,6 +3,7 @@
 import CloseIcon from "@/app/components/Icons/CloseIcon";
 import ListIcon from "@/app/components/Icons/ListIcon";
 import React, { useState } from "react";
+import Draggable from "react-draggable";
 import { Link as ScrollLink, animateScroll as scroll } from "react-scroll";
 
 type Props = {
@@ -84,16 +85,21 @@ const EditorTableOfContents = ({ headings }: Props) => {
   }
 
   return (
-    <div className="fixed shadow-sm opacity-95 p-4 rounded-md right-4 bottom-64 max-w-sm bg-slate-200 dark:bg-slate-600">
-      <h3
-        className={"flex justify-between gap-4"}
-        onClick={() => setIsToggled(true)}
-      >
-        <span>Table of contents</span>
-        <CloseIcon tooltip="Close this dialog" alt="Close Table" />
-      </h3>
-      {headings?.length > 0 ? renderTableOfContents(headings) : <>No content</>}
-    </div>
+    <Draggable grid={[16, 16]}>
+      <div className="fixed shadow-sm opacity-95 p-4 rounded-md right-4 bottom-64 max-w-sm bg-slate-200 dark:bg-slate-600">
+        <h3 className={"flex justify-between gap-4 cursor-move"}>
+          <span>Table of contents</span>
+          <span onClick={() => setIsToggled(true)}>
+            <CloseIcon tooltip="Close this dialog" alt="Close Table" />
+          </span>
+        </h3>
+        {headings?.length > 0 ? (
+          renderTableOfContents(headings)
+        ) : (
+          <>No content</>
+        )}
+      </div>
+    </Draggable>
   );
 };
 
