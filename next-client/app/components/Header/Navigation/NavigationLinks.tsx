@@ -1,9 +1,17 @@
+"use client";
+
 import React from "react";
 import NavigationLink from "./NavigationLink";
+import { useAtom } from "jotai";
+import { atom_content } from "@/app/atoms/atoms";
 
 type Props = {};
 
 export default function NavigationLinks({}: Props) {
+  const [content] = useAtom(atom_content);
+  const path =
+    content && content.length > 0 ? "/dashboard/editor" : "dashboard";
+
   return (
     <nav>
       <ul className="flex gap-8 items-center">
@@ -18,7 +26,7 @@ export default function NavigationLinks({}: Props) {
         </li>
 
         <li>
-          <NavigationLink label="App" href="/dashboard" isEmphasized={true} />
+          <NavigationLink label="App" href={path} isEmphasized={true} />
         </li>
       </ul>
     </nav>
