@@ -68,17 +68,26 @@ function exportToPDF(elementId: string, fileName: string = "file.pdf") {
       let position = 0;
       heightLeft -= pageHeight;
       const doc = new jsPDF("p", "mm");
-      doc.addImage(canvas, "PNG", 0, position, imgWidth, imgHeight, "", "FAST");
+      doc.addImage(
+        canvas,
+        "PNG",
+        0,
+        position,
+        imgWidth,
+        imgHeight + 25,
+        "",
+        "FAST"
+      );
       while (heightLeft >= 0) {
         position = heightLeft - imgHeight;
         doc.addPage();
         doc.addImage(
           canvas,
           "PNG",
-          0,
+          10,
           position,
           imgWidth,
-          imgHeight,
+          imgHeight + 25,
           "",
           "FAST"
         );
