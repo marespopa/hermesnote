@@ -10,6 +10,9 @@ import { useIsDarkTheme } from "@/app/hooks/use-dark-theme";
 import NavigationLinks from "../Navigation/NavigationLinks";
 import { useWindowSize } from "@/app/hooks/use-mobile";
 import MobileNavigationLinks from "../Navigation/MobileNavigationLinks";
+import NavigationLink from "../Navigation/NavigationLink";
+import { atom_content } from "@/app/atoms/atoms";
+import { useAtom } from "jotai";
 
 const Navbar = () => {
   // State to manage the navbar's visibility
@@ -19,6 +22,9 @@ const Navbar = () => {
   const logo = isDarkTheme ? logoDark : logoLight;
   const { width: windowWidth } = useWindowSize();
   const isBrowserMobile = !!windowWidth && windowWidth < 768;
+  const [content] = useAtom(atom_content);
+  const path =
+    content && content.length > 0 ? "/dashboard/editor" : "dashboard";
 
   useEffect(() => {
     setMounted(true);
@@ -43,6 +49,16 @@ const Navbar = () => {
         >
           <Image priority src={logo} alt="Hermes Notes" width={164} />
         </Link>
+
+        {/* Mobile Editor Link */}
+        {isBrowserMobile && (
+          <Link
+            className={`text-white rounded-md transition ease-in-out p-2 bg-emerald-500 dark:bg-emerald-600 hover:bg-emerald-600 focus:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:bg-emerald-700`}
+            href={path}
+          >
+            App
+          </Link>
+        )}
 
         {/*Menu Hamburg*/}
         <div className="md:hidden mr-4">

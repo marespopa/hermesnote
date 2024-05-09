@@ -22,6 +22,7 @@ const EditorSidebar = ({ actions }: Props) => {
   const [mounted, setMounted] = useState(false);
   const { width: windowWidth } = useWindowSize();
   const isBrowserMobile = !!windowWidth && windowWidth < 768;
+  const nodeRef = React.useRef(null);
 
   useEffect(() => {
     setMounted(true);
@@ -36,8 +37,13 @@ const EditorSidebar = ({ actions }: Props) => {
   }
 
   return (
-    <Draggable handle=".editor-sidebar__handle" axis={"y"} grid={[32, 32]}>
-      <aside className={`${sidebarStyle}`}>
+    <Draggable
+      ref={nodeRef}
+      handle=".editor-sidebar__handle"
+      axis={"y"}
+      grid={[32, 32]}
+    >
+      <aside className={`${sidebarStyle}`} ref={nodeRef}>
         <DragBar id="editor-sidebar__handle" />
         <ul className="flex flex-col flex-wrap gap-2">
           <li className={sidebarItemStyle} onClick={actions.newFile}>

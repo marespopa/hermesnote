@@ -172,7 +172,7 @@ export default function EditorContent() {
         router.push("/dashboard/editor");
       })
       .catch((error) => {
-        toast.success("File could not be loaded");
+        toast.error("File could not be loaded");
         console.error(error);
       })
       .finally(() => {

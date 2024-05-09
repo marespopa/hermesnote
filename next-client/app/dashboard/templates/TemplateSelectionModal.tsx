@@ -7,7 +7,7 @@ import {
 } from "@/app/atoms/atoms";
 import DialogModal from "@/app/components/DialogModal";
 import { useAtom } from "jotai";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import MarkdownTemplateList, { MarkdownTemplate } from ".";
 import Button from "@/app/components/Button";
 import { useRouter } from "next/navigation";
@@ -29,7 +29,7 @@ const TemplateSelectionModal = ({ isOpen, handleClose }: Props) => {
   const templates = MarkdownTemplateList;
   const { width: windowWidth } = useWindowSize();
   const isBrowserMobile = !!windowWidth && windowWidth < 768;
-  const showDescription = !isBrowserMobile;
+  const showTagsAndDescription = !isBrowserMobile;
   const filteredTemplates = templates.filter((template) => {
     const isTitleMatching = template.frontMatter.title
       .toLowerCase()
@@ -42,6 +42,13 @@ const TemplateSelectionModal = ({ isOpen, handleClose }: Props) => {
     return isTitleMatching || isTagMatching;
   });
   const [isLoadingTemplate, setIsLoadingTemplate] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => setIsMounted(true), []);
+
+  if (!isMounted) {
+    return <></>;
+  }
 
   return (
     <DialogModal isOpened={isOpen} onClose={handleClose}>
@@ -77,8 +84,12 @@ const TemplateSelectionModal = ({ isOpen, handleClose }: Props) => {
         <thead className="border-b font-medium dark:border-neutral-500">
           <tr>
             <th>Name</th>
-            {showDescription && <th>Description</th>}
-            <th>Tags</th>
+            {showTagsAndDescription && (
+              <>
+                <th>Description</th>
+                <th>Tags</th>
+              </>
+            )}
             <th></th>
           </tr>
         </thead>
@@ -114,23 +125,27 @@ const TemplateSelectionModal = ({ isOpen, handleClose }: Props) => {
         key={template.frontMatter.title}
       >
         <td>{template.frontMatter.title}</td>
-        {showDescription && <td>{template.frontMatter.description}</td>}
-        <td>
-          {tags.length && (
-            <div className="flex flex-wrap gap-2 py-4">
-              {tags.map((tag: string, index: number) => {
-                return (
-                  <span
-                    key={index}
-                    className="py-2 px-4 shadow-md no-underline rounded-full bg-emerald-500 text-white text-xs dark:bg-emerald-600"
-                  >
-                    {tag}
-                  </span>
-                );
-              })}
-            </div>
-          )}
-        </td>
+        {showTagsAndDescription && (
+          <>
+            <td>{template.frontMatter.description}</td>
+            <td>
+              {tags.length && (
+                <div className="flex flex-wrap gap-2 py-4">
+                  {tags.map((tag: string, index: number) => {
+                    return (
+                      <span
+                        key={index}
+                        className="py-2 px-4 shadow-md no-underline rounded-full bg-emerald-500 text-white text-xs dark:bg-emerald-600"
+                      >
+                        {tag}
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
+            </td>
+          </>
+        )}
         <td className="px-4">
           <Button
             label={"Select"}

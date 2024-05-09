@@ -38,6 +38,7 @@ export default function EditorEmpty() {
   const [, setContent] = useAtom(atom_content);
   const [, setContentEdited] = useAtom(atom_contentEdited);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFileInputVisible, setIsFileInputVisible] = useState(false);
   const [isTemplateSelectModalVisible, setIsTemplateSelectModalVisible] =
     useState(false);
   const [disabledButtonsState, setDisabledButtonsState] = useState({
@@ -64,89 +65,51 @@ export default function EditorEmpty() {
         <article className="my-8">
           <h2 className="text-2xl leading-tight">Let&apos;s get started!</h2>
 
-          <div className="my-2 prose dark:prose-invert">
-            <h3>Start from scratch</h3>
-            <p>
-              Focus on your content, structure your document, and save or export
-              it as either a Markdown or PDF file when you&apos;re ready.
-            </p>
-            <Button
-              isDisabled={disabledButtonsState.new}
-              variant="primary"
-              handler={() => handleCreateFile()}
-              label="New File"
-            />
-          </div>
-          <div className="my-4 prose dark:prose-invert">
-            <h3>Start from a template</h3>
-            <p>
-              Personalize it, insert your content, and save it as a Markdown
-              file or export it as a PDF when you&apos;re ready.
-            </p>
+          <div className="my-2 prose dark:prose-invert flex flex-col gap-2">
             <Button
               isDisabled={disabledButtonsState.template}
-              variant="primary"
+              variant="default"
               handler={() => handleSelectTemplate()}
-              label="Select a template"
-            />
-          </div>
-
-          <div className="my-4 prose dark:prose-invert">
-            <h3>Open a file</h3>
-            <p>
-              Personalize it, insert your content, and save it as a Markdown
-              file or export it as a PDF when you&apos;re ready.
-            </p>
-
-            <FileInput
-              name="file"
-              placeholder="Upload a markdown file"
-              fileList={fileList}
-              handleChange={(filelist: FileList) => {
-                console.dir(filelist);
-                // @ts-ignore
-                setFileList(filelist as File);
-
-                return;
-              }}
-              label="Markdown File"
-              accept=".md"
+              label="Start from a template"
             />
             <Button
-              variant="primary"
-              label="Submit"
-              handler={async () => {
-                console.dir(fileList);
+              isDisabled={disabledButtonsState.new}
+              variant="default"
+              handler={() => handleCreateFile()}
+              label="Blank File"
+            />
 
-                if (fileList[0]) {
-                  setDisabledButtonsState({
-                    ...disabledButtonsState,
-                    existing: true,
-                  });
-                  setIsLoading(true);
-
-                  const file = fileList[0];
-                  const text = await file.text();
-
-                  loadFileData(text, file.name)
-                    .then(() => {
-                      toast.success("File has been loaded");
-                      router.push("/dashboard/editor");
-                    })
-                    .catch((error) => {
-                      toast.success("File could not be loaded");
-                      console.error(error);
-                    })
-                    .finally(() => {
-                      setDisabledButtonsState({
-                        ...disabledButtonsState,
-                        existing: false,
-                      });
-                      setIsLoading(false);
-                    });
-                }
-              }}
+            <Button
+              variant="default"
+              label="Open File"
+              isDisabled={disabledButtonsState.existing}
+              handler={() => setIsFileInputVisible(!isFileInputVisible)}
             ></Button>
+
+            {isFileInputVisible && (
+              <div className="rounded-b-md flex flex-col -mt-2 gap-2 bg-slate-200 dark:bg-slate-900 p-2">
+                <FileInput
+                  name="file"
+                  placeholder="Upload a markdown file"
+                  fileList={fileList}
+                  handleChange={(filelist: FileList) => {
+                    console.dir(filelist);
+                    // @ts-ignore
+                    setFileList(filelist as File);
+
+                    return;
+                  }}
+                  label="Markdown File"
+                  accept=".md"
+                />
+                <Button
+                  variant="default"
+                  label="Load File"
+                  isDisabled={disabledButtonsState.existing}
+                  handler={handleOpenFileFromInput}
+                ></Button>
+              </div>
+            )}
           </div>
 
           {isTemplateSelectModalVisible && (
@@ -182,6 +145,42 @@ export default function EditorEmpty() {
       )}
     </div>
   );
+
+  function handleOpenFileFromInput(): () => void {
+    return async () => {
+      if (!fileList || !fileList[0]) {
+        toast.error("File could not be loaded");
+
+        return;
+      }
+      setIsFileInputVisible(false);
+      setDisabledButtonsState({
+        ...disabledButtonsState,
+        existing: true,
+      });
+      setIsLoading(true);
+
+      const file = fileList[0];
+      const text = await file.text();
+
+      loadFileData(text, file.name)
+        .then(() => {
+          toast.success("File has been loaded");
+          router.push("/dashboard/editor");
+        })
+        .catch((error) => {
+          toast.error("File could not be loaded");
+          console.error(error);
+        })
+        .finally(() => {
+          setDisabledButtonsState({
+            ...disabledButtonsState,
+            existing: false,
+          });
+          setIsLoading(false);
+        });
+    };
+  }
 
   function renderActions() {
     return (
@@ -290,11 +289,12 @@ export default function EditorEmpty() {
   }
 
   async function handleOpenFile() {
+    setIsLoading(true);
+
     const [fileHandle] = await window.showOpenFilePicker(PICKER_OPTIONS);
     const file = await fileHandle.getFile();
 
     setDisabledButtonsState({ ...disabledButtonsState, existing: true });
-    setIsLoading(true);
 
     parseFile(file)
       .then(() => {
@@ -302,7 +302,7 @@ export default function EditorEmpty() {
         router.push("/dashboard/editor");
       })
       .catch((error) => {
-        toast.success("File could not be loaded");
+        toast.error("File could not be loaded");
         console.error(error);
       })
       .finally(() => {
