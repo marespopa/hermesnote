@@ -146,7 +146,7 @@ const TemplateSelectionModal = ({ isOpen, handleClose }: Props) => {
             </td>
           </>
         )}
-        <td className="px-4">
+        <td className={`px-4 ${!showTagsAndDescription && "py-2"}`}>
           <Button
             label={"Select"}
             handler={() => loadFileFromTemplate(template)}

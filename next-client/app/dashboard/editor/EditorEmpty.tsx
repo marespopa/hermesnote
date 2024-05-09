@@ -93,7 +93,6 @@ export default function EditorEmpty() {
                   placeholder="Upload a markdown file"
                   fileList={fileList}
                   handleChange={(filelist: FileList) => {
-                    console.dir(filelist);
                     // @ts-ignore
                     setFileList(filelist as File);
 
@@ -101,12 +100,16 @@ export default function EditorEmpty() {
                   }}
                   label="Markdown File"
                   accept=".md"
+                  helperText="Load a markdown file."
                 />
                 <Button
-                  variant="default"
+                  variant="primary"
                   label="Load File"
                   isDisabled={disabledButtonsState.existing}
-                  handler={handleOpenFileFromInput}
+                  handler={() => {
+                    console.log("here");
+                    handleOpenFileFromInput();
+                  }}
                 ></Button>
               </div>
             )}
@@ -146,13 +149,17 @@ export default function EditorEmpty() {
     </div>
   );
 
-  function handleOpenFileFromInput(): () => void {
-    return async () => {
-      if (!fileList || !fileList[0]) {
-        toast.error("File could not be loaded");
+  async function handleOpenFileFromInput() {
+    console.log("file");
 
-        return;
-      }
+    if (!fileList || !fileList[0]) {
+      console.log("here");
+      toast.error("File could not be loaded");
+
+      return;
+    }
+
+    try {
       setIsFileInputVisible(false);
       setDisabledButtonsState({
         ...disabledButtonsState,
@@ -179,7 +186,9 @@ export default function EditorEmpty() {
           });
           setIsLoading(false);
         });
-    };
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function renderActions() {
