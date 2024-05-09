@@ -17,6 +17,7 @@ import TemplateSelectionModal from "../templates/TemplateSelectionModal";
 import { StatusResponse } from "@/app/services/save-utils";
 import { useWindowSize } from "@/app/hooks/use-mobile";
 import Button from "@/app/components/Button";
+import FileInput from "@/app/components/FileInput";
 
 export const PICKER_OPTIONS = {
   types: [
@@ -47,6 +48,7 @@ export default function EditorEmpty() {
   const { width: windowWidth } = useWindowSize();
   const isBrowserMobile = !!windowWidth && windowWidth < 768;
   const [mounted, setMounted] = useState(false);
+  const [fileList, setFileList] = useState<File[]>([]);
 
   useEffect(() => {
     setMounted(true);
@@ -87,6 +89,64 @@ export default function EditorEmpty() {
               handler={() => handleSelectTemplate()}
               label="Select a template"
             />
+          </div>
+
+          <div className="my-4 prose dark:prose-invert">
+            <h3>Open a file</h3>
+            <p>
+              Personalize it, insert your content, and save it as a Markdown
+              file or export it as a PDF when you&apos;re ready.
+            </p>
+
+            <FileInput
+              name="file"
+              placeholder="Upload a markdown file"
+              fileList={fileList}
+              handleChange={(filelist: FileList) => {
+                console.dir(filelist);
+                // @ts-ignore
+                setFileList(filelist as File);
+
+                return;
+              }}
+              label="Markdown File"
+              accept=".md"
+            />
+            <Button
+              variant="primary"
+              label="Submit"
+              handler={async () => {
+                console.dir(fileList);
+
+                if (fileList[0]) {
+                  setDisabledButtonsState({
+                    ...disabledButtonsState,
+                    existing: true,
+                  });
+                  setIsLoading(true);
+
+                  const file = fileList[0];
+                  const text = await file.text();
+
+                  loadFileData(text, file.name)
+                    .then(() => {
+                      toast.success("File has been loaded");
+                      router.push("/dashboard/editor");
+                    })
+                    .catch((error) => {
+                      toast.success("File could not be loaded");
+                      console.error(error);
+                    })
+                    .finally(() => {
+                      setDisabledButtonsState({
+                        ...disabledButtonsState,
+                        existing: false,
+                      });
+                      setIsLoading(false);
+                    });
+                }
+              }}
+            ></Button>
           </div>
 
           {isTemplateSelectModalVisible && (
@@ -256,7 +316,8 @@ export default function EditorEmpty() {
       const reader = new FileReader();
 
       reader.onload = async () => {
-        const result = await loadFileData(reader, file.name);
+        const fileContent = String(reader.result);
+        const result = await loadFileData(fileContent, file.name);
         resolve(result);
       };
 
@@ -265,11 +326,20 @@ export default function EditorEmpty() {
     });
   }
 
-  function loadFileData(reader: FileReader, fileName: string) {
-    const fileContent = String(reader.result);
+  function loadFileData(fileContent: string, fileName: string) {
     const { data: frontMatter, content } = matter(fileContent);
 
-    let setterPromise = new Promise<StatusResponse>(function (resolve, reject) {
+    let setterPromise = loadFileInEditor(fileName, frontMatter, content);
+
+    return setterPromise;
+  }
+
+  function loadFileInEditor(
+    fileName: string,
+    frontMatter: { [key: string]: any },
+    content: string
+  ) {
+    return new Promise<StatusResponse>(function (resolve, reject) {
       try {
         setFrontMatter({
           fileName: fileName || "",
@@ -291,8 +361,6 @@ export default function EditorEmpty() {
         });
       }
     });
-
-    return setterPromise;
   }
 
   function handleSelectTemplate() {
