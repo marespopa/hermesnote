@@ -92,25 +92,37 @@ export default function EditorEmpty() {
                   name="file"
                   placeholder="Upload a markdown file"
                   fileList={fileList}
-                  handleChange={(filelist: FileList) => {
-                    // @ts-ignore
-                    setFileList(filelist as File);
+                  handleChange={(selectedFileList: FileList) => {
+                    if (!selectedFileList) {
+                      toast.error(
+                        "Something went wrong with the file selection. Please try again."
+                      );
+
+                      return;
+                    }
+
+                    if (!isSelectedFileValid(selectedFileList[0])) {
+                      toast.error(
+                        "The selected file must be a .md or a .txt file."
+                      );
+
+                      return;
+                    }
+
+                    setIsFileInputVisible(false);
+                    setDisabledButtonsState({
+                      ...disabledButtonsState,
+                      existing: true,
+                    });
+                    setIsLoading(true);
+                    handleOpenFileFromInput(selectedFileList[0]);
 
                     return;
                   }}
                   label="Markdown File"
-                  accept=".md"
+                  accept=".md, .txt"
                   helperText="Load a markdown file."
                 />
-                <Button
-                  variant="primary"
-                  label="Load File"
-                  isDisabled={disabledButtonsState.existing}
-                  handler={() => {
-                    console.log("here");
-                    handleOpenFileFromInput();
-                  }}
-                ></Button>
               </div>
             )}
           </div>
@@ -149,25 +161,17 @@ export default function EditorEmpty() {
     </div>
   );
 
-  async function handleOpenFileFromInput() {
-    console.log("file");
+  function isSelectedFileValid(file: File) {
+    return file && (file?.name.endsWith(".md") || file?.name.endsWith(".txt"));
+  }
 
-    if (!fileList || !fileList[0]) {
-      console.log("here");
-      toast.error("File could not be loaded");
-
-      return;
-    }
-
+  async function handleOpenFileFromInput(file: File) {
     try {
-      setIsFileInputVisible(false);
-      setDisabledButtonsState({
-        ...disabledButtonsState,
-        existing: true,
-      });
-      setIsLoading(true);
+      if (!file) {
+        toast.error("File could not be loaded");
 
-      const file = fileList[0];
+        return;
+      }
       const text = await file.text();
 
       loadFileData(text, file.name)
