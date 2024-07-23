@@ -2,7 +2,6 @@
 import { useState } from "react";
 import DialogModal from "@/app/components/DialogModal";
 import Button from "@/app/components/Button";
-import ReactMarkdown from "react-markdown";
 import { useAtom } from "jotai";
 import { atom_contentEdited, atom_frontMatter } from "@/app/atoms/atoms";
 import MarkdownExport from "@/app/services/markdown-export";
