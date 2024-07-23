@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Cookies from "js-cookie";
-import { MouseEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../Button";
 
 const USER_CONSENT_COOKIE_KEY = "cookie_consent_is_true";

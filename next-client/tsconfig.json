@@ -12,8 +12,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
+    "jsx": "react-jsx",
+      "incremental": true,
     "baseUrl": ".",
     "plugins": [
       {
@@ -33,7 +33,7 @@
       "jest",
       "@testing-library/jest-dom",
       "@types/wicg-file-system-access"
-    ]
+    ],
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
