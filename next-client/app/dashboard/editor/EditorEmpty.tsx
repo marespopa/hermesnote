@@ -19,7 +19,7 @@ import { useWindowSize } from "@/app/hooks/use-mobile";
 import Button from "@/app/components/Button";
 import FileInput from "@/app/components/FileInput";
 
-export const PICKER_OPTIONS = {
+export const PICKER_OPTIONS: OpenFilePickerOptions  = {
   types: [
     {
       description: "MD Files",

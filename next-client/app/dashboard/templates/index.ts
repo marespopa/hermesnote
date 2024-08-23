@@ -4,7 +4,8 @@ import ProjectManagementTemplate from "./files/project-management-template";
 import SoftwareTaskTemplate from "./files/software-task-template";
 import SASSTemplate from "./files/sass-template";
 import DailyStandupTemplate from "./files/daily-standup";
-import BugTemplate from "./files/bug-template";
+import MeetingNotesTemplate from "./files/meeting-notes";
+import MonthlyBudgetTemplate from "./files/monthly-budget";
 
 export type MarkdownTemplate = {
   filename: string;
@@ -16,7 +17,8 @@ const MarkdownTemplateList = [
   ToDoListTemplate,
   DailyStandupTemplate,
   SoftwareTaskTemplate,
-  BugTemplate,
+  MeetingNotesTemplate,
+  MonthlyBudgetTemplate,
   ProjectManagementTemplate,
   SASSTemplate,
 ];
