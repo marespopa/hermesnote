@@ -13,7 +13,7 @@ export default function NavigationLinks({}: Props) {
     content && content.length > 0 ? "/dashboard/editor" : "dashboard";
 
   return (
-    <nav className="mx-auto">
+    <nav className="ml-auto">
       <ul className="flex flex-col md:flex-row space-x-4 gap-8 items-center">
         <li>
           <NavigationLink label="Home" href="/" />

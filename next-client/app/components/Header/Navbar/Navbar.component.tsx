@@ -4,13 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
-import logoLight from "../../../../assets/logo-l.svg";
-import logoDark from "../../../../assets/logo-d.svg";
-import { useIsDarkTheme } from "@/app/hooks/use-dark-theme";
+import logo from "../../../../assets/logo-l.svg";
 import NavigationLinks from "../Navigation/NavigationLinks";
 import { useWindowSize } from "@/app/hooks/use-mobile";
 import MobileNavigationLinks from "../Navigation/MobileNavigationLinks";
-import NavigationLink from "../Navigation/NavigationLink";
 import { atom_content } from "@/app/atoms/atoms";
 import { useAtom } from "jotai";
 
@@ -18,8 +15,6 @@ const Navbar = () => {
   // State to manage the navbar's visibility
   const [isNavigationVisible, setIsNavigationVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const isDarkTheme = useIsDarkTheme();
-  const logo = isDarkTheme ? logoDark : logoLight;
   const { width: windowWidth } = useWindowSize();
   const isBrowserMobile = !!windowWidth && windowWidth < 768;
   const [content] = useAtom(atom_content);
@@ -41,7 +36,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="flex justify-between w-full items-center">
+      <div className="flex justify-between w-full items-center px-2 md:px-4">
         {/*Logo*/}
         <Link
           className="hover:scale-110 focus:scale-110 transition-transform ease-in"

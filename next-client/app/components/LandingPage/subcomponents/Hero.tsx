@@ -3,15 +3,11 @@
 import Image from "next/image";
 import Button from "../../Button";
 import { useRouter } from "next/navigation";
-import { useIsDarkTheme } from "@/app/hooks/use-dark-theme";
 import { useState, useEffect } from "react";
 
 export default function Hero() {
   const router = useRouter();
-  const isDarkTheme = useIsDarkTheme();
-  const heroImage = isDarkTheme
-    ? "/assets/hero/niceday@2x-dark.jpg"
-    : "/assets/hero/niceday@2x.jpg";
+  const heroImage = "/assets/hero/niceday@2x.jpg";
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => setIsMounted(true), []);

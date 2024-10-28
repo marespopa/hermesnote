@@ -46,7 +46,7 @@ export default function EditorHeader({
 
   return (
     <>
-      <div className="mt-8 flex flex-col md:flex-row justify-between">
+      <div className="bg-amber-100 p-4 mt-8 flex flex-col md:flex-row justify-between border-b-2 rounded-md">
         <div className="flex gap-2 flex-col">
           <h1 className="text-3xl leading-tight flex gap-2 items-center">
             <span>{hasTitle && `${fileTitle}`}</span>

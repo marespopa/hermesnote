@@ -1,7 +1,6 @@
 "use client";
 
 import { Provider as JotaiProvider } from "jotai";
-import { ThemeProvider } from "next-themes";
 import React from "react";
 
 type Props = {
@@ -10,9 +9,9 @@ type Props = {
 
 const CustomProviders = ({ children }: Props) => {
   return (
-    <ThemeProvider attribute="class">
-      <JotaiProvider>{children}</JotaiProvider>
-    </ThemeProvider>
+    <JotaiProvider>
+      {children}
+    </JotaiProvider>
   );
 };
 

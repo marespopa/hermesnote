@@ -1,4 +1,3 @@
-import { useIsDarkTheme } from "@/app/hooks/use-dark-theme";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
@@ -10,7 +9,6 @@ type Props = {
 
 export default function CloseIcon({ alt, tooltip, size = 16 }: Props) {
   const [isMounted, setIsMounted] = useState(false);
-  const isDarkTheme = useIsDarkTheme();
 
   useEffect(() => setIsMounted(true), []);
 
@@ -21,11 +19,7 @@ export default function CloseIcon({ alt, tooltip, size = 16 }: Props) {
   return (
     <Image
       className="cursor-pointer"
-      src={`${
-        isDarkTheme
-          ? "/assets/icons/close-icon_dark.svg"
-          : "/assets/icons/close-icon.svg"
-      }`}
+      src="/assets/icons/close-icon.svg"
       width={size}
       height={size}
       alt={alt}
