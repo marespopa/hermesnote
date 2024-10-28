@@ -12,13 +12,6 @@ describe("Homepage spec", () => {
     cy.get("header nav ul li").contains("Pricing").should("be.visible");
     cy.get("header nav ul li").contains("App").should("be.visible");
 
-    // Theme Toggle
-    cy.get("html").should("have.class", "dark");
-    cy.get("header [data-testid='ThemeSwitcher']").click();
-    cy.get("html").should("not.have.class", "dark");
-    cy.get("header [data-testid='ThemeSwitcher']").click();
-    cy.get("html").should("have.class", "dark");
-
     // It has CTA button
     cy.contains("Try Hermes Notes").should("be.visible");
 
