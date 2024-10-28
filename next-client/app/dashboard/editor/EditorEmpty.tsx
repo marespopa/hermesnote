@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAtom } from "jotai";
 import {
   atom_content,
@@ -50,14 +50,6 @@ export default function EditorEmpty() {
   const isBrowserMobile = !!windowWidth && windowWidth < 768;
   const [mounted, setMounted] = useState(false);
   const [fileList, setFileList] = useState<File[]>([]);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
 
   if (isBrowserMobile) {
     return (

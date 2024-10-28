@@ -5,7 +5,7 @@ const minHeight = 150;
 
 // Updates the height of a <textarea> when the value changes.
 const useAutoResizeTextArea = (
-  textAreaRef: RefObject<HTMLTextAreaElement> | null,
+  textAreaRef: RefObject<HTMLTextAreaElement | null> | null,
   value: string
 ) => {
   useIsomorphicLayoutEffect(() => {

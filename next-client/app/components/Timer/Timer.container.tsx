@@ -1,5 +1,5 @@
 import { useInterval } from "@/app/hooks/use-interval";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, type JSX } from "react";
 import useSound from "use-sound";
 import TimerComponent from "./Timer.component";
 

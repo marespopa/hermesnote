@@ -151,7 +151,7 @@ const moduleWrapper = tsserver => {
 
       case `vscode`:
       default: {
-        return str.replace(/^\^?(zip:|\/zip(\/ts-nul-authority)?)\/+/, process.platform === `win32` ? `` : `/`)
+        return str.replace(/^\^?(zip:|\/zip(\/ts-nul-authority)?)\/+/, process.platform === `win32` ? `` : `/`);
       } break;
     }
   }

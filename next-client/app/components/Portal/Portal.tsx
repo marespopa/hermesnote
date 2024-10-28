@@ -14,7 +14,6 @@ const Portal = ({ children }: Props) => {
     return () => setMounted(false);
   }, []);
 
-  //@ts-expect-error
   return mounted ? createPortal(children, document.body) : null;
 };
 

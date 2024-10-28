@@ -12,11 +12,8 @@ import EditorPreview from "./EditorPreview";
 import { useKey } from "@/app/hooks/use-key";
 import MarkdownExport from "@/app/services/markdown-export";
 import { getHeadingsFromMarkdown } from "@/app/services/markdown-utils";
-import TextareaResizable from "@/app/components/TextareaResizable";
-import EditorTableOfContents from "./EditorTableOfContents";
 import CloseIcon from "@/app/components/Icons/CloseIcon";
 import PenIcon from "@/app/components/Icons/PenIcon";
-import EditorSidebar from "./EditorSidebar";
 import toast from "react-hot-toast";
 import { PICKER_OPTIONS } from "./EditorEmpty";
 import { StatusResponse } from "@/app/services/save-utils";
@@ -92,14 +89,6 @@ export default function EditorContent() {
 
   return (
     <>
-      <EditorSidebar
-        actions={{
-          newFile: handleCreateFile,
-          openFile: handleOpenFile,
-          templateFile: handleSelectTemplate,
-          emoji: handleAddEmoji,
-        }}
-      />
       <div className="flex gap-4 editor-area">
         <div
           className={`${getClassByPanelState(
@@ -122,7 +111,6 @@ export default function EditorContent() {
           {panelState === "both" && renderHidePreviewToggle()}
           {panelState === "preview" && renderShowEditorToggle()}
           <EditorPreview content={contentEdited} />
-          <EditorTableOfContents headings={headings}></EditorTableOfContents>
         </div>
       </div>
 
