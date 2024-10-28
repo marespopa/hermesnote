@@ -20,7 +20,7 @@ export default function EditorPreviewTrigger() {
   return (
     <>
       <Button
-        variant="default"
+        variant="small--info"
         label="Export to PDF"
         handler={() => showPdfPreviewModal()}
       />

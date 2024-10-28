@@ -1,25 +1,42 @@
 "use client";
 
-import {
-  atom_content,
-  atom_contentEdited,
-  atom_frontMatter,
-  atom_hasChanges,
-} from "@/app/atoms/atoms";
 import Button from "@/app/components/Button";
 import MarkdownExport from "@/app/services/markdown-export";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import EditorPreviewTrigger from "./EditorPreviewTrigger";
 import PenIcon from "@/app/components/Icons/PenIcon";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import EditorForm from "./EditorForm";
+import { FileMetadata } from "@/app/types/markdown";
+import { SetAtom } from "./EditorTypes";
+import { atom_content } from "@/app/atoms/atoms";
 
-export default function EditorHeader() {
-  const [hasChanges] = useAtom(atom_hasChanges);
-  const [content] = useAtom(atom_contentEdited);
+interface Props {
+  content: string;
+  contentEdited: string;
+  frontMatter: FileMetadata;
+  setFrontMatter: SetAtom<[SetStateAction<any>], void>;
+  setContentEdited: SetAtom<[SetStateAction<string>], void>;
+  setContent: SetAtom<[SetStateAction<string>], void>;
+  hasChanges: boolean;
+  actions: {
+    handleOpenFile: () => void,
+    handleSelectTemplate: () => void,
+  }
+}
+
+export default function EditorHeader({
+  content,
+  setContent,
+  contentEdited,
+  setContentEdited,
+  frontMatter,
+  setFrontMatter,
+  hasChanges,
+  actions
+}: Props) {
   const [, setFileContent] = useAtom(atom_content);
-  const [frontMatter] = useAtom(atom_frontMatter);
   const [isFormatterDialogOpen, setIsFormatterDialogOpen] = useState(false);
 
   const router = useRouter();
@@ -40,18 +57,23 @@ export default function EditorHeader() {
             }
           </h1>
           <h2 className="text-sm leading-tight">{`${
-            fileName.endsWith(".md") ? fileName : fileName + ".md"
+            fileName?.endsWith(".md") ? fileName : fileName + ".md"
           }`}</h2>
         </div>
         <div className="flex flex-col md:items-end mt-2 md:mt-0">
           <div className="flex gap-4 flex-wrap">
+          <Button
+              variant="small--info"
+              label="Use a Template"
+              handler={actions.handleSelectTemplate}
+            />
             <Button
-              variant="default"
-              label="Back to Main"
-              handler={() => router.push("/dashboard")}
+              variant="small--info"
+              label="Open File"
+              handler={actions.handleOpenFile}
             />
             <EditorPreviewTrigger />
-            <Button variant="primary" label="Save As" handler={exportToMD} />
+            <Button variant="small" label="Save As" handler={exportToMD} />
           </div>
           <span
             className={`${
