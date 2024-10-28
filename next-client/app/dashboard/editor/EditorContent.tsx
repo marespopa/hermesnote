@@ -77,7 +77,7 @@ export default function EditorContent({
 
   return (
     <>
-      <div className="flex gap-4 editor-area">
+      <div className="flex gap-4 editor-area max-height-[1000px] overflow-y-auto">
         <div
           className={`${getClassByPanelState(
             "editor"

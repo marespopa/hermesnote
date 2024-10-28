@@ -21,7 +21,7 @@ const TextareaResizable = ({
   return (
     <div className="my-4">
       <textarea
-        className="bg-amber-50 border-2 border-slate-100 dark:bg-slate-700 dark:border-slate-800 px-4 py-2 rounded-md outline-none w-full max-h-[1000px]"
+        className="bg-amber-50 border-2 border-slate-100 dark:bg-slate-700 dark:border-slate-800 px-4 py-2 rounded-md outline-none w-full"
         ref={textAreaRef}
         rows={4}
         id={name}
