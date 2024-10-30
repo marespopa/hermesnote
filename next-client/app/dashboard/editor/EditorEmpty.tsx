@@ -19,7 +19,7 @@ import { useWindowSize } from "@/app/hooks/use-mobile";
 import Button from "@/app/components/Button";
 import FileInput from "@/app/components/FileInput";
 
-export const PICKER_OPTIONS: OpenFilePickerOptions  = {
+export const PICKER_OPTIONS: OpenFilePickerOptions = {
   types: [
     {
       description: "MD Files",
@@ -146,9 +146,7 @@ export default function EditorEmpty() {
         </>
       )}
       {isLoading && (
-        <Loading
-          message={"Hang on tight. The editor is loading..."}
-        />
+        <Loading message={"Hang on tight. The editor is loading..."} />
       )}
     </div>
   );
@@ -201,8 +199,8 @@ export default function EditorEmpty() {
     return (
       <div className={panelStyle}>
         <InfoPanel
-          title="Begin with a Markdown Template"
-          description={`Personalize it, insert your content, and save it as a Markdown file or export it as a PDF when you're ready.`}
+          title="Start with a Template"
+          description={`Quickly start a new project with a pre-built structure.`}
           action={{
             label: "Select a Template",
             handler: () => handleSelectTemplate(),
@@ -231,7 +229,7 @@ export default function EditorEmpty() {
       <div className={panelStyle}>
         <InfoPanel
           title="Start from scratch"
-          description={`Focus on your content, structure your document, and save or export it as either a Markdown or PDF file when you're ready.`}
+          description={`Create a blank document and build your content from scratch.`}
           action={{
             label: "New File",
             handler: () => handleCreateFile(),
@@ -246,9 +244,8 @@ export default function EditorEmpty() {
     return (
       <div className={panelStyle}>
         <InfoPanel
-          title="Import Existing Markdown File"
-          description={`Access and edit your existing Markdown files.
-                          Update frontmatter, make changes, and choose to save or export the file in either Markdown or PDF format.`}
+          title="Import Existing File"
+          description={`Open and change your already existing Markdown files.`}
           action={{
             label: "Open File",
             handler: () => handleOpenFile(),
@@ -267,13 +264,14 @@ export default function EditorEmpty() {
           Editing Options in Hermes Markdown
         </h1>
         {!isLoading && (
-          <p className="w-1/2 my-8 leading-loose">
-            Explore the versatility of Hermes Markdown through three
-            straightforward options. Choose from a template, open an existing
-            file, or start with a blank canvas. Effortlessly edit, save, export,
-            and update both frontmatter and content for existing files, or begin
-            fresh with a clean slate.
-          </p>
+          <>
+            <p className="w-1/2 my-8 leading-loose">
+              Need a quick start? Choose a template and customize it to your
+              liking. Want a blank canvas? Start from scratch and let your
+              creativity flow. Or, perhaps you have an existing Markdown file
+              ready to be polished? Simply open it and edit away.
+            </p>
+          </>
         )}
       </article>
     );

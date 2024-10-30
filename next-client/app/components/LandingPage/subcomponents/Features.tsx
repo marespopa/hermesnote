@@ -6,25 +6,22 @@ export default function Features() {
       <div className={containerStyle}>
         <div className={gridStyle} data-testid="FeaturesList">
           <div className={gridItemStyle}>
-            <h2 className={headingStyle}>Create and Edit .md Files</h2>
+            <h2 className={headingStyle}>Seamless Editing</h2>
             <p className={paragraphStyle}>
-              Start fresh with our intuitive editor, allowing you to create new
-              Markdown files or edit existing ones with ease.
+              Create and edit .md files effortlessly with our intuitive editor.
             </p>
           </div>
           <div className={gridItemStyle}>
-            <h2 className={headingStyle}>Frontmatter Support</h2>
+            <h2 className={headingStyle}>Privacy First</h2>
             <p className={paragraphStyle}>
-              Keep your files organized and enhance metadata by adding
-              frontmatter information such as titles, authors, or tags.
+              Your data, your privacy. All your files are stored locally on your
+              device.
             </p>
           </div>
           <div className={gridItemStyle}>
             <h2 className={headingStyle}>Effortless PDF Exporting</h2>
             <p className={paragraphStyle}>
-              Convert your Markdown files into stunning PDF documents in just a
-              few clicks, preserving the formatting and structure of your
-              content.
+              Convert your Markdown files into clean PDFs with a single click.
             </p>
           </div>
         </div>
