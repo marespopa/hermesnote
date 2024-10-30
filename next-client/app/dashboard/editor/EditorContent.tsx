@@ -7,10 +7,6 @@ import { useKey } from "@/app/hooks/use-key";
 import MarkdownExport from "@/app/services/markdown-export";
 import CloseIcon from "@/app/components/Icons/CloseIcon";
 import PenIcon from "@/app/components/Icons/PenIcon";
-import toast from "react-hot-toast";
-import { PICKER_OPTIONS } from "./EditorEmpty";
-import { StatusResponse } from "@/app/services/save-utils";
-import TemplateSelectionModal from "../templates/TemplateSelectionModal";
 import EditorTextarea from "./EditorTextarea";
 import EyeIcon from "@/app/components/Icons/EyeIcon";
 import { FileMetadata } from "@/app/types/markdown";
@@ -37,7 +33,7 @@ export default function EditorContent({
   frontMatter,
   setFrontMatter,
   hasChanges,
-  setHasChanges
+  setHasChanges,
 }: Props) {
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
@@ -61,7 +57,6 @@ export default function EditorContent({
   if (!isMounted) {
     return <Loading />;
   }
-
 
   function getClassByPanelState(panel: string) {
     if (panelState === "both") {
@@ -105,10 +100,7 @@ export default function EditorContent({
 
   function renderShowEditorToggle(): React.ReactNode {
     return (
-      <span
-        className="absolute right-4 top-8 cursor-pointer"
-        onClick={() => setPanelState("editor")}
-      >
+      <span className={iconStyle} onClick={() => setPanelState("editor")}>
         <PenIcon tooltip="Show Editor" alt="Toggle Editor" size={14} />
       </span>
     );
@@ -116,10 +108,7 @@ export default function EditorContent({
 
   function renderShowPreviewToggle(): React.ReactNode {
     return (
-      <span
-        className="absolute right-4 top-8 cursor-pointer"
-        onClick={() => setPanelState("preview")}
-      >
+      <span className={iconStyle} onClick={() => setPanelState("preview")}>
         <EyeIcon tooltip="Show Preview" alt="Toggle Preview" size={20} />
       </span>
     );
@@ -127,10 +116,7 @@ export default function EditorContent({
 
   function renderHidePreviewToggle(): React.ReactNode {
     return (
-      <span
-        className="absolute right-4 top-8 cursor-pointer"
-        onClick={() => setPanelState("editor")}
-      >
+      <span className={iconStyle} onClick={() => setPanelState("editor")}>
         <CloseIcon
           tooltip="Hide the preview pane"
           alt="Toggle Preview"
@@ -142,10 +128,7 @@ export default function EditorContent({
 
   function renderHideEditorToggle(): React.ReactNode {
     return (
-      <span
-        className="absolute right-4 top-8 cursor-pointer"
-        onClick={() => setPanelState("preview")}
-      >
+      <span className={iconStyle} onClick={() => setPanelState("preview")}>
         <CloseIcon
           tooltip="Hide the editor pane"
           alt="Toggle Editor"
@@ -155,3 +138,5 @@ export default function EditorContent({
     );
   }
 }
+
+const iconStyle = `absolute right-5 top-8 cursor-pointer`;

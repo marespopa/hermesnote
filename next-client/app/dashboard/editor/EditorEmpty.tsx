@@ -147,7 +147,7 @@ export default function EditorEmpty() {
       )}
       {isLoading && (
         <Loading
-          message={"Hang on tight. Your file is now being prepared..."}
+          message={"Hang on tight. The editor is loading..."}
         />
       )}
     </div>

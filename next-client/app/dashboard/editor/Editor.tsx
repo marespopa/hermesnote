@@ -21,6 +21,7 @@ import { StatusResponse } from "@/app/services/save-utils";
 import matter from "gray-matter";
 import Loading from "@/app/components/Loading";
 import TemplateSelectionModal from "../templates/TemplateSelectionModal";
+import { RESET } from "jotai/utils";
 
 export default function Editor() {
   const [isLoading, setIsLoading] = useState(false);
@@ -48,6 +49,19 @@ export default function Editor() {
   useEffect(() => {
     setDocumentTitle(fileTitle);
   }, [fileTitle, setDocumentTitle]);
+
+  function handleNewFile() {
+    setIsLoading(true);
+    setFrontMatter({
+      fileName: "file",
+      title: "File",
+      description: "",
+      tags: "",
+    });
+    setContent("# Title");
+    setContentEdited("# Title");
+    setIsLoading(false);
+  }
 
   async function handleOpenFile() {
     try {
@@ -145,6 +159,7 @@ export default function Editor() {
         setFrontMatter={setFrontMatter}
         hasChanges={hasChanges}
         actions={{
+          handleNewFile,
           handleOpenFile,
           handleSelectTemplate
         }}

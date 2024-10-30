@@ -11,6 +11,7 @@ import EditorForm from "./EditorForm";
 import { FileMetadata } from "@/app/types/markdown";
 import { SetAtom } from "./EditorTypes";
 import { atom_content } from "@/app/atoms/atoms";
+import DropdownMenu from "@/app/components/DropdownMenu";
 
 interface Props {
   content: string;
@@ -21,9 +22,10 @@ interface Props {
   setContent: SetAtom<[SetStateAction<string>], void>;
   hasChanges: boolean;
   actions: {
-    handleOpenFile: () => void,
-    handleSelectTemplate: () => void,
-  }
+    handleNewFile: () => void;
+    handleOpenFile: () => void;
+    handleSelectTemplate: () => void;
+  };
 }
 
 export default function EditorHeader({
@@ -34,7 +36,7 @@ export default function EditorHeader({
   frontMatter,
   setFrontMatter,
   hasChanges,
-  actions
+  actions,
 }: Props) {
   const [, setFileContent] = useAtom(atom_content);
   const [isFormatterDialogOpen, setIsFormatterDialogOpen] = useState(false);
@@ -62,19 +64,25 @@ export default function EditorHeader({
         </div>
         <div className="flex flex-col md:items-end mt-2 md:mt-0">
           <div className="flex gap-4 flex-wrap">
-          <Button
-              variant="small--info"
-              label="Use a Template"
-              handler={actions.handleSelectTemplate}
-            />
-            <Button
-              variant="small--info"
-              label="Open File"
-              handler={actions.handleOpenFile}
-            />
+            <DropdownMenu label="File" options={[
+              {
+                label: 'New File...',
+                action: actions.handleNewFile
+              },
+              {
+                label: 'Open File...',
+                action: actions.handleOpenFile
+              },
+              {
+                label: 'Use a template...',
+                action: actions.handleSelectTemplate
+              }
+            ]
+
+            }/>
             <EditorPreviewTrigger />
-            <Button variant="small" label="Save As" handler={exportToMD} />
-          </div>
+            <Button variant="primary" label="Save As" handler={exportToMD} />
+        </div>
           <span
             className={`${
               hasChanges ? "visible" : "invisible"
