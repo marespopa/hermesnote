@@ -1,7 +1,7 @@
-# Hermes Notes
+# Hermes Markdown
 
 A free to use, online markdown editor.
-Hermes Notes is dedicated to enhancing your Markdown editing and viewing experience.
+Hermes Markdown is dedicated to enhancing your Markdown editing and viewing experience.
 
 The app provides a straightforward and efficient process for creating, editing, and exporting your Markdown content.
 

@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { SetStateAction } from "jotai";
 import Loading from "@/app/components/Loading/Loading";
 import EditorPreview from "./EditorPreview";
-import { useKey } from "@/app/hooks/use-key";
+import { useCommand } from "@/app/hooks/use-command";
 import MarkdownExport from "@/app/services/markdown-export";
 import CloseIcon from "@/app/components/Icons/CloseIcon";
 import PenIcon from "@/app/components/Icons/PenIcon";
@@ -18,21 +18,15 @@ interface Props {
   content: string;
   contentEdited: string;
   frontMatter: FileMetadata;
-  setFrontMatter: SetAtom<[SetStateAction<any>], void>;
   setContentEdited: SetAtom<[SetStateAction<string>], void>;
-  setContent: SetAtom<[SetStateAction<string>], void>;
-  hasChanges: boolean;
   setHasChanges: any;
 }
 
 export default function EditorContent({
   content,
-  setContent,
   contentEdited,
   setContentEdited,
   frontMatter,
-  setFrontMatter,
-  hasChanges,
   setHasChanges,
 }: Props) {
   const router = useRouter();
@@ -45,11 +39,11 @@ export default function EditorContent({
   }, [content, contentEdited]);
 
   useEffect(() => setIsMounted(true), []);
-  useKey("ctrls", () =>
+  useCommand("save", () =>
     MarkdownExport.exportMarkdown(contentEdited, frontMatter)
   );
 
-  useKey("home", () => {
+  useCommand("home", () => {
     setIsMounted(false);
     router.push("/dashboard");
   });

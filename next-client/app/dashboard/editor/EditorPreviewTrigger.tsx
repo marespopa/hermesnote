@@ -6,7 +6,7 @@ import { useAtom } from "jotai";
 import { atom_contentEdited, atom_frontMatter } from "@/app/atoms/atoms";
 import MarkdownExport from "@/app/services/markdown-export";
 import toast from "react-hot-toast";
-import { useKey } from "@/app/hooks/use-key";
+import { useCommand } from "@/app/hooks/use-command";
 import MarkdownPreview from "../components/MarkdownPreview";
 import Portal from "@/app/components/Portal";
 
@@ -15,7 +15,7 @@ export default function EditorPreviewTrigger() {
   const [contentEdited] = useAtom(atom_contentEdited);
   const [frontMatter] = useAtom(atom_frontMatter);
 
-  useKey("ctrle", () => showPdfPreviewModal());
+  useCommand("export", () => showPdfPreviewModal());
 
   return (
     <>

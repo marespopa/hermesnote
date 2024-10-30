@@ -16,12 +16,11 @@ import { useDocumentTitle } from "@/app/hooks/use-document-title";
 import { useState, useEffect } from "react";
 import { PICKER_OPTIONS } from "./EditorEmpty";
 import { toast } from "react-toastify";
-import router from "next/router";
 import { StatusResponse } from "@/app/services/save-utils";
 import matter from "gray-matter";
 import Loading from "@/app/components/Loading";
 import TemplateSelectionModal from "../templates/TemplateSelectionModal";
-import { RESET } from "jotai/utils";
+import { useCommand } from "@/app/hooks/use-command";
 
 export default function Editor() {
   const [isLoading, setIsLoading] = useState(false);
@@ -41,6 +40,10 @@ export default function Editor() {
     useState(false);
 
   const [_, setDocumentTitle] = useDocumentTitle("Hermes Markdown");
+
+  useCommand("open", () => handleOpenFile());
+  useCommand("new", () => handleNewFile());
+  useCommand("template", () => handleSelectTemplate());
 
   useEffect(() => {
     setMounted(true);
@@ -152,26 +155,19 @@ export default function Editor() {
 
       <EditorHeader
         content={content}
-        setContent={setContent}
-        contentEdited={contentEdited}
-        setContentEdited={setContentEdited}
         frontMatter={frontMatter}
-        setFrontMatter={setFrontMatter}
         hasChanges={hasChanges}
         actions={{
           handleNewFile,
           handleOpenFile,
-          handleSelectTemplate
+          handleSelectTemplate,
         }}
       />
       <EditorContent
         content={content}
-        setContent={setContent}
         contentEdited={contentEdited}
         setContentEdited={setContentEdited}
         frontMatter={frontMatter}
-        setFrontMatter={setFrontMatter}
-        hasChanges={hasChanges}
         setHasChanges={setHasChanges}
       />
     </div>

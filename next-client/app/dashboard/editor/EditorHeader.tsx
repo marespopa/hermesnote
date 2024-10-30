@@ -3,23 +3,17 @@
 import Button from "@/app/components/Button";
 import MarkdownExport from "@/app/services/markdown-export";
 import { useAtom } from "jotai";
-import { useRouter } from "next/navigation";
 import EditorPreviewTrigger from "./EditorPreviewTrigger";
 import PenIcon from "@/app/components/Icons/PenIcon";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import EditorForm from "./EditorForm";
 import { FileMetadata } from "@/app/types/markdown";
-import { SetAtom } from "./EditorTypes";
 import { atom_content } from "@/app/atoms/atoms";
 import DropdownMenu from "@/app/components/DropdownMenu";
 
 interface Props {
   content: string;
-  contentEdited: string;
   frontMatter: FileMetadata;
-  setFrontMatter: SetAtom<[SetStateAction<any>], void>;
-  setContentEdited: SetAtom<[SetStateAction<string>], void>;
-  setContent: SetAtom<[SetStateAction<string>], void>;
   hasChanges: boolean;
   actions: {
     handleNewFile: () => void;
@@ -30,18 +24,13 @@ interface Props {
 
 export default function EditorHeader({
   content,
-  setContent,
-  contentEdited,
-  setContentEdited,
   frontMatter,
-  setFrontMatter,
   hasChanges,
   actions,
 }: Props) {
   const [, setFileContent] = useAtom(atom_content);
   const [isFormatterDialogOpen, setIsFormatterDialogOpen] = useState(false);
 
-  const router = useRouter();
   const fileTitle = frontMatter.title;
   const fileName = frontMatter.fileName;
   const hasTitle = fileTitle.length > 0;
@@ -64,25 +53,26 @@ export default function EditorHeader({
         </div>
         <div className="flex flex-col md:items-end mt-2 md:mt-0">
           <div className="flex gap-4 flex-wrap">
-            <DropdownMenu label="File" options={[
-              {
-                label: 'New File...',
-                action: actions.handleNewFile
-              },
-              {
-                label: 'Open File...',
-                action: actions.handleOpenFile
-              },
-              {
-                label: 'Use a template...',
-                action: actions.handleSelectTemplate
-              }
-            ]
-
-            }/>
+            <DropdownMenu
+              label="File"
+              options={[
+                {
+                  label: "New File...",
+                  action: actions.handleNewFile,
+                },
+                {
+                  label: "Open File...",
+                  action: actions.handleOpenFile,
+                },
+                {
+                  label: "Use a template...",
+                  action: actions.handleSelectTemplate,
+                },
+              ]}
+            />
             <EditorPreviewTrigger />
             <Button variant="primary" label="Save As" handler={exportToMD} />
-        </div>
+          </div>
           <span
             className={`${
               hasChanges ? "visible" : "invisible"
