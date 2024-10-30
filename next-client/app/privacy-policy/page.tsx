@@ -7,22 +7,24 @@ export default function PrivacyPolicy() {
         <h1>Privacy Policy</h1>
 
         <p>
-          <strong>MARES POPA PFA</strong> (referred to as the “Company”) is
-          committed to maintaining robust privacy protections for its users. Our
-          Privacy Policy (“Privacy Policy”) is designed to help you understand
-          how we collect, use, and safeguard the information you provide to us,
-          and to assist you in making informed decisions when using our Service.
+          <strong>MARES POPA PFA</strong> (referred to as the
+          &ldquo;Company&rdquo;) is committed to maintaining robust privacy
+          protections for its users. Our Privacy Policy (&ldquo;Privacy
+          Policy&rdquo;) is designed to help you understand how we collect, use,
+          and safeguard the information you provide to us, and to assist you in
+          making informed decisions when using our Service.
         </p>
 
         <p>
-          For purposes of this Agreement, “Site” refers to the Company's
-          website, accessible at{" "}
+          For purposes of this Agreement, &ldquo;Site&rdquo; refers to the
+          Company&rsquo;s website, accessible at{" "}
           <a href="https://hermesmd.netlify.app">hermesmd.netlify.app</a>.
-          “Service” refers to the Company's services accessed via the Site,
-          including users' ability to send an email to obtain a quote. The terms
-          “we,” “us,” and “our” refer to the Company. “You” refers to you, as a
-          user of our Site or Service. By accessing our Site or Service, you
-          accept our Privacy Policy and Terms of Use (found here:{" "}
+          &ldquo;Service&rdquo; refers to the Company&rsquo;s services accessed
+          via the Site, including users&rsquo; ability to send an email to
+          obtain a quote. The terms &ldquo;we,&rdquo; &ldquo;us,&rdquo; and
+          &ldquo;our&rdquo; refer to the Company. &ldquo;You&rdquo; refers to
+          you, as a user of our Site or Service. By accessing our Site or
+          Service, you accept our Privacy Policy and Terms of Use (found here:{" "}
           <a href="https://hermesmd.netlify.app/privacy-policy">
             https://hermesmd.netlify.app/privacy-policy
           </a>
@@ -32,7 +34,10 @@ export default function PrivacyPolicy() {
 
         <h2>I. INFORMATION WE COLLECT</h2>
 
-        <p>We collect “Non-Personal Information” and “Personal Information.”</p>
+        <p>
+          We collect &ldquo;Non-Personal Information&rdquo; and &ldquo;Personal
+          Information.&rdquo;
+        </p>
 
         <ul>
           <li>
@@ -53,20 +58,20 @@ export default function PrivacyPolicy() {
           Information other than your IP Address. However, in an effort to
           improve the quality of the Service, we track information provided by
           your browser or our software application when you view or use the
-          Service, such as the website you came from (known as the “referring
-          URL”), the type of browser you use, the device from which you
-          connected to the Service, the time and date of access, and other
-          information that does not personally identify you.
+          Service, such as the website you came from (known as the
+          &ldquo;referring URL&rdquo;), the type of browser you use, the device
+          from which you connected to the Service, the time and date of access,
+          and other information that does not personally identify you.
         </p>
 
         <p>
           We track this information using cookies, which are small text files
           that include an anonymous unique identifier. Cookies are sent to a
-          user's browser from our servers and are stored on the user's computer
-          hard drive. Sending a cookie to a user's browser enables us to collect
-          Non-Personal information about that user and keep a record of the
-          user's preferences when utilizing our services, both on an individual
-          and aggregate basis.
+          user&rsquo;s browser from our servers and are stored on the
+          user&rsquo;s computer hard drive. Sending a cookie to a user&rsquo;s
+          browser enables us to collect Non-Personal information about that user
+          and keep a record of the user&rsquo;s preferences when utilizing our
+          services, both on an individual and aggregate basis.
         </p>
 
         <p>
@@ -75,7 +80,7 @@ export default function PrivacyPolicy() {
           delete them, while session cookies expire when you close your browser.
         </p>
 
-        <h3>2. Children's Privacy</h3>
+        <h3>2. Children&apos;s Privacy</h3>
         <p>
           The Site and the Service are not directed to anyone under the age of
           13. The Site does not knowingly collect or solicit information from
