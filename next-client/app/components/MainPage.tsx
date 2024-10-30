@@ -32,7 +32,6 @@ const MainPage = ({ children }: Props) => {
             <Toaster position="top-center" reverseOrder={false} />
             <div className="min-h-screen flex flex-col bg-white dark:bg-slate-800">
               {showHeader && <Header />}
-
               <div className="flex-1 sm:px-4 md:px-2">{children}</div>
               <Footer />
             </div>

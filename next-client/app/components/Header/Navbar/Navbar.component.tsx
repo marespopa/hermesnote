@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
-import logo from "../../../../assets/logo-l.svg";
+import logo from "../../../../assets/logo.svg";
 import NavigationLinks from "../Navigation/NavigationLinks";
 import { useWindowSize } from "@/app/hooks/use-mobile";
 import MobileNavigationLinks from "../Navigation/MobileNavigationLinks";
@@ -36,13 +36,13 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="flex justify-between w-full items-center px-2 md:px-4">
+      <div className="flex items-center justify-between container max-w-screen-xl mx-auto px-4 sm:px-2">
         {/*Logo*/}
         <Link
           className="hover:scale-110 focus:scale-110 transition-transform ease-in"
           href={"/"}
         >
-          <Image priority src={logo} alt="Hermes Markdown" width={164} />
+          <Image priority src={logo} alt="Hermes Markdown" width={200} />
         </Link>
 
         {/* Mobile Editor Link */}
