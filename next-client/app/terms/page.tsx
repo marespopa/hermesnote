@@ -7,7 +7,7 @@ export default function TermsAndConditions({}: Props) {
     <div className="w-full max-w-screen-xl mx-auto my-4 md:my-8">
       <section className="prose dark:prose-invert">
         <h1>Terms and Conditions</h1>
-        <h2>Thanks for joining Hermes Notes</h2>
+        <h2>Thanks for joining Hermes Markdown</h2>
         <p>
           These Terms of Service along with any other terms and policies
           referenced herein, and are incorporated herein by reference and form
@@ -15,8 +15,8 @@ export default function TermsAndConditions({}: Props) {
           constitute a legally binding agreement as of the Effective Date (as
           defined below), governing your access to, and the use of
           www.hermesnotes.netlify.app and any related website owned or operated
-          by Hermes Notes (the “Sites”), and the use of, and registration with,
-          Hermes Notes Service (defined below) through the Sites, a mobile
+          by Hermes Markdown (the “Sites”), and the use of, and registration with,
+          Hermes Markdown Service (defined below) through the Sites, a mobile
           application or through any other means.
         </p>
         <p>

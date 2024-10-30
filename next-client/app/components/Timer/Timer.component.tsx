@@ -43,7 +43,7 @@ const TimerComponent = ({
 }: Props) => {
   const [isTimerMinimized, setIsTimerMinimized] = useState(true);
   const isPauseButtonVisible = isWorking || isResting;
-  const [_, setDocumentTitle] = useDocumentTitle("Hermes Notes");
+  const [_, setDocumentTitle] = useDocumentTitle("Hermes Markdown");
   const [frontMatter] = useAtom(atom_frontMatter);
   const fileTitle = frontMatter.title || "File";
 

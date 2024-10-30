@@ -40,7 +40,7 @@ export default function Editor() {
   const [isTemplateSelectModalVisible, setIsTemplateSelectModalVisible] =
     useState(false);
 
-  const [_, setDocumentTitle] = useDocumentTitle("Hermes Notes");
+  const [_, setDocumentTitle] = useDocumentTitle("Hermes Markdown");
 
   useEffect(() => {
     setMounted(true);

@@ -3,18 +3,18 @@ import MainPage from "./components/MainPage";
 
 export const metadata = {
   metadataBase: "https://hermesmd.netlify.app/",
-  title: "Hermes Notes",
+  title: "Hermes Markdown",
   description: "A free to use, online markdown editor",
-  applicationName: "Hermes Notes",
+  applicationName: "Hermes Markdown",
   referrer: "origin-when-cross-origin",
   keywords: ["Editor", "Markdown", "Markdown Notes"],
   authors: [{ name: "Mares Popa", url: "https://www.marespopa.com/" }],
   creator: "Mares Popa",
   openGraph: {
-    title: "Hermes Notes",
+    title: "Hermes Markdown",
     description: "A free to use, online markdown editor",
     url: "https://hermesmd.netlify.app/",
-    siteName: "Hermes Notes",
+    siteName: "Hermes Markdown",
     locale: "en_US",
     type: "website",
     images: {

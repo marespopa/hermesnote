@@ -12,7 +12,7 @@ export default function Motto() {
     <div className={containerStyle}>
       <section className="text-center w-1/2 mx-auto mb-4">
         <h3 className="text-2xl">
-          Start using Hermes Notes today for effortless Markdown editing and PDF
+          Start using Hermes Markdown today for effortless Markdown editing and PDF
           exporting.
         </h3>
         <div className="mt-8 mb-16">

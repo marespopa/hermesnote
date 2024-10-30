@@ -6,14 +6,14 @@ describe("Homepage spec", () => {
   it("Loads homepage correctly", () => {
     // Navigation
     cy.get("header").should("be.visible");
-    cy.get("header img[alt='Hermes Notes']").should("be.visible");
+    cy.get("header img[alt='Hermes Markdown']").should("be.visible");
     cy.get("header nav ul li").contains("Home").should("be.visible");
     cy.get("header nav ul li").contains("Learn Markdown").should("be.visible");
     cy.get("header nav ul li").contains("Pricing").should("be.visible");
     cy.get("header nav ul li").contains("App").should("be.visible");
 
     // It has CTA button
-    cy.contains("Try Hermes Notes").should("be.visible");
+    cy.contains("Try Hermes Markdown").should("be.visible");
 
     // It has features section
     cy.scrollTo(0, 500);

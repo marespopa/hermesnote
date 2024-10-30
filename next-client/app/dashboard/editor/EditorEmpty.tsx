@@ -264,11 +264,11 @@ export default function EditorEmpty() {
       <article className="my-16">
         <h2 className="text-2xl leading-tight">Choose Your Path:</h2>
         <h1 className="text-5xl leading-tight">
-          Editing Options in Hermes Notes
+          Editing Options in Hermes Markdown
         </h1>
         {!isLoading && (
           <p className="w-1/2 my-8 leading-loose">
-            Explore the versatility of Hermes Notes through three
+            Explore the versatility of Hermes Markdown through three
             straightforward options. Choose from a template, open an existing
             file, or start with a blank canvas. Effortlessly edit, save, export,
             and update both frontmatter and content for existing files, or begin

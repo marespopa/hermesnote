@@ -24,7 +24,7 @@ export default function Hero() {
             A free to use, online Markdown editor
           </h1>
           <p className="text-xl">
-            Hermes Notes is dedicated to enhancing your Markdown editing and
+            Hermes Markdown is dedicated to enhancing your Markdown editing and
             viewing experience.
           </p>
           <p className="text-lg">
@@ -35,7 +35,7 @@ export default function Hero() {
           <Button
             styles="mx-auto md:ml-0 grow-0"
             variant="primary-large"
-            label="Try Hermes Notes"
+            label="Try Hermes Markdown"
             handler={() => router.push("/dashboard")}
           ></Button>
         </div>

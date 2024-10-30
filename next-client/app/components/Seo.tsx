@@ -4,9 +4,9 @@ import Head from "next/head";
 import { ComponentPropsWithoutRef } from "react";
 
 export const defaultMeta = {
-  title: "Hermes Notes - Markdown Notes",
-  siteName: "Hermes Notes",
-  description: `Hermes Notes - Free online markdown editor. Start from scratch, or use a template, or even open your own markdown file! Easily export your notes to markdown or PDF with maximum privacy, as all data is stored locally, on your computer.`,
+  title: "Hermes Markdown - Markdown Notes",
+  siteName: "Hermes Markdown",
+  description: `Hermes Markdown - Free online markdown editor. Start from scratch, or use a template, or even open your own markdown file! Easily export your notes to markdown or PDF with maximum privacy, as all data is stored locally, on your computer.`,
   url: "https://hermesmd.netlify.app",
   type: "website",
   robots: "follow, index",

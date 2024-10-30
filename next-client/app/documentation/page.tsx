@@ -17,7 +17,7 @@ export default function Prices() {
                   2. Item 2
                   3. Item 3`,
     },
-    links: `[Visit Hermes Notes](https://hermesmd.netlify.app/)`,
+    links: `[Visit Hermes Markdown](https://hermesmd.netlify.app/)`,
     images: `![Alt Text](Image URL)`,
     codeBlocks: `~~~
                   console.log("Hello, world!")
@@ -35,9 +35,9 @@ export default function Prices() {
           <section>
             <h1>Documentation</h1>
             <p>
-              Welcome to the <strong>Hermes Notes</strong> Markdown Syntax
+              Welcome to the <strong>Hermes Markdown</strong> Markdown Syntax
               Guide. This documentation will provide you with a comprehensive
-              overview of the Markdown syntax supported by Hermes Notes.
+              overview of the Markdown syntax supported by Hermes Markdown.
             </p>
             <p>
               Markdown is a lightweight markup language that allows you to
@@ -161,7 +161,7 @@ export default function Prices() {
               This concludes the Hermes{" "}
               <strong>Notes Markdown Syntax Guide.</strong> With these Markdown
               syntax elements at your disposal, you can create well-structured
-              and visually appealing content in Hermes Notes.
+              and visually appealing content in Hermes Markdown.
             </p>
           </section>
         </div>

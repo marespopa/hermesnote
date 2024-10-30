@@ -42,7 +42,7 @@ const Navbar = () => {
           className="hover:scale-110 focus:scale-110 transition-transform ease-in"
           href={"/"}
         >
-          <Image priority src={logo} alt="Hermes Notes" width={164} />
+          <Image priority src={logo} alt="Hermes Markdown" width={164} />
         </Link>
 
         {/* Mobile Editor Link */}
