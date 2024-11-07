@@ -4,7 +4,7 @@ type Props = {};
 
 export default function TermsAndConditions({}: Props) {
   return (
-    <div className="w-full max-w-screen-xl mx-auto my-4 md:my-8">
+    <div className="w-full max-w-screen-xl px-4 md:px-2 mx-auto my-4 md:my-8">
       <section className="prose dark:prose-invert">
         <h1>Terms and Conditions</h1>
         <h2>Thanks for joining Hermes Markdown</h2>
