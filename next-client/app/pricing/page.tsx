@@ -8,7 +8,7 @@ export default function Prices() {
           Hermes Markdown is <strong>100% free to use</strong>.
         </h2>
         <p>
-          HermesNotes is designed as a completely free tool, created to help you
+          It is designed as a completely free tool, created to help you
           work with Markdown effortlessly, without any cost.
         </p>
 
