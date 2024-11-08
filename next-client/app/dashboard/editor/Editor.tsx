@@ -154,7 +154,7 @@ export default function Editor() {
       )}
 
       <EditorHeader
-        content={content}
+        contentEdited={contentEdited}
         frontMatter={frontMatter}
         hasChanges={hasChanges}
         actions={{

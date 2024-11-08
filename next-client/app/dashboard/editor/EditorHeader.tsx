@@ -12,7 +12,7 @@ import { atom_content } from "@/app/atoms/atoms";
 import DropdownMenu from "@/app/components/DropdownMenu";
 
 interface Props {
-  content: string;
+  contentEdited: string;
   frontMatter: FileMetadata;
   hasChanges: boolean;
   actions: {
@@ -23,7 +23,7 @@ interface Props {
 }
 
 export default function EditorHeader({
-  content,
+  contentEdited,
   frontMatter,
   hasChanges,
   actions,
@@ -94,7 +94,7 @@ export default function EditorHeader({
   }
 
   function exportToMD() {
-    MarkdownExport.exportMarkdown(content, frontMatter);
-    setFileContent(content);
+    MarkdownExport.exportMarkdown(contentEdited, frontMatter);
+    setFileContent(contentEdited);
   }
 }
