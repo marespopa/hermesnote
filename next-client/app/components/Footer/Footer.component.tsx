@@ -1,7 +1,24 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import ProductHuntBadge from "./components/ProductHuntBadge";
+import { usePathname } from 'next/navigation';
 
 export default function Footer() {
+  const [isMounted, setIsMounted] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => setIsMounted(true), []);
+
+  if (!isMounted) {
+    return <></>;
+  }
+
+  if (pathname.includes("editor")) {
+    return <></>;
+  }
+
   return (
     <footer
       data-testid="GlobalFooter"
@@ -36,7 +53,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li className="py-2 sm:py-0 sm:pl-4">
-                <Link className={linkStyle} target="_top" href="mailto:office@marespopa.com">
+                <Link
+                  className={linkStyle}
+                  target="_top"
+                  href="mailto:office@marespopa.com"
+                >
                   Feedback
                 </Link>
               </li>

@@ -21,7 +21,8 @@ import matter from "gray-matter";
 import Loading from "@/app/components/Loading";
 import TemplateSelectionModal from "../templates/TemplateSelectionModal";
 import { useCommand } from "@/app/hooks/use-command";
-
+import { useWindowSize } from "@/app/hooks/use-mobile";
+import FileSelectionModal from "../components/FileSelectionModal";
 export default function Editor() {
   const [isLoading, setIsLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -36,6 +37,10 @@ export default function Editor() {
   const [, setContent] = useAtom(atom_content);
   const [hasChanges] = useAtom(atom_hasChanges);
   const [, setHasChanges] = useAtom(atom_hasChanges);
+  const { width: windowWidth } = useWindowSize();
+  const isBrowserMobile = !!windowWidth && windowWidth < 768;
+  const [isFileSelectModalVisible, setIsFileSelectModalVisible] =
+    useState(false);
   const [isTemplateSelectModalVisible, setIsTemplateSelectModalVisible] =
     useState(false);
 
@@ -67,6 +72,12 @@ export default function Editor() {
   }
 
   async function handleOpenFile() {
+    if (isBrowserMobile) {
+      setIsFileSelectModalVisible(true);
+
+      return;
+    }
+
     try {
       const [fileHandle] = await window.showOpenFilePicker(PICKER_OPTIONS);
       const file = await fileHandle.getFile();
@@ -142,7 +153,15 @@ export default function Editor() {
   return (
     <div className="mb-8">
       {isTimerVisible && <Timer settings={timerSettings} />}
-
+      {isFileSelectModalVisible && (
+        <FileSelectionModal
+          isOpen={isFileSelectModalVisible}
+          handleClose={() => {
+            setIsFileSelectModalVisible(false);
+            setIsLoading(false);
+          }}
+        />
+      )}
       {isTemplateSelectModalVisible && (
         <TemplateSelectionModal
           isOpen={isTemplateSelectModalVisible}
