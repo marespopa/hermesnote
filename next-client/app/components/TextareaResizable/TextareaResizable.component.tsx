@@ -1,5 +1,7 @@
+import { atom_searchTerm } from "@/app/atoms/atoms";
 import useAutoResizeTextArea from "@/app/hooks/use-autoresize";
-import { useRef } from "react";
+import { useAtom } from "jotai";
+import { useEffect, useRef } from "react";
 
 interface Props {
   name: string;
@@ -12,11 +14,25 @@ const TextareaResizable = ({
   name,
   value = " ",
   placeholder,
-  handleChange
+  handleChange,
 }: Props) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-
+  const [searchTerm] = useAtom(atom_searchTerm);
   useAutoResizeTextArea(textAreaRef, value);
+
+  useEffect(() => {
+    if (searchTerm && searchTerm.length > 0 && textAreaRef?.current) {
+      const startIndex = value.toLowerCase().indexOf(searchTerm.toLowerCase());
+
+      if (startIndex !== -1 && searchTerm) {
+        // textAreaRef?.current?.focus();
+        textAreaRef?.current?.setSelectionRange(
+          startIndex,
+          startIndex + searchTerm.length
+        );
+      }
+    }
+  }, [searchTerm, value]);
 
   return (
     <div className="my-4">

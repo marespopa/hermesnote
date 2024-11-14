@@ -19,6 +19,7 @@ interface Props {
     handleNewFile: () => void;
     handleOpenFile: () => void;
     handleSelectTemplate: () => void;
+    handleOpenFindAndReplace: () => void;
   };
 }
 
@@ -67,6 +68,10 @@ export default function EditorHeader({
                 {
                   label: "Use a template...",
                   action: actions.handleSelectTemplate,
+                },
+                {
+                  label: "Find and replace...",
+                  action: actions.handleOpenFindAndReplace,
                 },
               ]}
             />

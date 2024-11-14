@@ -30,7 +30,7 @@ const DropdownMenu = ({ label, options }: Props) => {
         File <FaCaretDown />
       </Button>
       {isOpen && (
-        <div className="absolute mt-1 w-40 bg-white border border-gray-200 rounded shadow-lg z-10">
+        <div className="absolute mt-1 w-[164px] bg-white border border-gray-200 rounded shadow-lg z-10">
           {options.map((option) => (
             <button
               key={option.label}

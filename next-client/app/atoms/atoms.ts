@@ -68,5 +68,6 @@ export const atom_frontMatter = atomWithStorage(
   storage
 ) as FrontmatterAtom;
 
+export const atom_searchTerm = atom('');
 export const atom_hasChanges = atom(false);
 export const atom_isSaved = atom(false);

@@ -23,6 +23,7 @@ import TemplateSelectionModal from "../templates/TemplateSelectionModal";
 import { useCommand } from "@/app/hooks/use-command";
 import { useWindowSize } from "@/app/hooks/use-mobile";
 import FileSelectionModal from "../components/FileSelectionModal";
+import FindAndReplaceModal from "../components/FindAndReplaceModal";
 export default function Editor() {
   const [isLoading, setIsLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -39,6 +40,8 @@ export default function Editor() {
   const [, setHasChanges] = useAtom(atom_hasChanges);
   const { width: windowWidth } = useWindowSize();
   const isBrowserMobile = !!windowWidth && windowWidth < 768;
+  const [isFindAndReplaceModalVisible, setIsFindAndReplaceModalVisible] =
+    useState(false);
   const [isFileSelectModalVisible, setIsFileSelectModalVisible] =
     useState(false);
   const [isTemplateSelectModalVisible, setIsTemplateSelectModalVisible] =
@@ -138,6 +141,10 @@ export default function Editor() {
     return setterPromise;
   }
 
+  function handleOpenFindAndReplace() {
+    setIsFindAndReplaceModalVisible(true);
+  }
+
   function handleSelectTemplate() {
     setIsTemplateSelectModalVisible(true);
   }
@@ -180,8 +187,19 @@ export default function Editor() {
           handleNewFile,
           handleOpenFile,
           handleSelectTemplate,
+          handleOpenFindAndReplace,
         }}
       />
+
+      {isFindAndReplaceModalVisible && (
+        <FindAndReplaceModal
+          isOpen={isFindAndReplaceModalVisible}
+          handleClose={() => {
+            setIsFindAndReplaceModalVisible(false);
+          }}
+        />
+      )}
+
       <EditorContent
         content={content}
         contentEdited={contentEdited}

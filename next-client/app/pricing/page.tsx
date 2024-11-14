@@ -11,7 +11,6 @@ export default function Prices() {
           It is designed as a completely free tool, created to help you
           work with Markdown effortlessly, without any cost.
         </p>
-
         <p>
           Having used HermesMarkdown extensively myself to streamline my
           Markdown workflow, I&apos;m excited to share this tool with you.
