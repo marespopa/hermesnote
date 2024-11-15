@@ -17,22 +17,7 @@ const TextareaResizable = ({
   handleChange,
 }: Props) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const [searchTerm] = useAtom(atom_searchTerm);
   useAutoResizeTextArea(textAreaRef, value);
-
-  useEffect(() => {
-    if (searchTerm && searchTerm.length > 0 && textAreaRef?.current) {
-      const startIndex = value.toLowerCase().indexOf(searchTerm.toLowerCase());
-
-      if (startIndex !== -1 && searchTerm) {
-        // textAreaRef?.current?.focus();
-        textAreaRef?.current?.setSelectionRange(
-          startIndex,
-          startIndex + searchTerm.length
-        );
-      }
-    }
-  }, [searchTerm, value]);
 
   return (
     <div className="my-4">

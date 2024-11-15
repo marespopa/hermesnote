@@ -24,6 +24,7 @@ import { useCommand } from "@/app/hooks/use-command";
 import { useWindowSize } from "@/app/hooks/use-mobile";
 import FileSelectionModal from "../components/FileSelectionModal";
 import FindAndReplaceModal from "../components/FindAndReplaceModal";
+
 export default function Editor() {
   const [isLoading, setIsLoading] = useState(false);
   const [mounted, setMounted] = useState(false);

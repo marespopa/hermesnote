@@ -19,6 +19,7 @@ const FindAndReplaceModal = ({ isOpen, handleClose }: Props) => {
   const [replaceTerm, setReplaceTerm] = useState("");
   const [isMounted, setIsMounted] = useState(false);
   const [shouldReplaceAll, setShouldReplaceAll] = useState(false);
+  const [isCaseSensitive, setIsCaseSensitive] = useState(false);
   useEffect(() => setIsMounted(true), []);
 
   if (!isMounted) {
@@ -27,14 +28,11 @@ const FindAndReplaceModal = ({ isOpen, handleClose }: Props) => {
 
   function handleReplace() {
     let text = contentEdited;
-
-    // Escape special characters in the search term for use in a regex
+    let regexConfig = `${shouldReplaceAll ? "g" : ''}${isCaseSensitive ? "i": ''}`;
     const escapedSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const regex = new RegExp(`(${escapedSearchTerm})`, "gi");
+    const regex = new RegExp(`(${escapedSearchTerm})`, regexConfig);
 
-    text = shouldReplaceAll
-      ? text.replaceAll(regex, replaceTerm)
-      : text.replace(regex, replaceTerm);
+    text = text.replace(regex, replaceTerm);
 
     setContentEdited(text);
     handleClose();
@@ -64,6 +62,14 @@ const FindAndReplaceModal = ({ isOpen, handleClose }: Props) => {
           checked={shouldReplaceAll}
           handleChange={(e: React.FormEvent<HTMLInputElement>) => {
             setShouldReplaceAll(e.currentTarget.checked);
+          }}
+        />
+        <Checkbox
+          label="Case Sensitive"
+          name="caseSensitive"
+          checked={isCaseSensitive}
+          handleChange={(e: React.FormEvent<HTMLInputElement>) => {
+            setIsCaseSensitive(e.currentTarget.checked);
           }}
         />
         <div className="flex gap-2 items-center">
