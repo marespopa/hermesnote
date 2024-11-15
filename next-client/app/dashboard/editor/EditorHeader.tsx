@@ -66,6 +66,10 @@ export default function EditorHeader({
                   action: actions.handleOpenFile,
                 },
                 {
+                  label: "Save As...",
+                  action: exportToMD
+                },
+                {
                   label: "Use a template...",
                   action: actions.handleSelectTemplate,
                 },
