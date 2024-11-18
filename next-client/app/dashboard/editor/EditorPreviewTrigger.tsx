@@ -4,11 +4,11 @@ import DialogModal from "@/app/components/DialogModal";
 import Button from "@/app/components/Button";
 import { useAtom } from "jotai";
 import { atom_contentEdited, atom_frontMatter } from "@/app/atoms/atoms";
-import MarkdownExport from "@/app/services/markdown-export";
 import toast from "react-hot-toast";
 import { useCommand } from "@/app/hooks/use-command";
 import MarkdownPreview from "../components/MarkdownPreview";
 import Portal from "@/app/components/Portal";
+import ExportService from "@/app/services/export-service";
 
 export default function EditorPreviewTrigger() {
   const [isPdfPreviewOpen, setIsPdfPreviewOpen] = useState(false);
@@ -49,17 +49,16 @@ export default function EditorPreviewTrigger() {
     </>
   );
 
-  function handlePdfExport() {
+  async function handlePdfExport() {
     const reportName = frontMatter.fileName.replace(".md", ".pdf");
 
-    MarkdownExport.exportToPDF("#pdfReport", reportName)
-      .then(() => {
-        toast.success("File has been exported");
-      })
-      .catch((error) => {
-        toast.error("File could not be exported");
-        console.error(error);
-      });
+    try {
+      await ExportService.exportToPDF("#pdfReport", reportName);
+      toast.success("File has been exported");
+    } catch (error) {
+      toast.error("File could not be exported");
+      console.error(error);
+    }
   }
 
   function showPdfPreviewModal() {

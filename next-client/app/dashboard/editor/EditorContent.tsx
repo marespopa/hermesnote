@@ -4,13 +4,13 @@ import { SetStateAction } from "jotai";
 import Loading from "@/app/components/Loading/Loading";
 import EditorPreview from "./EditorPreview";
 import { useCommand } from "@/app/hooks/use-command";
-import MarkdownExport from "@/app/services/markdown-export";
 import CloseIcon from "@/app/components/Icons/CloseIcon";
 import PenIcon from "@/app/components/Icons/PenIcon";
 import EditorTextarea from "./EditorTextarea";
 import EyeIcon from "@/app/components/Icons/EyeIcon";
 import { FileMetadata } from "@/app/types/markdown";
 import { SetAtom } from "./EditorTypes";
+import ExportService from "@/app/services/export-service";
 
 type PanelState = "both" | "editor" | "preview";
 
@@ -40,7 +40,7 @@ export default function EditorContent({
 
   useEffect(() => setIsMounted(true), []);
   useCommand("save", () =>
-    MarkdownExport.exportMarkdown(contentEdited, frontMatter)
+    ExportService.exportMarkdown(contentEdited, frontMatter)
   );
 
   useCommand("home", () => {

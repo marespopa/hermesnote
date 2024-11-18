@@ -1,7 +1,6 @@
 "use client";
 
 import Button from "@/app/components/Button";
-import MarkdownExport from "@/app/services/markdown-export";
 import { useAtom } from "jotai";
 import EditorPreviewTrigger from "./EditorPreviewTrigger";
 import PenIcon from "@/app/components/Icons/PenIcon";
@@ -10,6 +9,7 @@ import EditorForm from "./EditorForm";
 import { FileMetadata } from "@/app/types/markdown";
 import { atom_content } from "@/app/atoms/atoms";
 import DropdownMenu from "@/app/components/DropdownMenu";
+import ExportService from "@/app/services/export-service";
 
 interface Props {
   contentEdited: string;
@@ -103,7 +103,7 @@ export default function EditorHeader({
   }
 
   function exportToMD() {
-    MarkdownExport.exportMarkdown(contentEdited, frontMatter);
+    ExportService.exportMarkdown(contentEdited, frontMatter);
     setFileContent(contentEdited);
   }
 }

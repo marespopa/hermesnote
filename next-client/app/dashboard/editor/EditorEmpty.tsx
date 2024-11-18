@@ -163,11 +163,11 @@ export default function EditorEmpty() {
         return;
       }
       const text = await file.text();
-
+      setIsLoading(true);
       loadFileData(text, file.name)
         .then(() => {
-          toast.success("File has been loaded");
           router.push("/dashboard/editor");
+          toast.success("File has been loaded");
         })
         .catch((error) => {
           toast.error("File could not be loaded");
