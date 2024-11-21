@@ -1,6 +1,7 @@
 import { FrontMatterGeneric } from "@/app/types/markdown";
 import ToDoListTemplate from "./files/todo-list-template";
 import DashboardTemplate from "./files/dashboard";
+import WeeklyJournalTemplate from "./files/weekly-journal";
 import ProjectManagementTemplate from "./files/project-management-template";
 import SoftwareTaskTemplate from "./files/software-task-template";
 import SASSTemplate from "./files/sass-template";
@@ -17,6 +18,7 @@ export type MarkdownTemplate = {
 const MarkdownTemplateList = [
   ToDoListTemplate,
   DashboardTemplate,
+  WeeklyJournalTemplate,
   DailyStandupTemplate,
   SoftwareTaskTemplate,
   MeetingNotesTemplate,
