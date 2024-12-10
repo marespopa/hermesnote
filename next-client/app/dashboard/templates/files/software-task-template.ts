@@ -12,30 +12,84 @@ const SoftwareTaskTemplate: MarkdownTemplate = {
   },
   content: `# [Task-1] Task Title
 
-## Links 🖇️
+---
+
+## 🖇️ Links
 | Type      | Link                 |
 |-----------|----------------------|
-| **Story** | [LinkTitle](LinkURL) |
-| **Docs**  | [LinkTitle](LinkURL) |
-| **PR**    | [LinkTitle](LinkURL) |
+| **Story** | [Story Link](#)      |
+| **Docs**  | [Documentation Link](#) |
+| **PR**    | [Pull Request Link](#) |
 
-## Description 📝
-This is where things get interesting. The better you define the problem or the goal/feature you need to implement, and why you need to do it, the easier all the following steps will be.
+---
 
-- **Start with a high-level summary** - that way, readers can quickly decide if this is relevant to them or not and whether they should keep reading.
-- **Provide some context** - explain a bit about the current state of the world, as it is right now. This can be a single sentence or a whole chapter, depending on the intended audience.
-- **Clearly state the problem/goal** - explain why there is a problem and connect it with the user’s/company’s pain, so that motivation is clear.
-- **Provide extra details if possible** - diagrams, code examples → anything that can help the reader get faster to that “aha” moment.
+## 📝 Description
+*Clearly define the problem, goal, or feature. Include context and details to help others understand the task quickly.*
 
-## Non-goals 🛑
-This is the sub-section of the "Problem" that can sometimes be super valuable. Writing what we don't want or will not be doing in this codebase change can help set the expectations and better define its scope.
+- **Summary**: Provide a high-level overview of the task (e.g., "Implement user authentication for Feature X").
+- **Context**: Explain the current state and why this task is needed (e.g., "Feature X lacks secure login, which is critical for user data protection").
+- **Problem/Goal**: State the problem or goal clearly (e.g., "Ensure secure authentication for users").
+- **Details**: Add any relevant diagrams, code snippets, or examples to clarify the task.
 
-## Solution & Implementation 🛠️
-Once we know what we want to do, we have to figure out the best way of doing it! You might have already hinted at the possible solution in the Problem section, but now is the moment to dive deeper - research different approaches, evaluate their pros and cons, and sketch how they could fit into the existing system.
+---
 
-## Remarks & open questions 🎯
-In this final section of the document, you can summarize the main thoughts and highlight the biggest open questions. After going through everything, it can be helpful for the reader to be reminded of where his attention can be most valuable.  
-`,
+## 🛑 Non-goals
+*Define what this task does NOT cover to set clear boundaries.*
+- Example: This task does not include frontend UI changes.
+- Example: This task does not address API rate limiting.
+
+---
+
+## 🛠️ Solution & Implementation
+*Outline how you plan to solve the problem. Include steps, research findings, or alternative approaches.*
+
+1. Research and evaluate authentication libraries.
+2. Integrate chosen library with backend services.
+3. Write unit tests to ensure functionality.
+4. Document implementation details in the project wiki.
+
+---
+
+## 🎯 Acceptance Criteria
+*Define what success looks like for this task. Be specific and measurable.*
+- [ ] Users can log in securely using Feature X.
+- [ ] Unit tests cover at least 90% of new code.
+- [ ] Documentation is updated with implementation details.
+
+---
+
+## 🔗 Dependencies
+*List any tasks, resources, or approvals required before starting this task.*
+- Dependency 1: Approval of design document ([Link](#)).
+- Dependency 2: Backend service setup ([Link](#)).
+
+---
+
+## 🚧 Remarks & Open Questions
+*Summarize key points and highlight unresolved issues or decisions that need input.*
+- Remark: Ensure compatibility with existing APIs.
+- Open Question: Should we support OAuth2 in this release?
+
+---
+
+## 📋 Subtasks
+*Break down the task into smaller, actionable steps.*
+- [ ] Research authentication libraries.
+- [ ] Implement backend integration.
+- [ ] Write unit tests.
+- [ ] Update documentation.
+
+---
+
+## ⏱️ Time Estimate
+*Provide an estimate for completing this task.*
+- Estimated Time: 3 days
+
+---
+
+## 📝 Notes & Additional Information
+*Add any extra context or instructions that might be helpful.*
+- Note 1: Coordinate with the frontend team for integration testing.`,
 };
 
 export default SoftwareTaskTemplate;

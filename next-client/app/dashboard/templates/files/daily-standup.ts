@@ -11,19 +11,32 @@ const DailyStandupTemplate: MarkdownTemplate = {
     tags: "daily,engineering,status,meeting",
   },
   content: `**${date}**
+
 # 🗓️ Daily Standup Status
 
-## 🕰️ What did you accomplish yesterday?
+---
 
-Share the tasks or work you completed the previous day. Be concise and specific.
+## ✅ What did you accomplish yesterday?
+*Briefly list the tasks or work you completed yesterday.*
+- Example: Fixed Bug #123.
 
-## 💻 What are you planning to do today?
+---
 
-Mention the tasks you intend to work on during the current day. It's important to communicate your priorities.
+## 🎯 What are you planning to do today?
+*Outline the tasks you intend to work on today.*
+- Example: Implement authentication for FeatureY.
+
+---
 
 ## 🚧 Are there any blockers or impediments?
+*Mention any challenges or obstacles preventing progress.*
+- Example: Waiting for approval on PR #789.
 
-If you're facing any challenges or obstacles that are preventing you from making progress, mention them. This allows the team to offer help or find solutions.`,
+---
+
+## 📝 Additional Notes (Optional)
+*Add any extra information that might be helpful for the team.*
+- Example: Suggesting a quick sync on FeatureZ.`,
 };
 
 export default DailyStandupTemplate;
