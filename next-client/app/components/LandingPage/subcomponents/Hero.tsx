@@ -21,17 +21,17 @@ export default function Hero() {
       <section className="flex flex-wrap mt-4 sm:mt-8 md:mt-16 items-center">
         <div className="w-full md:w-1/2 prose dark:prose-invert flex flex-col justify-center">
           <h1 className="text-5xl mt-8 leading-tight">
-            Write, Edit, and Export Markdown.{" "}
+            Write Freely, Securely, and Locally.
             <span className="text-emerald-500"> Your Way.</span>
           </h1>
           <p className="text-xl">
-            Create and edit .md files with ease using templates, live preview,
-            and keyboard shortcuts for a seamless writing experience.
+            Create and edit markdown files effortlessly with templates, live
+            preview, and keyboard shortcuts for a seamless writing experience.
           </p>
           <p className="text-lg">
-            Your privacy matters. All your data remains secure on your device.
-            No data is transmitted to servers, ensuring your privacy and
-            security.
+            Your privacy matters. The content stays on your device. No
+            information about your content is transmitted to servers, ensuring
+            complete privacy & security.
           </p>
           <Button
             styles="mx-auto md:ml-0 grow-0"

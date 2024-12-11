@@ -2,6 +2,9 @@ import React from "react";
 import Features from "./subcomponents/Features";
 import Hero from "./subcomponents/Hero";
 import Motto from "./subcomponents/Motto";
+import FAQContent from "./subcomponents/FAQContent";
+import Button from "../Button";
+import HowItWorks from "./subcomponents/HowItWorks";
 
 export default function LandingPage() {
   return (
@@ -11,6 +14,8 @@ export default function LandingPage() {
     >
       <Hero />
       <Features />
+      <HowItWorks />
+      <FAQContent />
       <Motto />
     </main>
   );
