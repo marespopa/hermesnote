@@ -39,7 +39,7 @@ const MainPage = ({ children }: Props) => {
             <Script
               defer
               async
-              data-host="hermesmd.netlify.app"
+              data-host="hermesmarkdown.com"
               src="https://liteanalytics.com/lite.js"
             ></Script>
           </main>
