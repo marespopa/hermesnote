@@ -1,6 +1,7 @@
 "use-client";
 
 import Head from "next/head";
+import Script from "next/script";
 import { ComponentPropsWithoutRef } from "react";
 
 export const defaultMeta = {

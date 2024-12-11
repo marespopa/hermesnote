@@ -42,6 +42,11 @@ const MainPage = ({ children }: Props) => {
               data-host="hermesmarkdown.com"
               src="https://liteanalytics.com/lite.js"
             ></Script>
+            <Script
+              async
+              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3137348299560712"
+              crossOrigin="anonymous"
+            ></Script>
           </main>
         </CustomProviders>
       </body>
