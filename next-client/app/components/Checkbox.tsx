@@ -22,7 +22,7 @@ interface CheckboxProps {
             name={name}
             checked={checked}
             onChange={handleChange}
-            className="rounded border-2 border-gray-300 dark:border-gray-600 focus:ring-emerald-500 bg-white dark:bg-slate-700"
+            className="rounded border-2 border-gray-300 dark:border-gray-600 focus:ring-emerald-800 bg-white dark:bg-slate-700"
             aria-label={label}
           />
           <span className="text-gray-600 dark:text-gray-200 text-sm">{label}</span>

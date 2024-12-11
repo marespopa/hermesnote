@@ -21,25 +21,32 @@ export default function Hero() {
       <section className="flex flex-wrap mt-4 sm:mt-8 md:mt-16 items-center">
         <div className="w-full md:w-1/2 prose dark:prose-invert flex flex-col justify-center">
           <h1 className="text-5xl mt-8 leading-tight">
-            Write Freely, Securely, and Locally.
-            <span className="text-emerald-500"> Your Way.</span>
+            Write{" "}
+            <span className="text-emerald-800">
+              Freely, Securely, and Locally
+            </span>
           </h1>
-          <p className="text-xl">
-            Create and edit markdown files effortlessly with templates, live
-            preview, and keyboard shortcuts for a seamless writing experience.
+          <p className="text-xl mt-4">
+            Hermes Markdown is your go-to markdown editor for creating and
+            editing markdown files effortlessly. Enjoy powerful features like{" "}
+            <strong>templates</strong>, <strong>live preview</strong>, and{" "}
+            <strong>keyboard shortcuts</strong>{" "}
+            to streamline your writing process.
           </p>
-          <p className="text-lg">
-            Your privacy matters. The content stays on your device. No
-            information about your content is transmitted to servers, ensuring
-            complete privacy & security.
+          <p className="text-lg mt-4">
+            Prioritize your <strong>privacy</strong> with a tool that ensures
+            all your content stays on your device. No data is transmitted to
+            servers, giving you complete control over your work while
+            maintaining top-notch security.
           </p>
           <Button
-            styles="mx-auto md:ml-0 grow-0"
+            styles="mx-auto md:ml-0 grow-0 mt-6"
             variant="primary-large"
-            label="Try Hermes Markdown"
+            label="Try Hermes Markdown Now"
             handler={() => router.push("/dashboard")}
           ></Button>
         </div>
+
         <div className="hidden md:flex w-full sm:w-1/2">
           <Image
             className="ml-auto"

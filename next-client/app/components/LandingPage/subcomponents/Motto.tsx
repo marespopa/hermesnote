@@ -1,7 +1,6 @@
 "use client";
 
 import { containerStyle } from "@/app/constants/styles";
-import Link from "next/link";
 import Button from "../../Button";
 import { useRouter } from "next/navigation";
 

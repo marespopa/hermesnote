@@ -66,6 +66,6 @@ const DialogModal = ({ isOpened, onClose, children, styles = "" }: Props) => {
 const closeBtnStyle = `absolute right-2 top-2 text-sm bg-gray-900 rounded-full p-2 inline-flex items-center justify-center
                        text-white hover:text-gray-200
                        hover:bg-gray-800 focus:outline-none focus:ring-2
-                       focus:ring-inset focus:ring-emerald-500`;
+                       focus:ring-inset focus:ring-emerald-800`;
 
 export default DialogModal;
