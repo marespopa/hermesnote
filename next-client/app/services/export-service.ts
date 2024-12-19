@@ -2,6 +2,8 @@ import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import { FileMetadata } from "../types/markdown";
 import { saveFile } from "./save-utils";
+import { ConversionOptions, Margin, Resolution } from "./types";
+import Converter from "./converter";
 
 class ExportService {
   static formatTags(metadataTags: string) {
@@ -42,51 +44,48 @@ class ExportService {
     saveFile({ blob, fileName });
   }
 
-  static exportToPDF(elementId: string, fileName: string = "file.pdf") {
+  static async generatePDF (elementId: string, filename: string = "file.pdf"): Promise<InstanceType<typeof jsPDF>> {
+    const options: ConversionOptions = {
+      resolution: Resolution.MEDIUM as Resolution,
+      page: {
+         // margin is in MM, default is Margin.NONE = 0
+         margin: Margin.SMALL,
+         format: 'letter',
+         orientation: 'portrait',
+      },
+      canvas: {
+         mimeType: 'image/jpeg',
+         qualityRatio: 1,
+         logging: true,
+         useCORS: true,
+      },
+      overrides: {
+         pdf: {
+            compress: true
+         },
+         canvas: {
+            useCORS: true
+         }
+      },
+   };
+
     const reportElement = document.querySelector(elementId) as HTMLElement;
 
     if (!reportElement) {
       return Promise.reject("Something went wrong");
     }
 
-    return html2canvas(reportElement, {
-      logging: true,
-      allowTaint: false,
-      useCORS: true,
-      width: reportElement.scrollWidth,
-      height: reportElement.scrollHeight,
-      scale: 2,
-      scrollX: -window.scrollX,
-      scrollY: -window.scrollY,
-    }).then((canvas) => {
-      const imgWidth = 210;
-      const pageHeight = 290;
-      const imgHeight = canvas.height * imgWidth / canvas.width;
-      const doc = new jsPDF('p', 'mm');
-      const pageData = canvas.toDataURL('image/jpeg', 1.0);
-      const imgData = encodeURIComponent(pageData);
-
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      doc.setLineWidth(5);
-      doc.setDrawColor(255, 255, 255);
-      doc.rect(0, 0, 210, 295);
-      heightLeft -= pageHeight;
-
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        doc.addPage();
-        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        doc.setLineWidth(5);
-        doc.setDrawColor(255, 255, 255);
-        doc.rect(0, 0, 210, 295);
-        heightLeft -= pageHeight;
-      }
-      doc.save(fileName);
+    const canvas = await html2canvas(reportElement, {
+      scale: Resolution.MEDIUM,
+      ...options.overrides?.canvas,
     });
-  }
+    const converter = new Converter(canvas, options);
+    const pdf = converter.convert();
+
+    const pdfFilename = filename;
+    await pdf.save(pdfFilename, { returnPromise: true });
+    return pdf;
+  };
 }
 
 export default ExportService;

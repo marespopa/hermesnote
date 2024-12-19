@@ -30,18 +30,19 @@ export default function EditorPreviewTrigger() {
           onClose={() => hidePdfPreviewModal()}
           styles={`dark:bg-white dark:text-gray-700`}
         >
-          <div className="h-full">
-            <div className={previewContainerStyles} id="pdfReport">
-              <section className={previewStyles}>
-                <MarkdownPreview content={contentEdited} />
-              </section>
-            </div>
-            <div className="fixed bottom-2 right-2 sm:bottom-8 sm:right-8">
+          <div className="h-full relative">
+            <div className="fixed bottom-2 right-2 sm:flex sm:sticky sm:top-4">
               <Button
+                styles="pop-short flex-initial"
                 variant="primary"
                 label="Export"
                 handler={() => handlePdfExport()}
               />
+            </div>
+            <div className={previewContainerStyles} id="pdfReport">
+              <section className={previewStyles}>
+                <MarkdownPreview content={contentEdited} />
+              </section>
             </div>
           </div>
         </DialogModal>
@@ -53,7 +54,7 @@ export default function EditorPreviewTrigger() {
     const reportName = frontMatter.fileName.replace(".md", ".pdf");
 
     try {
-      await ExportService.exportToPDF("#pdfReport", reportName);
+      await ExportService.generatePDF("#pdfReport", reportName);
       toast.success("File has been exported");
     } catch (error) {
       toast.error("File could not be exported");
