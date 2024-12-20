@@ -42,9 +42,11 @@ export default function Hero() {
           <Button
             styles="mx-auto md:ml-0 grow-0 mt-6"
             variant="primary-large"
-            label="Try Hermes Markdown Now"
             handler={() => router.push("/dashboard")}
-          ></Button>
+          >
+            Start{' '}
+            <span className="text-xs align-super -mt-4">100% free</span>
+          </Button>
         </div>
 
         <div className="hidden md:flex w-full sm:w-1/2">
