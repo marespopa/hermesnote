@@ -15,7 +15,7 @@ export default function HowItWorks() {
        <Image
          src={EditorPreviewImage}
          alt="Editor Preview"
-         className="rounded-md shadow-md w-full"
+         className="rounded-sm shadow-sm w-full"
        />
 
        <div>

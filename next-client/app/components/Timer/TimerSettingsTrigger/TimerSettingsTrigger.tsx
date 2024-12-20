@@ -54,7 +54,7 @@ export default function TimerSettingsTrigger() {
     <>
       <div className="mt-4 flex justify-end absolute right-4 -bottom-4">
         <Button
-          variant="small"
+          variant="secondary"
           handler={() => {
             setIsModalOpen(!isModalOpen);
           }}

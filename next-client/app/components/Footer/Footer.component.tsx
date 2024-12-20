@@ -22,7 +22,7 @@ export default function Footer() {
   return (
     <footer
       data-testid="GlobalFooter"
-      className="py-4 md:py-8 bg-gray-900  text-gray-300"
+      className="py-2 md:py-4 bg-gray-900 text-gray-300 text-xs"
     >
       <div className="container max-w-screen-xl mx-auto px-4 md:px-2">
         <div className="flex flex-col md:flex-row justify-between w-full items-center">

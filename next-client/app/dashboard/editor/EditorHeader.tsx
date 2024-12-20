@@ -7,9 +7,12 @@ import PenIcon from "@/app/components/Icons/PenIcon";
 import { useState } from "react";
 import EditorForm from "./EditorForm";
 import { FileMetadata } from "@/app/types/markdown";
-import { atom_content } from "@/app/atoms/atoms";
+import { atom_content, atom_showDashboard } from "@/app/atoms/atoms";
 import DropdownMenu from "@/app/components/DropdownMenu";
 import ExportService from "@/app/services/export-service";
+import { FaCaretDown, FaCog, FaPlusCircle } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import useIsMobile from "@/app/hooks/use-is-mobile";
 
 interface Props {
   contentEdited: string;
@@ -30,15 +33,19 @@ export default function EditorHeader({
   actions,
 }: Props) {
   const [, setFileContent] = useAtom(atom_content);
-  const [isFormatterDialogOpen, setIsFormatterDialogOpen] = useState(false);
+  const [_, setShowDashboardOnStartup] = useAtom(atom_showDashboard);
 
+  const [isFormatterDialogOpen, setIsFormatterDialogOpen] = useState(false);
+  const [isFabMenuOpen, setIsFabMenuOpen] = useState(false);
+  const router = useRouter();
+  const isMobile = useIsMobile();
   const fileTitle = frontMatter.title;
   const fileName = frontMatter.fileName;
   const hasTitle = fileTitle.length > 0;
 
   return (
     <>
-      <div className="bg-amber-100 p-4 mt-8 flex flex-col md:flex-row justify-between border-b-2 rounded-md">
+      <div className="bg-amber-100 p-4 mt-8 flex flex-col md:flex-row justify-between border-b-2 rounded-sm">
         <div className="flex gap-2 flex-col">
           <h1 className="text-3xl leading-tight flex gap-2 items-center">
             <span>{hasTitle && `${fileTitle}`}</span>
@@ -53,35 +60,7 @@ export default function EditorHeader({
           }`}</h2>
         </div>
         <div className="flex flex-col md:items-end mt-2 md:mt-0">
-          <div className="flex gap-4 flex-wrap">
-            <DropdownMenu
-              label="File"
-              options={[
-                {
-                  label: "New File...",
-                  action: actions.handleNewFile,
-                },
-                {
-                  label: "Open File...",
-                  action: actions.handleOpenFile,
-                },
-                {
-                  label: "Save As...",
-                  action: exportToMD
-                },
-                {
-                  label: "Use a template...",
-                  action: actions.handleSelectTemplate,
-                },
-                {
-                  label: "Find and replace...",
-                  action: actions.handleOpenFindAndReplace,
-                },
-              ]}
-            />
-            <EditorPreviewTrigger />
-            <Button variant="primary" label="Save As" handler={exportToMD} />
-          </div>
+          {renderOptionsMenu()}
           <span
             className={`${
               hasChanges ? "visible" : "invisible"
@@ -97,6 +76,99 @@ export default function EditorHeader({
       />
     </>
   );
+
+  function renderOptionsMenu() {
+    if (isMobile) {
+      return (
+        <div className="fixed top-4 right-4 z-50">
+          <Button
+            variant="secondary"
+            handler={() => setIsFabMenuOpen(!isFabMenuOpen)}
+          >
+            <FaCog /> Options
+          </Button>
+          {isFabMenuOpen && (
+            <div className="fixed top-16 right-4 rounded-sm shadow-sm p-2 flex flex-col flex-wrap space-y-4 w-[164px] bg-white border border-gray-200 rounded shadow-sm z-10">
+              {renderFileMenu()}
+              {renderHelpMenu()}
+              <EditorPreviewTrigger />
+              <Button variant="primary" label="Save As" handler={exportToMD} />
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2 items-start">
+        {renderFileMenu()}
+        {renderHelpMenu()}
+        <EditorPreviewTrigger />
+        <Button variant="primary" label="Save As" handler={exportToMD} />
+      </div>
+    );
+  }
+
+  function renderHelpMenu() {
+    return (
+      <DropdownMenu
+        label={
+          <span className="flex gap-2 items-center">
+            Help <FaCaretDown />
+          </span>
+        }
+        options={[
+          {
+            label: "Welcome",
+            action: () => {
+              setShowDashboardOnStartup(true);
+              router.push("/dashboard");
+            },
+          },
+          {
+            label: "Documentation",
+            action: () => {
+              router.push("/documentation");
+            },
+          },
+        ]}
+      />
+    );
+  }
+
+  function renderFileMenu() {
+    return (
+      <DropdownMenu
+        label={
+          <span className="flex gap-2 items-center">
+            File <FaCaretDown />
+          </span>
+        }
+        options={[
+          {
+            label: "New File...",
+            action: actions.handleNewFile,
+          },
+          {
+            label: "Open File...",
+            action: actions.handleOpenFile,
+          },
+          {
+            label: "Save As...",
+            action: exportToMD,
+          },
+          {
+            label: "Use a template...",
+            action: actions.handleSelectTemplate,
+          },
+          {
+            label: "Find and replace...",
+            action: actions.handleOpenFindAndReplace,
+          },
+        ]}
+      />
+    );
+  }
 
   function showFileDialog() {
     setIsFormatterDialogOpen(true);

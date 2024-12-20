@@ -23,7 +23,7 @@ const NavigationLink = ({
     : "text-gray-500 dark:text-gray-300";
 
   const emphasizeStyle = isEmphasized
-    ? `text-white rounded-md transition ease-in-out p-2 bg-emerald-800 dark:bg-emerald-600 hover:bg-emerald-900 focus:bg-emerald-900 dark:hover:bg-emerald-700 dark:focus:bg-emerald-700`
+    ? `text-white rounded-sm transition ease-in-out p-2 bg-emerald-600 hover:bg-emerald-700 focus:bg-emerald-700`
     : ``;
 
   return (

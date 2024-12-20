@@ -3,17 +3,16 @@
 import Script from "next/script";
 import React from "react";
 import { Toaster } from "react-hot-toast";
-import { useWindowSize } from "../hooks/use-mobile";
 import CookieConsent from "./CookieConsent";
 import CustomProviders from "./CustomProviders";
 import Footer from "./Footer/Footer.component";
 import Header from "./Header";
-import { Montserrat } from "next/font/google";
-import Seo from "./Seo";
+import { Fira_Code} from "next/font/google";
 import { usePathname } from 'next/navigation'
-import { includes } from "cypress/types/lodash";
 
-const mainFont = Montserrat({ subsets: ["latin"] });
+import Seo from "./Seo";
+
+const monoFont = Fira_Code({ subsets: ["latin"], weight: '400' });
 
 type Props = {
   children: React.ReactNode;
@@ -28,7 +27,7 @@ const MainPage = ({ children }: Props) => {
       <Seo />
       <body>
         <CustomProviders>
-          <main className={mainFont.className}>
+          <main className={monoFont.className}>
             <Toaster position="top-center" reverseOrder={false} />
             <div className="min-h-screen flex flex-col bg-white dark:bg-slate-800">
               {showHeader && <Header />}

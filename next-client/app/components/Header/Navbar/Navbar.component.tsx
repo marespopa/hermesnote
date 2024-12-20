@@ -6,17 +6,16 @@ import React, { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import logo from "../../../../assets/logo.svg";
 import NavigationLinks from "../Navigation/NavigationLinks";
-import { useWindowSize } from "@/app/hooks/use-mobile";
 import MobileNavigationLinks from "../Navigation/MobileNavigationLinks";
 import { atom_content } from "@/app/atoms/atoms";
 import { useAtom } from "jotai";
+import useIsMobile from "@/app/hooks/use-is-mobile";
 
 const Navbar = () => {
   // State to manage the navbar's visibility
   const [isNavigationVisible, setIsNavigationVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const { width: windowWidth } = useWindowSize();
-  const isBrowserMobile = !!windowWidth && windowWidth < 768;
+  const isMobile = useIsMobile();
   const [content] = useAtom(atom_content);
   const path =
     content && content.length > 0 ? "/dashboard/editor" : "dashboard";
@@ -46,9 +45,9 @@ const Navbar = () => {
         </Link>
 
         {/* Mobile Editor Link */}
-        {isBrowserMobile && (
+        {isMobile && (
           <Link
-            className={`text-white rounded-md transition ease-in-out p-2 bg-emerald-800 dark:bg-emerald-600 hover:bg-emerald-600 focus:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:bg-emerald-700`}
+            className={`text-white rounded-sm transition ease-in-out p-2 bg-emerald-600 hover:bg-emerald-700 focus:bg-emerald-700`}
             href={path}
           >
             App
@@ -63,11 +62,11 @@ const Navbar = () => {
         </div>
 
         {/* Navigation links */}
-        {!isBrowserMobile && <NavigationLinks />}
+        {!isMobile && <NavigationLinks />}
       </div>
 
       {/* Mobile Navigation links */}
-      {isBrowserMobile && isNavigationVisible && (
+      {isMobile && isNavigationVisible && (
         <MobileNavigationLinks handleClose={toggleNav} />
       )}
     </>

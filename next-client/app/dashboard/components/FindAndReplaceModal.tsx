@@ -74,7 +74,7 @@ const FindAndReplaceModal = ({ isOpen, handleClose }: Props) => {
         />
         <div className="flex gap-2 items-center">
           <Button
-            variant="default"
+            variant="secondary"
             handler={handleClose}
             label="Close"
           ></Button>

@@ -30,7 +30,7 @@ const DialogModal = ({ isOpened, onClose, children, styles = "" }: Props) => {
     >
       <dialog
         ref={ref}
-        className={`h-full my-auto sm:h-4/5 p-4 text-gray-700 dark:text-white sm:p-0 w-full sm:w-2/3 bg-white dark:bg-slate-600 rounded-md ${styles}`}
+        className={`h-full my-auto sm:h-4/5 p-4 text-gray-700 dark:text-white sm:p-0 w-full sm:w-2/3 bg-white dark:bg-slate-600 rounded-sm ${styles}`}
         onCancel={onClose}
       >
         <div className="relative p-4">
@@ -63,9 +63,9 @@ const DialogModal = ({ isOpened, onClose, children, styles = "" }: Props) => {
   );
 };
 
-const closeBtnStyle = `absolute right-2 top-2 text-sm bg-gray-900 rounded-full p-2 inline-flex items-center justify-center
+const closeBtnStyle = `fixed right-2 top-2 text-sm bg-gray-900 rounded-full p-2 inline-flex items-center justify-center
                        text-white hover:text-gray-200
-                       hover:bg-gray-800 focus:outline-none focus:ring-2
-                       focus:ring-inset focus:ring-emerald-800`;
+                       hover:bg-gray-800 focus:outline-none focus:ring-1
+                       focus:ring-inset focus:ring-emerald-500`;
 
 export default DialogModal;

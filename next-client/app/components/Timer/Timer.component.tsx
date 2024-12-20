@@ -80,7 +80,7 @@ const TimerComponent = ({
         className="font-bold flex justify-between cursor-pointer"
         onClick={() => toggleTimerWindow()}
       >
-        <span className="font-mono">
+        <span>
           {getHeadingText(pomodoroSettings, fileTitle, false)}
         </span>
         <span>
@@ -120,29 +120,31 @@ const TimerComponent = ({
       <div className="flex gap-4 mt-4 justify-center">
         {!isResting && !isWorking && !isTimerCounting && (
           <Button
+            variant="success"
             label={
               <>
                 START <FaPlay />
               </>
             }
             handler={() => startWorkInterval()}
-            variant="small"
+            styles="text-xs"
           ></Button>
         )}
         {isResting && (
           <Button
+            variant="secondary"
             label={
               <>
                 WORK <FaTerminal />
               </>
             }
             handler={() => startWorkInterval()}
-            variant="small"
+            styles="text-xs"
           ></Button>
         )}
         {isWorking && (
           <Button
-            variant="small--warning"
+            variant="secondary"
             label={
               <>
                 BREAK <FaMugHot />
@@ -153,7 +155,7 @@ const TimerComponent = ({
         )}
         {isPauseButtonVisible && (
           <Button
-            variant={isTimerCounting ? "small" : "small--info"}
+            variant={"secondary"}
             label={
               isTimerCounting ? (
                 <>
@@ -170,7 +172,7 @@ const TimerComponent = ({
         )}
         {(isPauseButtonVisible || isTimerCounting) && (
           <Button
-            variant="small--error"
+            variant="danger"
             label={
               <>
                 RESET <FaRecycle />
@@ -219,7 +221,7 @@ function getHeadingText(
   return isDocumentTitle ? `${fileTitle}` : "Pomodoro Timer";
 }
 
-const timerPopStyles = `bg-slate-200 shadow-sm py-2 md:px-4 pt-2 my-4 rounded-md
+const timerPopStyles = `bg-slate-200 shadow-sm py-2 md:px-4 pt-2 my-4 rounded-sm
                         w-full sm:w-1/2 z-10 md:w-1/4 sm:fixed sm:right-4 sm:bottom-2
                         dark:bg-slate-600 dark:text-white opacity-95 relative`;
 

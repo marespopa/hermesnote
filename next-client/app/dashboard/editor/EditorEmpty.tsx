@@ -1,23 +1,26 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import {
   atom_content,
   atom_contentEdited,
   atom_frontMatter,
+  atom_showDashboard,
 } from "@/app/atoms/atoms";
 import Loading from "@/app/components/Loading";
 import matter from "gray-matter";
 import toast from "react-hot-toast";
 import InfoPanel from "../components/InfoPanel";
-import DocumentationMessage from "../components/DocumentationMessage";
 import TemplateSelectionModal from "../templates/TemplateSelectionModal";
 import { StatusResponse } from "@/app/services/save-utils";
-import { useWindowSize } from "@/app/hooks/use-mobile";
 import Button from "@/app/components/Button";
 import FileInput from "@/app/components/FileInput";
+import ShowWelcomeCheckbox from "../components/ShowWelcomeCheckbox";
+import { FaFile, FaFileAlt, FaFolderOpen } from "react-icons/fa";
+import Badge from "@/app/components/Badges/Badge";
+import useIsMobile from "@/app/hooks/use-is-mobile";
 
 export const PICKER_OPTIONS: OpenFilePickerOptions = {
   types: [
@@ -37,6 +40,9 @@ export default function EditorEmpty() {
   const [, setFrontMatter] = useAtom(atom_frontMatter);
   const [, setContent] = useAtom(atom_content);
   const [, setContentEdited] = useAtom(atom_contentEdited);
+  const [showDashboardOnStartup, setShowDashboardOnStartup] =
+    useAtom(atom_showDashboard);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isFileInputVisible, setIsFileInputVisible] = useState(false);
   const [isTemplateSelectModalVisible, setIsTemplateSelectModalVisible] =
@@ -46,38 +52,113 @@ export default function EditorEmpty() {
     new: false,
     template: false,
   });
-  const { width: windowWidth } = useWindowSize();
-  const isBrowserMobile = !!windowWidth && windowWidth < 768;
+  const isMobile = useIsMobile();
   const [mounted, setMounted] = useState(false);
-  const [fileList, setFileList] = useState<File[]>([]);
+  const [fileList, _] = useState<File[]>([]);
 
-  if (isBrowserMobile) {
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!showDashboardOnStartup) {
+      router.push("dashboard/editor");
+    }
+  }, [router, showDashboardOnStartup]);
+
+  if (!mounted) {
+    return <></>
+  }
+
+  if (isMobile) {
+    return renderMobileView();
+  }
+
+  return (
+    <div>
+      {renderHeading()}
+      {!isLoading && (
+        <>
+          {renderActions()}
+          <ShowWelcomeCheckbox />
+        </>
+      )}
+      {isLoading && (
+        <Loading message={"Hang on tight. The editor is loading..."} />
+      )}
+    </div>
+  );
+
+  function renderMobileView() {
     return (
       <div>
         <article className="my-8">
-          <h2 className="text-2xl leading-tight">Let&apos;s get started!</h2>
+          {/* Enhanced Header */}
+          <h2 className="text-2xl leading-tight text-center mb-4">
+            🚀 Let&apos;s get started!
+          </h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400 text-center mb-6">
+            Choose an option below to begin working with Hermes Markdown.
+          </p>
 
-          <div className="my-2 prose dark:prose-invert flex flex-col gap-2">
-            <Button
-              isDisabled={disabledButtonsState.template}
-              variant="default"
-              handler={() => handleSelectTemplate()}
-              label="Start from a template"
-            />
-            <Button
-              isDisabled={disabledButtonsState.new}
-              variant="default"
-              handler={() => handleCreateFile()}
-              label="Blank File"
-            />
+          {/* Buttons Section for Mobile View */}
+          <div className="prose dark:prose-invert flex flex-col gap-4">
+            {/* Start from Template Button */}
+            <div className="flex flex-col items-center">
+              {/* Recommended Badge */}
+              <Badge variant="success" label="Recommended" />
+              <Button
+                isDisabled={disabledButtonsState.template}
+                variant="secondary"
+                handler={() => handleSelectTemplate()}
+                label={
+                  <span>
+                    <i className="fa fa-file-alt mr-2"></i> Start from a
+                    Template
+                  </span>
+                }
+              />
+              <p className="text-xs text-center text-gray-500 mt-1">
+                Use pre-built templates to save time and get started quickly.
+              </p>
+            </div>
 
-            <Button
-              variant="default"
-              label="Open File"
-              isDisabled={disabledButtonsState.existing}
-              handler={() => setIsFileInputVisible(!isFileInputVisible)}
-            ></Button>
+            {/* Blank File Button */}
+            <div className="flex flex-col items-center">
+              <Button
+                isDisabled={disabledButtonsState.new}
+                variant="secondary"
+                handler={() => handleCreateFile()}
+                label={
+                  <span>
+                    <i className="fa fa-file mr-2"></i> Blank File
+                  </span>
+                }
+              />
+              <p className="text-xs text-center text-gray-500 mt-1">
+                Start with a clean slate and create a new markdown file from
+                scratch.
+              </p>
+            </div>
 
+            {/* Open File Button */}
+            <div className="flex flex-col items-center">
+              <Button
+                variant="secondary"
+                label={
+                  <span>
+                    <i className="fa fa-folder-open mr-2"></i> Open File
+                  </span>
+                }
+                isDisabled={disabledButtonsState.existing}
+                handler={() => setIsFileInputVisible(!isFileInputVisible)}
+              />
+              <p className="text-xs text-center text-gray-500 mt-1">
+                Import an existing markdown or text file to edit.
+              </p>
+            </div>
+
+            {/* File Input Section (if visible) */}
             {isFileInputVisible && (
               <div className="rounded-b-md flex flex-col -mt-2 gap-2 bg-slate-200 dark:bg-slate-900 p-2">
                 <FileInput
@@ -89,7 +170,6 @@ export default function EditorEmpty() {
                       toast.error(
                         "Something went wrong with the file selection. Please try again."
                       );
-
                       return;
                     }
 
@@ -97,7 +177,6 @@ export default function EditorEmpty() {
                       toast.error(
                         "The selected file must be a .md or a .txt file."
                       );
-
                       return;
                     }
 
@@ -119,6 +198,7 @@ export default function EditorEmpty() {
             )}
           </div>
 
+          {/* Template Selection Modal */}
           {isTemplateSelectModalVisible && (
             <TemplateSelectionModal
               isOpen={isTemplateSelectModalVisible}
@@ -129,27 +209,13 @@ export default function EditorEmpty() {
                 });
                 setIsTemplateSelectModalVisible(false);
               }}
-            ></TemplateSelectionModal>
+            />
           )}
         </article>
+        <ShowWelcomeCheckbox />
       </div>
     );
   }
-
-  return (
-    <div>
-      {renderHeading()}
-      {!isLoading && (
-        <>
-          {renderActions()}
-          <DocumentationMessage />
-        </>
-      )}
-      {isLoading && (
-        <Loading message={"Hang on tight. The editor is loading..."} />
-      )}
-    </div>
-  );
 
   function isSelectedFileValid(file: File) {
     return file && (file?.name.endsWith(".md") || file?.name.endsWith(".txt"));
@@ -188,8 +254,8 @@ export default function EditorEmpty() {
   function renderActions() {
     return (
       <section className="flex gap-8">
-        {renderSelectTemplateOption()}
         {renderNewFileOption()}
+        {renderSelectTemplateOption()}
         {renderImportFileOption()}
       </section>
     );
@@ -199,8 +265,16 @@ export default function EditorEmpty() {
     return (
       <div className={panelStyle}>
         <InfoPanel
-          title="Start with a Template"
-          description={`Quickly start a new project with a pre-built structure.`}
+          isHighlighted={true}
+          title={
+            <span className="flex flex-col items-start">
+              <Badge variant="success" label="Recommended" />
+              <span className="flex gap-2 items-center">
+                <FaFileAlt /> Start with a Template
+              </span>
+            </span>
+          }
+          description={`Pre-built structures for quick starts`}
           action={{
             label: "Select a Template",
             handler: () => handleSelectTemplate(),
@@ -228,8 +302,13 @@ export default function EditorEmpty() {
     return (
       <div className={panelStyle}>
         <InfoPanel
-          title="Start from scratch"
-          description={`Create a blank document and build your content from scratch.`}
+          title={
+            <span className="flex gap-2 items-center">
+              <FaFile />
+              Start from scratch
+            </span>
+          }
+          description={`Begin with an empty document`}
           action={{
             label: "New File",
             handler: () => handleCreateFile(),
@@ -244,8 +323,13 @@ export default function EditorEmpty() {
     return (
       <div className={panelStyle}>
         <InfoPanel
-          title="Import Existing File"
-          description={`Open and change your already existing Markdown files.`}
+          title={
+            <span className="flex gap-2 items-center">
+              <FaFolderOpen />
+              Import existing file
+            </span>
+          }
+          description={`Edit your existing markdown file`}
           action={{
             label: "Open File",
             handler: () => handleOpenFile(),

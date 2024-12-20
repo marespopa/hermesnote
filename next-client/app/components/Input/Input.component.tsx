@@ -29,7 +29,7 @@ const Input = ({
           {label}
         </span>
         <input
-          className="bg-white dark:bg-slate-700 px-2 py-2 rounded-md border-2 border-gray-300 dark:border-gray-600 outline-none focus:border-emerald-800"
+          className="bg-white dark:bg-slate-700 px-2 py-2 rounded-sm border-2 border-gray-300 dark:border-gray-600 focus:ring-1 focus:ring-emerald-500 focus: outline-none"
           type={type}
           aria-label={label}
           id={name}

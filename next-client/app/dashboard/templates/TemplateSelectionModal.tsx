@@ -12,8 +12,8 @@ import MarkdownTemplateList, { MarkdownTemplate } from ".";
 import Button from "@/app/components/Button";
 import { useRouter } from "next/navigation";
 import Loading from "@/app/components/Loading";
-import Input from "@/app/components/Input";
-import { useWindowSize } from "@/app/hooks/use-mobile";
+import TemplateTags from "./components/TemplateTags";
+import useIsMobile from "@/app/hooks/use-is-mobile";
 
 type Props = {
   isOpen: boolean;
@@ -27,9 +27,7 @@ const TemplateSelectionModal = ({ isOpen, handleClose }: Props) => {
   const [, setContentEdited] = useAtom(atom_contentEdited);
   const [searchTerm, setSearchTerm] = useState("");
   const templates = MarkdownTemplateList;
-  const { width: windowWidth } = useWindowSize();
-  const isBrowserMobile = !!windowWidth && windowWidth < 768;
-  const showTagsAndDescription = !isBrowserMobile;
+  const isMobile = useIsMobile();
   const filteredTemplates = templates.filter((template) => {
     const isTitleMatching = template.frontMatter.title
       .toLowerCase()
@@ -41,120 +39,173 @@ const TemplateSelectionModal = ({ isOpen, handleClose }: Props) => {
 
     return isTitleMatching || isTagMatching;
   });
+  const uniqueTags = getUniqueTags(templates);
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [isLoadingTemplate, setIsLoadingTemplate] = useState(false);
+  const [showTagsCluster, setShowTagsCluster] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => setIsMounted(true), []);
+  useEffect(() => { setShowTagsCluster(!isMobile)}, [isMobile]);
 
   if (!isMounted) {
     return <></>;
   }
 
   return (
-    <DialogModal isOpened={isOpen} onClose={handleClose}>
+    <DialogModal
+      isOpened={isOpen}
+      onClose={handleClose}
+    >
       {isLoadingTemplate && <Loading />}
       {!isLoadingTemplate && (
         <>
+          {renderModalHeader()}
+          {renderTagsToggle()}
+          {showTagsCluster && renderTagsCluster()}
           {renderSearchBar()}
-          {renderTable()}
+          {renderTemplates()}
         </>
       )}
     </DialogModal>
   );
 
+  function renderTagsToggle() {
+    return (
+      <div className="my-2">
+        <Button
+          variant="secondary"
+          styles="text-sm"
+          handler={() => setShowTagsCluster(!showTagsCluster)}
+        >
+          {showTagsCluster ? "Hide Tags" : "Show Tags"}
+        </Button>
+      </div>
+    );
+  }
+
+  function renderTagsCluster() {
+    if (!showTagsCluster) {
+      return <></>;
+    }
+
+    return (
+      <div className="flex flex-wrap gap-2 mb-4 max-h-">
+        {uniqueTags.map((tag) => (
+          <button
+            key={tag}
+            className={`px-3 py-1 rounded-sm text-sm ${
+              selectedTag === tag
+                ? "bg-emerald-600 text-white"
+                : "bg-gray-200 text-gray-800"
+            }`}
+            onClick={() => {
+              // Deselect
+              if (selectedTag === tag) {
+                // Select
+                setSearchTerm("");
+                setSelectedTag(null);
+              } else {
+                // Select
+                setSearchTerm(tag);
+                setSelectedTag(tag);
+              }
+            }}
+          >
+            {tag}
+          </button>
+        ))}
+      </div>
+    );
+  }
+
+  function getUniqueTags(templates: MarkdownTemplate[]) {
+    const allTags = templates.flatMap((template) =>
+      template.frontMatter.tags.split(",")
+    );
+    return Array.from(new Set(allTags));
+  }
+
+  function renderModalHeader() {
+    return (
+      <div className="mb-4">
+        <h2 className="text-xl font-bold text-gray-800">Select a Template</h2>
+        <p className="text-sm text-gray-600">
+          Choose from pre-built templates to get started quickly.
+        </p>
+      </div>
+    );
+  }
+
   function renderSearchBar() {
     return (
-      <Input
-        name="Search"
-        value={searchTerm}
-        label="Search"
-        handleChange={(e: FormEvent<HTMLInputElement>) => {
-          const element = e.currentTarget as HTMLInputElement;
-          const value = element.value;
+      <div className="mb-4 max-w-[450px]">
+        <input
+          type="text"
+          className="w-full px-4 py-3 border border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-emerald-500 text-sm text-gray-700 placeholder-gray-500"
+          placeholder="Search templates by name or tag..."
+          value={searchTerm}
+          onChange={(e: FormEvent<HTMLInputElement>) => {
+            const element = e.currentTarget as HTMLInputElement;
+            const value = element.value;
 
-          setSearchTerm(value);
-        }}
-      />
+            setSearchTerm(value);
+          }}
+        />
+      </div>
     );
   }
 
-  function renderTable() {
-    return (
-      <table className="min-w-full text-left text-sm font-light">
-        <thead className="border-b font-medium dark:border-neutral-500">
-          <tr>
-            <th>Name</th>
-            {showTagsAndDescription && (
-              <>
-                <th>Description</th>
-                <th>Tags</th>
-              </>
-            )}
-            <th></th>
-          </tr>
-        </thead>
-        {renderTableRows()}
-      </table>
-    );
-  }
-
-  function renderTableRows() {
+  function renderTemplates() {
     if (!filteredTemplates || !filteredTemplates.length) {
       return (
-        <tbody>
-          <td colSpan={4}>No template found</td>
-        </tbody>
+        <div className="text-center py-4 text-gray-600">
+          No templates found. Try adjusting your search terms.
+        </div>
       );
     }
 
     return (
-      <tbody className="overflow-y-auto">
-        {filteredTemplates.map((template) =>
-          renderTemplateAsTableRow(template)
+      <div className="flex flex-col gap-[1rem]">
+        {filteredTemplates.map((template, index) =>
+          renderTemplateAsCard(template, index)
         )}
-      </tbody>
+      </div>
     );
   }
 
-  function renderTemplateAsTableRow(template: MarkdownTemplate): any {
+  function renderTemplateAsCard(template: MarkdownTemplate, index: number) {
     const tags = template.frontMatter.tags?.split(",");
 
     return (
-      <tr
-        className="border-b dark:border-neutral-500"
-        key={template.frontMatter.title}
+      <div
+        key={template.filename}
+        className={`p-4 rounded-sm shadow-sm bg-slate-100 hover:bg-amber-100 focus:bg-amber-100`}
       >
-        <td>{template.frontMatter.title}</td>
-        {showTagsAndDescription && (
-          <>
-            <td>{template.frontMatter.description}</td>
-            <td>
-              {tags.length && (
-                <div className="flex flex-wrap gap-2 py-4">
-                  {tags.map((tag: string, index: number) => {
-                    return (
-                      <span
-                        key={index}
-                        className="py-2 px-4 shadow-md no-underline rounded-full bg-emerald-800 text-white text-xs dark:bg-emerald-600"
-                      >
-                        {tag}
-                      </span>
-                    );
-                  })}
-                </div>
-              )}
-            </td>
-          </>
-        )}
-        <td className={`px-4 ${!showTagsAndDescription && "py-2"}`}>
-          <Button
-            label={"Select"}
-            handler={() => loadFileFromTemplate(template)}
-            variant="secondary"
-            isDisabled={isLoadingTemplate}
-          />
-        </td>
-      </tr>
+        {/* Tags */}
+        <div className="flex flex-wrap gap-2">
+          {tags && <TemplateTags tags={tags} maxVisible={3} />}
+        </div>
+
+        {/* Title */}
+        <h3 className="font-bold text-gray-800 text-base mt-6">
+          {template.frontMatter.title}
+        </h3>
+
+        {/* Description */}
+        <p className="text-sm text-gray-600 mt-2">
+          {template.frontMatter.description}
+        </p>
+
+        {/* Select Button */}
+        <Button
+          label={"Select"}
+          handler={() => loadFileFromTemplate(template)}
+          variant="secondary"
+          isDisabled={isLoadingTemplate}
+          styles="mt-4"
+        />
+      </div>
     );
   }
 
@@ -168,9 +219,11 @@ const TemplateSelectionModal = ({ isOpen, handleClose }: Props) => {
     });
     setContent(template.content);
     setContentEdited(template.content);
-    setIsLoadingTemplate(false);
-    handleClose();
     router.push("/dashboard/editor");
+    setTimeout(() => {
+      setIsLoadingTemplate(false);
+      handleClose();
+    }, 2000); // Delay of 2 seconds
   }
 };
 

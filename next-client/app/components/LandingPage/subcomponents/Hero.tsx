@@ -3,18 +3,10 @@
 import Image from "next/image";
 import Button from "../../Button";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
 
 export default function Hero() {
   const router = useRouter();
   const heroImage = "/assets/hero/niceday@2x.jpg";
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => setIsMounted(true), []);
-
-  if (!isMounted) {
-    return <></>;
-  }
 
   return (
     <div className="container max-w-screen-xl mx-auto">
@@ -22,16 +14,19 @@ export default function Hero() {
         <div className="w-full md:w-1/2 prose dark:prose-invert flex flex-col justify-center">
           <h1 className="text-5xl mt-8 leading-tight">
             Write{" "}
-            <span className="text-emerald-800">
+            <span className="bg-emerald-600 text-white p-1">
               Freely, Securely, and Locally
             </span>
           </h1>
           <p className="text-xl mt-4">
             Hermes Markdown is your go-to markdown editor for creating and
-            editing markdown files effortlessly. Enjoy powerful features like{" "}
-            <strong>templates</strong>, <strong>live preview</strong>, and{" "}
-            <strong>keyboard shortcuts</strong>{" "}
-            to streamline your writing process.
+            editing markdown files effortlessly.
+          </p>
+          <p className="text-xl mt-4">
+            Enjoy powerful features like <strong>templates</strong>,{" "}
+            <strong>live preview</strong>, and{" "}
+            <strong>keyboard shortcuts</strong> to streamline your writing
+            process.
           </p>
           <p className="text-lg mt-4">
             Prioritize your <strong>privacy</strong> with a tool that ensures
@@ -41,11 +36,10 @@ export default function Hero() {
           </p>
           <Button
             styles="mx-auto md:ml-0 grow-0 mt-6"
-            variant="primary-large"
+            variant="primary"
             handler={() => router.push("/dashboard")}
           >
-            Start{' '}
-            <span className="text-xs align-super -mt-4">100% free</span>
+            <span className="text-2xl">Start <span className="text-xs align-super -mt-4">100% free</span></span>
           </Button>
         </div>
 

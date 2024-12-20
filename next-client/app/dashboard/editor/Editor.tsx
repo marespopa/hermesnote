@@ -21,9 +21,9 @@ import matter from "gray-matter";
 import Loading from "@/app/components/Loading";
 import TemplateSelectionModal from "../templates/TemplateSelectionModal";
 import { useCommand } from "@/app/hooks/use-command";
-import { useWindowSize } from "@/app/hooks/use-mobile";
 import FileSelectionModal from "../components/FileSelectionModal";
 import FindAndReplaceModal from "../components/FindAndReplaceModal";
+import useIsMobile from "@/app/hooks/use-is-mobile";
 
 export default function Editor() {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,8 +39,7 @@ export default function Editor() {
   const [, setContent] = useAtom(atom_content);
   const [hasChanges] = useAtom(atom_hasChanges);
   const [, setHasChanges] = useAtom(atom_hasChanges);
-  const { width: windowWidth } = useWindowSize();
-  const isBrowserMobile = !!windowWidth && windowWidth < 768;
+  const isMobile = useIsMobile();
   const [isFindAndReplaceModalVisible, setIsFindAndReplaceModalVisible] =
     useState(false);
   const [isFileSelectModalVisible, setIsFileSelectModalVisible] =
@@ -76,7 +75,7 @@ export default function Editor() {
   }
 
   async function handleOpenFile() {
-    if (isBrowserMobile) {
+    if (isMobile) {
       setIsFileSelectModalVisible(true);
 
       return;

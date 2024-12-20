@@ -93,8 +93,12 @@ const FileSelectionModal = ({ isOpen, handleClose }: Props) => {
     });
     setContent(fileData?.content || "");
     setContentEdited(fileData?.content || "");
-    handleClose();
+
     router.push("/dashboard/editor");
+
+    setTimeout(() => {
+      handleClose();
+    }, 2000); // Delay of 2 seconds
 
     return;
   }

@@ -38,7 +38,7 @@ const FileInput = ({
         </span>
         <input
           name={name}
-          className="bg-white dark:bg-slate-700 px-2 py-2 rounded-md border-2 border-gray-300 dark:border-gray-600 outline-none focus:border-emerald-800"
+          className="bg-white dark:bg-slate-700 px-2 py-2 rounded-sm border-2 border-gray-300 dark:border-gray-600 outline-none focus:border-emerald-800"
           type="file"
           ref={inputRef}
           data-testid="uploader"
