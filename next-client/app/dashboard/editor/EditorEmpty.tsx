@@ -7,7 +7,6 @@ import {
   atom_content,
   atom_contentEdited,
   atom_frontMatter,
-  atom_showDashboard,
 } from "@/app/atoms/atoms";
 import Loading from "@/app/components/Loading";
 import matter from "gray-matter";
@@ -40,8 +39,6 @@ export default function EditorEmpty() {
   const [, setFrontMatter] = useAtom(atom_frontMatter);
   const [, setContent] = useAtom(atom_content);
   const [, setContentEdited] = useAtom(atom_contentEdited);
-  const [showDashboardOnStartup, setShowDashboardOnStartup] =
-    useAtom(atom_showDashboard);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isFileInputVisible, setIsFileInputVisible] = useState(false);
@@ -59,12 +56,6 @@ export default function EditorEmpty() {
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  useEffect(() => {
-    if (!showDashboardOnStartup) {
-      router.push("dashboard/editor");
-    }
-  }, [router, showDashboardOnStartup]);
 
   if (!mounted) {
     return <></>
