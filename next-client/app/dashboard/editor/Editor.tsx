@@ -15,7 +15,6 @@ import { useSearchParams } from "next/navigation";
 import { useDocumentTitle } from "@/app/hooks/use-document-title";
 import { useState, useEffect } from "react";
 import { PICKER_OPTIONS } from "./EditorEmpty";
-import { toast } from "react-toastify";
 import { StatusResponse } from "@/app/services/save-utils";
 import matter from "gray-matter";
 import Loading from "@/app/components/Loading";
@@ -87,10 +86,7 @@ export default function Editor() {
 
       setIsLoading(true);
       await parseFile(file);
-
-      toast.success("File has been loaded");
     } catch (error) {
-      toast.error("File could not be loaded");
       console.error(error);
     } finally {
       setIsLoading(false);
