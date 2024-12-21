@@ -12,6 +12,7 @@ import { SetAtom } from "../EditorTypes";
 import html2markdown from "@notable/html2markdown";
 import sanitizeHtml from "sanitize-html";
 import { FaCopy } from "react-icons/fa";
+import { replaceMarkdownWithHtml } from "../EditorUtils";
 
 interface Props {
   contentEdited: string;
@@ -31,6 +32,30 @@ export default function EditorContent({
   const [isEdit, setIsEdit] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const markdownRef = useRef<HTMLDivElement>(null);
+  const sanitizeHTMLConfig = {
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "a"]),
+    allowedAttributes: {
+      ...sanitizeHtml.defaults.allowedAttributes,
+      p: ["style"],
+      div: ["style"],
+      a: ["href"],
+    },
+    allowedStyles: {
+      "*": {
+        // Match HEX and RGB
+        color: [
+          /^#(0x)?[0-9a-f]+$/i,
+          /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/,
+        ],
+        "text-align": [/^left$/, /^right$/, /^center$/],
+        // Match any number with px, em, or %
+        "font-size": [/^\d+(?:px|em|%)$/],
+      },
+      p: {
+        "font-size": [/^\d+rem$/],
+      },
+    },
+  };
 
   const htmlEdit = `<article>${markdownRef?.current?.innerHTML}</article>`;
 
@@ -97,19 +122,11 @@ export default function EditorContent({
       </>
     );
   }
-
   function syncMarkdown(e: React.FocusEvent<HTMLDivElement, Element>) {
-    const html = e.currentTarget.innerHTML;
-    const cleanHTML = sanitizeHtml(html, {
-      allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-        "img",
-        "table",
-        "tr",
-        "tr",
-      ]),
-    });
+    const html = replaceMarkdownWithHtml(e.currentTarget.innerHTML);
+    const cleanHTML = sanitizeHtml(html, sanitizeHTMLConfig);
     const md = html2markdown(cleanHTML);
-    
+
     setContentEdited(md); // Update markdown state
     setHasChanges(true);
     setIsEdit(false); // Exit edit mode
@@ -117,4 +134,3 @@ export default function EditorContent({
 }
 
 const previewStyles = `w-full max-w-none prose my-6 rounded-sm bg-white prose-pre:bg-amber-100 prose-pre:text-gray-700`;
-const iconStyle = `absolute right-5 top-8 cursor-pointer transition-all duration-200 ease-in-out focus:scale-105 hover:scale-105`;
