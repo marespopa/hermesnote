@@ -30,7 +30,7 @@ const DialogModal = ({ isOpened, onClose, children, styles = "" }: Props) => {
     >
       <dialog
         ref={ref}
-        className={`h-full my-auto sm:h-4/5 p-4 text-gray-700 dark:text-white sm:p-0 w-full sm:w-2/3 bg-white dark:bg-slate-600 rounded-sm ${styles}`}
+        className={`h-full my-auto sm:h-4/5 p-4 text-gray-700  sm:p-0 w-full sm:w-2/3 bg-white  rounded-sm ${styles}`}
         onCancel={onClose}
       >
         <div className="relative p-4">

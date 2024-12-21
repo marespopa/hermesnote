@@ -3,7 +3,7 @@ import React from "react";
 export default function PrivacyPolicy() {
   return (
     <div className="w-full max-w-screen-xl mx-auto my-4 md:my-8 px-4 md:px-2">
-      <section className="prose dark:prose-invert">
+      <section className="prose ">
         <h1>Privacy Policy</h1>
 
         <p>

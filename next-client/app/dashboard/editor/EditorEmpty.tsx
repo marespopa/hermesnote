@@ -58,7 +58,7 @@ export default function EditorEmpty() {
   }, []);
 
   if (!mounted) {
-    return <></>
+    return <></>;
   }
 
   if (isMobile) {
@@ -88,12 +88,12 @@ export default function EditorEmpty() {
           <h2 className="text-2xl leading-tight text-center mb-4">
             🚀 Let&apos;s get started!
           </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 text-center mb-6">
+          <p className="text-sm text-gray-600 text-center mb-6">
             Choose an option below to begin working with Hermes Markdown.
           </p>
 
           {/* Buttons Section for Mobile View */}
-          <div className="prose dark:prose-invert flex flex-col gap-4">
+          <div className="prose  flex flex-col gap-4">
             {/* Start from Template Button */}
             <div className="flex flex-col items-center">
               {/* Recommended Badge */}
@@ -151,7 +151,7 @@ export default function EditorEmpty() {
 
             {/* File Input Section (if visible) */}
             {isFileInputVisible && (
-              <div className="rounded-b-md flex flex-col -mt-2 gap-2 bg-slate-200 dark:bg-slate-900 p-2">
+              <div className="rounded-b-md flex flex-col -mt-2 gap-2 bg-slate-200 p-2">
                 <FileInput
                   name="file"
                   placeholder="Upload a markdown file"

@@ -34,7 +34,7 @@ export default function Button({
 }
 
 const variantStyles = (variant: ButtonVariant) => {
-  const baseStyles = `rounded-lg shadow-md px-4 py-2 text-lg font-medium transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2`;
+  const baseStyles = `rounded-lg shadow-md px-4 py-2 text-lg font-medium transition-all duration-200 ease-in-out focus:scale-105 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2`;
   const disabledStyles = `disabled:opacity-50 disabled:pointer-events-none`;
 
   switch (variant) {

@@ -16,14 +16,15 @@ module.exports = {
     },
     keyframes: {
       pop: {
-        '0%, 100%': { transform: 'scale(1)', opacity: '1' },
-        '50%': { transform: 'scale(1.1)', opacity: '0.9' },
+        "0%, 100%": { transform: "scale(1)", opacity: "1" },
+        "50%": { transform: "scale(1.1)", opacity: "0.9" },
       },
     },
     animation: {
-      pop: 'pop 0.5s ease-in-out',
+      "spin-slow": "spin 3s linear infinite",
+      pop: "pop 0.5s ease-in-out",
       "pop-infinite": "pop 3s ease-in-out infinite",
-      "pop-short": "pulse 300ms ease-in"
+      "pop-short": "pulse 300ms ease-in",
     },
   },
   plugins: [require("@tailwindcss/typography")],

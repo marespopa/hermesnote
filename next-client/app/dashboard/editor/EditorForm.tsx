@@ -67,7 +67,7 @@ export default function EditorForm({ isOpened, handleClose }: Props) {
         <h3 className="text-2xl mt-4 flex gap-2 items-center justify-between">
           <span>Document Properties</span>
         </h3>
-        <p className="mt-2 my-4 text-sm text-gray-500 dark:text-gray-300">
+        <p className="mt-2 my-4 text-sm text-gray-500">
           These fields, which will be saved as frontmatter, contain essential
           information about your Markdown file.
         </p>

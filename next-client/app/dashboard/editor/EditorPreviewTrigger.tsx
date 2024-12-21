@@ -28,7 +28,6 @@ export default function EditorPreviewTrigger() {
         <DialogModal
           isOpened={isPdfPreviewOpen}
           onClose={() => hidePdfPreviewModal()}
-          styles={`dark:bg-white dark:text-gray-700`}
         >
           <div className="h-full relative">
             <div className="fixed bottom-2 right-2 sm:flex sm:sticky sm:top-4">

@@ -11,7 +11,7 @@ export default function Hero() {
   return (
     <div className="container max-w-screen-xl mx-auto">
       <section className="flex flex-wrap mt-4 sm:mt-8 md:mt-16 items-center">
-        <div className="w-full md:w-1/2 prose dark:prose-invert flex flex-col justify-center">
+        <div className="w-full md:w-1/2 prose flex flex-col justify-center">
           <h1 className="text-5xl mt-8 leading-tight">
             Write{" "}
             <span className="bg-emerald-600 text-white p-1">
@@ -39,7 +39,9 @@ export default function Hero() {
             variant="primary"
             handler={() => router.push("/dashboard")}
           >
-            <span className="text-2xl">Start <span className="text-xs align-super -mt-4">100% free</span></span>
+            <span className="text-2xl">
+              Start <span className="text-xs align-super -mt-4">100% free</span>
+            </span>
           </Button>
         </div>
 

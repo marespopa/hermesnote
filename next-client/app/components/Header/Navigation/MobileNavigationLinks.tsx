@@ -12,7 +12,7 @@ type Props = {
 export default function MobileNavigationLinks({ handleClose }: Props) {
   return (
     <nav
-      className={`backdrop-blur	w-full fixed top-20 left-0 bg-slate-300 dark:bg-slate-700 dark:text-white pt-2 pb-4 flex-grow`}
+      className={`backdrop-blur	w-full fixed top-20 left-0 bg-slate-300   pt-2 pb-4 flex-grow`}
     >
       <ul className="pt-2 flex flex-col md:flex-row space-x-4 gap-8 items-center">
         <li>

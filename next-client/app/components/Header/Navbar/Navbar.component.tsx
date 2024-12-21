@@ -56,7 +56,7 @@ const Navbar = () => {
 
         {/*Menu Hamburg*/}
         <div className="md:hidden mr-4">
-          <button onClick={toggleNav} className="dark:text-white">
+          <button onClick={toggleNav}>
             <FaBars />
           </button>
         </div>

@@ -27,6 +27,7 @@
     "eslint-config-next": "15.1.2",
     "gray-matter": "^4.0.3",
     "html2canvas": "^1.4.1",
+    "html2markdown": "^1.1.0",
     "jest": "^29.7.0",
     "jotai": "^2.10.1",
     "js-cookie": "^3.0.5",
@@ -42,6 +43,7 @@
     "react-syntax-highlighter": "^15.6.1",
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.0",
+    "sanitize-html": "^2.14.0",
     "sass": "^1.80.5",
     "tailwindcss": "3.4.14",
     "typescript": "5.6.3",
@@ -49,6 +51,7 @@
     "use-sound": "^4.0.3"
   },
   "devDependencies": {
+    "@types/sanitize-html": "^2.13.0",
     "@types/wicg-file-system-access": "^2023.10.5",
     "jest-environment-jsdom": "^29.7.0"
   },

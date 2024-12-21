@@ -7,20 +7,20 @@ import CookieConsent from "./CookieConsent";
 import CustomProviders from "./CustomProviders";
 import Footer from "./Footer/Footer.component";
 import Header from "./Header";
-import { Fira_Code} from "next/font/google";
-import { usePathname } from 'next/navigation'
+import { Fira_Code } from "next/font/google";
+import { usePathname } from "next/navigation";
 
 import Seo from "./Seo";
 
-const monoFont = Fira_Code({ subsets: ["latin"], weight: '400' });
+const monoFont = Fira_Code({ subsets: ["latin"], weight: "400" });
 
 type Props = {
   children: React.ReactNode;
 };
 
 const MainPage = ({ children }: Props) => {
-  const pathname = usePathname()
-  const showHeader = !pathname.includes('dashboard');
+  const pathname = usePathname();
+  const showHeader = !pathname.includes("dashboard");
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -29,7 +29,7 @@ const MainPage = ({ children }: Props) => {
         <CustomProviders>
           <main className={monoFont.className}>
             <Toaster position="top-center" reverseOrder={false} />
-            <div className="min-h-screen flex flex-col bg-white dark:bg-slate-800">
+            <div className="min-h-screen flex flex-col bg-white ">
               {showHeader && <Header />}
               <div className="flex-1 sm:px-4 md:px-2">{children}</div>
               <Footer />

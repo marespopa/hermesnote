@@ -80,9 +80,7 @@ const TimerComponent = ({
         className="font-bold flex justify-between cursor-pointer"
         onClick={() => toggleTimerWindow()}
       >
-        <span>
-          {getHeadingText(pomodoroSettings, fileTitle, false)}
-        </span>
+        <span>{getHeadingText(pomodoroSettings, fileTitle, false)}</span>
         <span>
           {isTimerMinimized ? <FaRegWindowMaximize /> : <FaRegWindowMinimize />}
         </span>
@@ -223,6 +221,6 @@ function getHeadingText(
 
 const timerPopStyles = `bg-slate-200 shadow-sm py-2 md:px-4 pt-2 my-4 rounded-sm
                         w-full sm:w-1/2 z-10 md:w-1/4 sm:fixed sm:right-4 sm:bottom-2
-                        dark:bg-slate-600 dark:text-white opacity-95 relative`;
+                        opacity-95 relative`;
 
 export default TimerComponent;

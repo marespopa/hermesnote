@@ -45,7 +45,11 @@ export default function EditorHeader({
 
   return (
     <>
-      <div className={`bg-amber-100 p-4 ${isMobile ? 'mt-20' : 'mt-8'} flex flex-col md:flex-row justify-between border-b-2 rounded-sm`}>
+      <div
+        className={`bg-amber-100 p-4 ${
+          isMobile ? "mt-20" : "mt-8"
+        } flex flex-col md:flex-row justify-between border-b-2 rounded-sm`}
+      >
         <div className="flex gap-2 flex-col">
           <h1 className="text-3xl leading-tight flex gap-2 items-center">
             <span>{hasTitle && `${fileTitle}`}</span>
@@ -64,7 +68,7 @@ export default function EditorHeader({
           <span
             className={`${
               hasChanges ? "visible" : "invisible"
-            } text-xs my-2 text-gray-600 dark:text-gray-200`}
+            } text-xs my-2 text-gray-600`}
           >
             You have unsaved changes.
           </span>

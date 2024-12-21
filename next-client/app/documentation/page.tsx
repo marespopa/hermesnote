@@ -34,9 +34,9 @@ export default function Prices() {
   } as const;
 
   return (
-    <main className="py-4 bg-white dark:bg-slate-800">
+    <main className="py-4 bg-white">
       <div className={`${containerStyle}`}>
-        <div className="prose dark:prose-invert">
+        <div className="prose">
           <section>
             <h1>Documentation</h1>
             <p>

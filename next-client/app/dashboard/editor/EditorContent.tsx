@@ -1,21 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SetStateAction } from "jotai";
+
 import Loading from "@/app/components/Loading/Loading";
-import EditorPreview from "./EditorPreview";
+import MarkdownPreview from "../components/MarkdownPreview";
+import ExportService from "@/app/services/export-service";
 import { useCommand } from "@/app/hooks/use-command";
-import CloseIcon from "@/app/components/Icons/CloseIcon";
-import PenIcon from "@/app/components/Icons/PenIcon";
-import EditorTextarea from "./EditorTextarea";
-import EyeIcon from "@/app/components/Icons/EyeIcon";
 import { FileMetadata } from "@/app/types/markdown";
 import { SetAtom } from "./EditorTypes";
-import ExportService from "@/app/services/export-service";
 
-type PanelState = "both" | "editor" | "preview";
+import html2markdown from "html2markdown";
+import sanitizeHtml from "sanitize-html";
+import { FaCopy } from "react-icons/fa";
 
 interface Props {
-  content: string;
   contentEdited: string;
   frontMatter: FileMetadata;
   setContentEdited: SetAtom<[SetStateAction<string>], void>;
@@ -23,7 +21,6 @@ interface Props {
 }
 
 export default function EditorContent({
-  content,
   contentEdited,
   setContentEdited,
   frontMatter,
@@ -31,18 +28,22 @@ export default function EditorContent({
 }: Props) {
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
-  const [panelState, setPanelState] = useState<PanelState>("editor");
+  const [isEdit, setIsEdit] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const markdownRef = useRef<HTMLDivElement>(null);
+
+  const htmlEdit = `<article>${markdownRef?.current?.innerHTML}</article>`;
 
   useEffect(() => {
-    setHasChanges(content !== contentEdited);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [content, contentEdited]);
+    setIsMounted(true);
+  }, []);
 
-  useEffect(() => setIsMounted(true), []);
+  // Save command using `useCommand` hook
   useCommand("save", () =>
     ExportService.exportMarkdown(contentEdited, frontMatter)
   );
 
+  // Navigate to home/dashboard
   useCommand("home", () => {
     setIsMounted(false);
     router.push("/dashboard");
@@ -52,85 +53,79 @@ export default function EditorContent({
     return <Loading />;
   }
 
-  function getClassByPanelState(panel: string) {
-    if (panelState === "both") {
-      return "w-1/2";
-    }
-
-    if (panel === panelState) {
-      return "w-full";
-    }
-
-    return "hidden";
-  }
-
   return (
-    <>
-      <div className="flex gap-4 editor-area max-height-[1000px] overflow-y-auto">
-        <div
-          className={`${getClassByPanelState(
-            "editor"
-          )} relative transition ease-in-out delay-150`}
-        >
-          {panelState === "both" && renderHideEditorToggle()}
-          {panelState === "editor" && renderShowPreviewToggle()}
-          <EditorTextarea
-            contentEdited={contentEdited}
-            setContentEdited={setContentEdited}
-          />
-        </div>
-        <div
-          className={`${getClassByPanelState(
-            "preview"
-          )} relative transition ease-in-out delay-150`}
-        >
-          {panelState === "both" && renderHidePreviewToggle()}
-          {panelState === "preview" && renderShowEditorToggle()}
-          <EditorPreview content={contentEdited} />
+    <div className="flex gap-4 editor-area max-height-[1000px] overflow-y-auto">
+      <div className="w-full relative transition ease-in-out delay-150">
+        <div className={previewStyles} id="pdfExport">
+          <>
+            {renderCopyButton()}
+
+            {/* Editable Content */}
+            {renderEditor()}
+
+            {/* Markdown Preview */}
+            {renderPreview()}
+          </>
         </div>
       </div>
-    </>
+    </div>
   );
 
-  function renderShowEditorToggle(): React.ReactNode {
+  function renderCopyButton() {
     return (
-      <span className={iconStyle} onClick={() => setPanelState("editor")}>
-        <PenIcon tooltip="Show Editor" alt="Toggle Editor" size={14} />
+      <span
+        title="Copy Markdown"
+        className={iconStyle}
+        onClick={() => {
+          navigator.clipboard.writeText(contentEdited);
+        }}
+      >
+        <FaCopy />
       </span>
     );
   }
 
-  function renderShowPreviewToggle(): React.ReactNode {
+  function renderPreview() {
     return (
-      <span className={iconStyle} onClick={() => setPanelState("preview")}>
-        <EyeIcon tooltip="Show Preview" alt="Toggle Preview" size={20} />
-      </span>
+      <div
+        ref={markdownRef}
+        onClick={() => setIsEdit(true)}
+        className={`${isEdit && "hidden"} p-4`}
+      >
+        <MarkdownPreview content={contentEdited} />
+      </div>
     );
   }
 
-  function renderHidePreviewToggle(): React.ReactNode {
+  function renderEditor() {
     return (
-      <span className={iconStyle} onClick={() => setPanelState("editor")}>
-        <CloseIcon
-          tooltip="Hide the preview pane"
-          alt="Toggle Preview"
-          size={14}
-        />
-      </span>
+      <>
+        <div
+          className={`${
+            !isEdit && "hidden"
+          } border-none border-gray-300 rounded-lg p-4 shadow-sm focus:outline-none`}
+          ref={contentRef}
+          contentEditable
+          suppressContentEditableWarning={true}
+          onBlur={syncMarkdown} // Sync markdown on blur
+          dangerouslySetInnerHTML={{ __html: htmlEdit }}
+        ></div>
+      </>
     );
   }
 
-  function renderHideEditorToggle(): React.ReactNode {
-    return (
-      <span className={iconStyle} onClick={() => setPanelState("preview")}>
-        <CloseIcon
-          tooltip="Hide the editor pane"
-          alt="Toggle Editor"
-          size={14}
-        />
-      </span>
-    );
+  function syncMarkdown(e: React.FocusEvent<HTMLDivElement, Element>) {
+    const html = e.currentTarget.innerHTML;
+    const cleanHTML = sanitizeHtml(html, {
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
+    });
+    const md = html2markdown(cleanHTML);
+
+    setContentEdited(md); // Update markdown state
+    setHasChanges(true);
+    setIsEdit(false); // Exit edit mode
   }
 }
 
-const iconStyle = `absolute right-5 top-8 cursor-pointer`;
+const previewStyles = `w-full max-w-none prose my-6 rounded-sm bg-white prose-pre:bg-amber-100 prose-pre:text-gray-700`;
+const iconStyle = `absolute right-5 top-8 cursor-pointer transition-all duration-200 ease-in-out focus:scale-105 hover:scale-105`;

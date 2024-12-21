@@ -18,9 +18,7 @@ const NavigationLink = ({
   const currentRoute = usePathname();
   const isActive =
     href === "/" ? currentRoute === href : currentRoute.startsWith(href);
-  const textColor = isActive
-    ? "text-gray-800 dark:text-white"
-    : "text-gray-500 dark:text-gray-300";
+  const textColor = isActive ? "text-gray-800" : "text-gray-500";
 
   const emphasizeStyle = isEmphasized
     ? `text-white rounded-sm transition ease-in-out p-2 bg-emerald-600 hover:bg-emerald-700 focus:bg-emerald-700`

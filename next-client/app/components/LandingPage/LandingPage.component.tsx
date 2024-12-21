@@ -8,10 +8,7 @@ import HowItWorks from "./subcomponents/HowItWorks";
 
 export default function LandingPage() {
   return (
-    <main
-      data-testid="LandingPage"
-      className="p-4 md:px-2 bg-white dark:bg-slate-800"
-    >
+    <main data-testid="LandingPage" className="p-4 md:px-2 bg-white">
       <Hero />
       <Features />
       <HowItWorks />

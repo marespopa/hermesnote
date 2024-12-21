@@ -32,7 +32,6 @@ export default function Editor() {
   const isTimerVisible = searchParams.has("timer");
   const [frontMatter] = useAtom(atom_frontMatter);
   const fileTitle = frontMatter.title || "File";
-  const [content] = useAtom(atom_content);
   const [contentEdited, setContentEdited] = useAtom(atom_contentEdited);
   const [, setFrontMatter] = useAtom(atom_frontMatter);
   const [, setContent] = useAtom(atom_content);
@@ -197,7 +196,6 @@ export default function Editor() {
       )}
 
       <EditorContent
-        content={content}
         contentEdited={contentEdited}
         setContentEdited={setContentEdited}
         frontMatter={frontMatter}

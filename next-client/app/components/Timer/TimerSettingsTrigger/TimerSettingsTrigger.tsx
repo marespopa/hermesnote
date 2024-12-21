@@ -77,7 +77,7 @@ export default function TimerSettingsTrigger() {
             <span>Timer Properties</span>
             <SaveStateText status={saveState} />
           </h3>
-          <p className="mt-2 my-4 text-sm text-gray-500 dark:text-gray-300">
+          <p className="mt-2 my-4 text-sm text-gray-500">
             In here you can configure the default minutes for a work session or
             for break sessions.
           </p>

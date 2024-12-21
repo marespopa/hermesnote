@@ -25,11 +25,9 @@ const Input = ({
   return (
     <div className="my-4">
       <label className="flex flex-col">
-        <span className="text-gray-600 dark:text-gray-200 text-sm">
-          {label}
-        </span>
+        <span className="text-gray-600 text-sm">{label}</span>
         <input
-          className="bg-white dark:bg-slate-700 px-2 py-2 rounded-sm border-2 border-gray-300 dark:border-gray-600 focus:ring-1 focus:ring-emerald-500 focus: outline-none"
+          className="bg-white px-2 py-2 rounded-sm border-2 border-gray-300 focus:ring-1 focus:ring-emerald-500 focus: outline-none"
           type={type}
           aria-label={label}
           id={name}
@@ -41,9 +39,7 @@ const Input = ({
           max={validation?.max}
         />
       </label>
-      {helperText && (
-        <p className="text-gray-500 dark:text-gray-300 text-xs">{helperText}</p>
-      )}
+      {helperText && <p className="text-gray-500 text-xs">{helperText}</p>}
     </div>
   );
 };
