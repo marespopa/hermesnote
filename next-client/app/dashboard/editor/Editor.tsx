@@ -1,7 +1,7 @@
 "use client";
 
-import EditorHeader from "./EditorHeader";
-import EditorContent from "./EditorContent";
+import EditorHeader from "./components/EditorHeader";
+import EditorContent from "./components/EditorContent";
 import Timer from "@/app/components/Timer";
 import { useAtom } from "jotai";
 import {
@@ -14,7 +14,7 @@ import {
 import { useSearchParams } from "next/navigation";
 import { useDocumentTitle } from "@/app/hooks/use-document-title";
 import { useState, useEffect } from "react";
-import { PICKER_OPTIONS } from "./EditorEmpty";
+import { PICKER_OPTIONS } from "./components/EditorEmpty";
 import { StatusResponse } from "@/app/services/save-utils";
 import matter from "gray-matter";
 import Loading from "@/app/components/Loading";

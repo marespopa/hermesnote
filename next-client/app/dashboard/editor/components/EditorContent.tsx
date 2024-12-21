@@ -3,13 +3,13 @@ import { useRouter } from "next/navigation";
 import { SetStateAction } from "jotai";
 
 import Loading from "@/app/components/Loading/Loading";
-import MarkdownPreview from "../components/MarkdownPreview";
+import MarkdownPreview from "../../components/MarkdownPreview";
 import ExportService from "@/app/services/export-service";
 import { useCommand } from "@/app/hooks/use-command";
 import { FileMetadata } from "@/app/types/markdown";
-import { SetAtom } from "./EditorTypes";
+import { SetAtom } from "../EditorTypes";
 
-import html2markdown from '@notable/html2markdown';
+import html2markdown from "@notable/html2markdown";
 import sanitizeHtml from "sanitize-html";
 import { FaCopy } from "react-icons/fa";
 
@@ -58,8 +58,6 @@ export default function EditorContent({
       <div className="w-full relative transition ease-in-out delay-150">
         <div className={previewStyles} id="pdfExport">
           <>
-            {renderCopyButton()}
-
             {/* Editable Content */}
             {renderEditor()}
 
@@ -70,20 +68,6 @@ export default function EditorContent({
       </div>
     </div>
   );
-
-  function renderCopyButton() {
-    return (
-      <span
-        title="Copy Markdown"
-        className={iconStyle}
-        onClick={() => {
-          navigator.clipboard.writeText(contentEdited);
-        }}
-      >
-        <FaCopy />
-      </span>
-    );
-  }
 
   function renderPreview() {
     return (
@@ -117,11 +101,15 @@ export default function EditorContent({
   function syncMarkdown(e: React.FocusEvent<HTMLDivElement, Element>) {
     const html = e.currentTarget.innerHTML;
     const cleanHTML = sanitizeHtml(html, {
-      allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "table", "tr", "tr"]),
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+        "img",
+        "table",
+        "tr",
+        "tr",
+      ]),
     });
-    console.dir(html);
     const md = html2markdown(cleanHTML);
-    console.dir(md);
+    
     setContentEdited(md); // Update markdown state
     setHasChanges(true);
     setIsEdit(false); // Exit edit mode

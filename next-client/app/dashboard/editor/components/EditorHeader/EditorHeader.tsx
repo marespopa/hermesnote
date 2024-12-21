@@ -2,15 +2,15 @@
 
 import Button from "@/app/components/Button";
 import { useAtom } from "jotai";
-import EditorPreviewTrigger from "./EditorPreviewTrigger";
+import EditorPreviewTrigger from "../EditorPreviewTrigger";
 import PenIcon from "@/app/components/Icons/PenIcon";
 import { useState } from "react";
-import EditorForm from "./EditorForm";
+import EditorForm from "../EditorForm";
 import { FileMetadata } from "@/app/types/markdown";
 import { atom_content, atom_showDashboard } from "@/app/atoms/atoms";
 import DropdownMenu from "@/app/components/DropdownMenu";
 import ExportService from "@/app/services/export-service";
-import { FaCaretDown, FaCog, FaPlusCircle } from "react-icons/fa";
+import { FaCaretDown, FaCog, FaEdit, FaPlusCircle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import useIsMobile from "@/app/hooks/use-is-mobile";
 
@@ -94,6 +94,7 @@ export default function EditorHeader({
           {isFabMenuOpen && (
             <div className="fixed top-16 right-4 rounded-sm shadow-sm p-2 flex flex-col flex-wrap space-y-4 w-[164px] bg-white border border-gray-200 rounded shadow-sm z-10">
               {renderFileMenu()}
+              {renderEditMenu()}
               {renderHelpMenu()}
               <EditorPreviewTrigger />
               <Button variant="primary" label="Save As" handler={exportToMD} />
@@ -106,6 +107,7 @@ export default function EditorHeader({
     return (
       <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2 items-start">
         {renderFileMenu()}
+        {renderEditMenu()}
         {renderHelpMenu()}
         <EditorPreviewTrigger />
         <Button variant="primary" label="Save As" handler={exportToMD} />
@@ -113,6 +115,27 @@ export default function EditorHeader({
     );
   }
 
+  function renderEditMenu() {
+    return (
+      <DropdownMenu
+        label={
+          <span className="flex gap-2 items-center">
+            Edit <FaCaretDown />
+          </span>
+        }
+        options={[
+          {
+            label: "Copy as markdown",
+            action: () => navigator.clipboard.writeText(contentEdited),
+          },
+          {
+            label: "Find and replace...",
+            action: actions.handleOpenFindAndReplace,
+          },
+        ]}
+      />
+    );
+  }
   function renderHelpMenu() {
     return (
       <DropdownMenu
@@ -154,20 +177,16 @@ export default function EditorHeader({
             action: actions.handleNewFile,
           },
           {
+            label: "New from template...",
+            action: actions.handleSelectTemplate,
+          },
+          {
             label: "Open File...",
             action: actions.handleOpenFile,
           },
           {
             label: "Save As...",
             action: exportToMD,
-          },
-          {
-            label: "Use a template...",
-            action: actions.handleSelectTemplate,
-          },
-          {
-            label: "Find and replace...",
-            action: actions.handleOpenFindAndReplace,
           },
         ]}
       />

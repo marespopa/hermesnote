@@ -6,7 +6,7 @@ import { useAtom } from "jotai";
 import { atom_contentEdited, atom_frontMatter } from "@/app/atoms/atoms";
 import toast from "react-hot-toast";
 import { useCommand } from "@/app/hooks/use-command";
-import MarkdownPreview from "../components/MarkdownPreview";
+import MarkdownPreview from "../../components/MarkdownPreview";
 import Portal from "@/app/components/Portal";
 import ExportService from "@/app/services/export-service";
 

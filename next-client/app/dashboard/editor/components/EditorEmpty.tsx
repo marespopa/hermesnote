@@ -11,12 +11,12 @@ import {
 import Loading from "@/app/components/Loading";
 import matter from "gray-matter";
 import toast from "react-hot-toast";
-import InfoPanel from "../components/InfoPanel";
-import TemplateSelectionModal from "../templates/TemplateSelectionModal";
+import InfoPanel from "../../components/InfoPanel";
+import TemplateSelectionModal from "../../templates/TemplateSelectionModal";
 import { StatusResponse } from "@/app/services/save-utils";
 import Button from "@/app/components/Button";
 import FileInput from "@/app/components/FileInput";
-import ShowWelcomeCheckbox from "../components/ShowWelcomeCheckbox";
+import ShowWelcomeCheckbox from "../../components/ShowWelcomeCheckbox";
 import { FaFile, FaFileAlt, FaFolderOpen } from "react-icons/fa";
 import Badge from "@/app/components/Badges/Badge";
 import useIsMobile from "@/app/hooks/use-is-mobile";

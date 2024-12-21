@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 
 import Loading from "@/app/components/Loading";
 import { containerStyle } from "@/app/constants/styles";
-import EditorEmpty from "./editor/EditorEmpty";
+import EditorEmpty from "./editor/components/EditorEmpty";
 import { useAtom } from "jotai";
 import { atom_showDashboard } from "../atoms/atoms";
 import { useRouter } from "next/navigation";

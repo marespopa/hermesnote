@@ -47,12 +47,12 @@ const DropdownMenu = ({ label, options }: Props) => {
         {label}
       </Button>
       {isOpen && (
-        <div className="absolute mt-1 w-[200px] bg-white border border-gray-200 rounded shadow-sm z-10">
+        <div className="absolute -left-1 mt-2 bg-white border border-gray-200 rounded shadow-sm z-10">
           {options.map((option) => (
             <button
               key={option.label}
               onClick={() => handleOptionClick(option)}
-              className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 text-sm"
+              className="w-full inline px-4 py-2 text-left text-gray-700 hover:bg-gray-100 text-sm whitespace-nowrap"
             >
               {option.label}
             </button>
