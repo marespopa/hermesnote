@@ -17,25 +17,21 @@ const DailyStandupTemplate: MarkdownTemplate = {
 ---
 
 ## ✅ What did you accomplish yesterday?
-*Briefly list the tasks or work you completed yesterday.*
 - Example: Fixed Bug #123.
 
 ---
 
 ## 🎯 What are you planning to do today?
-*Outline the tasks you intend to work on today.*
 - Example: Implement authentication for FeatureY.
 
 ---
 
 ## 🚧 Are there any blockers or impediments?
-*Mention any challenges or obstacles preventing progress.*
 - Example: Waiting for approval on PR #789.
 
 ---
 
 ## 📝 Additional Notes (Optional)
-*Add any extra information that might be helpful for the team.*
 - Example: Suggesting a quick sync on FeatureZ.`,
 };
 

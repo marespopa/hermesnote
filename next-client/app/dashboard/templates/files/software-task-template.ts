@@ -34,14 +34,12 @@ const SoftwareTaskTemplate: MarkdownTemplate = {
 ---
 
 ## 🛑 Non-goals
-*Define what this task does NOT cover to set clear boundaries.*
 - Example: This task does not include frontend UI changes.
 - Example: This task does not address API rate limiting.
 
 ---
 
 ## 🛠️ Solution & Implementation
-*Outline how you plan to solve the problem. Include steps, research findings, or alternative approaches.*
 
 1. Research and evaluate authentication libraries.
 2. Integrate chosen library with backend services.
@@ -52,9 +50,9 @@ const SoftwareTaskTemplate: MarkdownTemplate = {
 
 ## 🎯 Acceptance Criteria
 *Define what success looks like for this task. Be specific and measurable.*
-- [ ] Users can log in securely using Feature X.
-- [ ] Unit tests cover at least 90% of new code.
-- [ ] Documentation is updated with implementation details.
+- Users can log in securely using Feature X.
+- Unit tests cover at least 90% of new code.
+- Documentation is updated with implementation details.
 
 ---
 
@@ -74,10 +72,10 @@ const SoftwareTaskTemplate: MarkdownTemplate = {
 
 ## 📋 Subtasks
 *Break down the task into smaller, actionable steps.*
-- [ ] Research authentication libraries.
-- [ ] Implement backend integration.
-- [ ] Write unit tests.
-- [ ] Update documentation.
+- Research authentication libraries.
+- Implement backend integration.
+- Write unit tests.
+- Update documentation.
 
 ---
 

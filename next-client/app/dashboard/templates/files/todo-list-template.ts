@@ -11,17 +11,17 @@ const ToDoListTemplate: MarkdownTemplate = {
   
   Use this to-do list to keep track of tasks and stay organized.
   
-  - ⬜ Task 1
-  - ⬜ Task 2
-  - ⬜ Task 3
-  - ⬜ Task 4
-  - ⬜ Task 5
-  - ⬜ Task 6
+ - Task 1
+ - Task 2
+ - Task 3
+ - Task 4
+ - Task 5
+ - Task 6
   
   ## Priority Tasks 🎯
   
-  - ⬜ High Priority Task
-  - ⬜ Another High Priority Task
+ - High Priority Task
+ - Another High Priority Task
   
   ## Completed Tasks 💯
   
