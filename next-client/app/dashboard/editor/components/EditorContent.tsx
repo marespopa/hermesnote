@@ -12,17 +12,13 @@ import { SetAtom } from "../EditorTypes";
 import html2markdown from "@notable/html2markdown";
 import sanitizeHtml from "sanitize-html";
 import { replaceMarkdownWithHtml } from "../EditorUtils";
+import LoadingOverlay from "@/app/components/LoadingOverlay";
 
 interface Props {
   contentEdited: string;
   frontMatter: FileMetadata;
   setContentEdited: SetAtom<[SetStateAction<string>], void>;
   setHasChanges: (hasChanges: boolean) => void;
-}
-
-interface CursorPosition {
-  x: number;
-  y: number;
 }
 
 export default function EditorContent({
@@ -32,11 +28,11 @@ export default function EditorContent({
   setHasChanges,
 }: Props) {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const markdownRef = useRef<HTMLDivElement>(null);
-  const [cursorPosition, setCursorPosition] = useState<number>(0);
 
   const sanitizeHTMLConfig = {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "a"]),
@@ -98,123 +94,6 @@ export default function EditorContent({
     </div>
   );
 
-  function isChildOf(node: Node | null, parentId: string): boolean {
-    while (node !== null) {
-      if ((node as HTMLElement).id === parentId) {
-        return true;
-      }
-      node = node.parentNode;
-    }
-    return false;
-  }
-
-  function createRange(
-    node: Node,
-    chars: { count: number },
-    range?: Range
-  ): Range {
-    if (!range) {
-      range = document.createRange();
-      range.selectNode(node);
-      range.setStart(node, 0);
-    }
-
-    if (chars.count === 0) {
-      range.setEnd(node, chars.count);
-    } else if (node && chars.count > 0) {
-      if (node.nodeType === Node.TEXT_NODE) {
-        if ((node.textContent?.length || 0) < chars.count) {
-          chars.count -= node.textContent?.length || 0;
-        } else {
-          range.setEnd(node, chars.count);
-          chars.count = 0;
-        }
-      } else {
-        for (let i = 0; i < node.childNodes.length; i++) {
-          range = createRange(node.childNodes[i], chars, range);
-
-          if (chars.count === 0) break;
-        }
-      }
-    }
-
-    return range;
-  }
-
-  function scrollToCursorPosition(
-    contentEditableElement: HTMLElement | null
-  ): void {
-    if (!contentEditableElement) {
-      return;
-    }
-
-    const selection = window.getSelection();
-
-    if (!selection || selection.rangeCount === 0) return;
-
-    // Get the current range
-    const range = selection.getRangeAt(0);
-
-    // Create a temporary span element at the cursor position
-    const tempSpan = document.createElement("span");
-    range.insertNode(tempSpan);
-
-    // Scroll to the temporary span
-    tempSpan.scrollIntoView({
-      block: "center",
-      inline: "nearest",
-      behavior: "instant",
-    });
-
-    // Clean up by removing the temporary span
-    const parent = tempSpan.parentNode;
-    if (parent) {
-      parent.removeChild(tempSpan);
-    }
-  }
-
-  function setCurrentCursorPosition(chars: number): void {
-    if (chars >= 0 && contentRef.current) {
-      const selection = window.getSelection();
-      const range = createRange(contentRef.current.parentNode as Node, {
-        count: chars,
-      });
-
-      if (range) {
-        range.collapse(false);
-        selection?.removeAllRanges();
-        selection?.addRange(range);
-      }
-    }
-  }
-
-  function getCurrentCursorPosition(parentId: string): number {
-    const selection = window.getSelection();
-    let charCount = -1;
-    let node;
-
-    if (selection?.focusNode) {
-      if (isChildOf(selection.focusNode, parentId)) {
-        node = selection.focusNode;
-        charCount = selection.focusOffset;
-
-        while (node) {
-          if ((node as HTMLElement).id === parentId) break;
-
-          if (node.previousSibling) {
-            node = node.previousSibling;
-            charCount += node.textContent?.length || 0;
-          } else {
-            node = node.parentNode;
-            if (!node) break;
-          }
-        }
-      }
-    }
-
-    return charCount;
-  }
-
   function renderPreview() {
     return (
       <div
@@ -230,30 +109,42 @@ export default function EditorContent({
 
   function handlePreviewClick(e: React.MouseEvent<HTMLDivElement>): void {
     setIsEdit(true);
-    setCursorPosition(getCurrentCursorPosition("previewId"));
-    setTimeout(() => contentRef.current?.focus(), 200);
+    setTimeout(() => contentRef.current?.focus(), 0);
   }
 
   function renderEditor() {
     return (
-      <div
-        onFocus={(e) => {
-          e.preventDefault();
-          setCurrentCursorPosition(cursorPosition);
-          scrollToCursorPosition(contentRef.current);
-        }}
-        className={`${
-          !isEdit ? "hidden" : ""
-        } border-none border-gray-300 rounded-lg p-4 shadow-sm focus:outline-none`}
-        ref={contentRef}
-        contentEditable
-        suppressContentEditableWarning={true}
-        onBlur={syncMarkdown}
-        dangerouslySetInnerHTML={{ __html: htmlEdit }}
-      ></div>
+      <>
+        <LoadingOverlay
+          isVisible={isLoading}
+          text="Getting editor ready..."
+        ></LoadingOverlay>
+        <div
+          onFocus={(e) => {
+            e.preventDefault();
+            showLoadingTimer();
+          }}
+          className={`${
+            !isEdit ? "hidden" : ""
+          } border-none border-gray-300 rounded-lg p-4 shadow-sm focus:outline-none`}
+          ref={contentRef}
+          contentEditable
+          suppressContentEditableWarning={true}
+          onBlur={syncMarkdown}
+          dangerouslySetInnerHTML={{ __html: htmlEdit }}
+        ></div>
+      </>
     );
   }
 
+  function showLoadingTimer() {
+    const LOADING_DURATION = 500;
+
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, LOADING_DURATION);
+  }
   function syncMarkdown(e: React.FocusEvent<HTMLDivElement>): void {
     const html = replaceMarkdownWithHtml(e.currentTarget.innerHTML);
     const cleanHTML = sanitizeHtml(html, sanitizeHTMLConfig);
