@@ -160,17 +160,19 @@ export default function EditorContent({
     range.insertNode(tempSpan);
 
     // Scroll to the temporary span
-    tempSpan.scrollIntoView({
-      behavior: "instant",
-      block: "center",
-      inline: "nearest",
-    });
+    setTimeout(() => {
+      tempSpan.scrollIntoView({
+        block: "center",
+        inline: "nearest",
+        behavior: "smooth",
+      });
 
-    // Clean up by removing the temporary span
-    const parent = tempSpan.parentNode;
-    if (parent) {
-      parent.removeChild(tempSpan);
-    }
+      // Clean up by removing the temporary span
+      const parent = tempSpan.parentNode;
+      if (parent) {
+        parent.removeChild(tempSpan);
+      }
+    }, 10);
   }
 
   function setCurrentCursorPosition(chars: number): void {
