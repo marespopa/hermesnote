@@ -11,14 +11,18 @@ import { SetAtom } from "../EditorTypes";
 
 import html2markdown from "@notable/html2markdown";
 import sanitizeHtml from "sanitize-html";
-import { FaCopy } from "react-icons/fa";
 import { replaceMarkdownWithHtml } from "../EditorUtils";
 
 interface Props {
   contentEdited: string;
   frontMatter: FileMetadata;
   setContentEdited: SetAtom<[SetStateAction<string>], void>;
-  setHasChanges: any;
+  setHasChanges: (hasChanges: boolean) => void;
+}
+
+interface CursorPosition {
+  x: number;
+  y: number;
 }
 
 export default function EditorContent({
@@ -32,6 +36,8 @@ export default function EditorContent({
   const [isEdit, setIsEdit] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const markdownRef = useRef<HTMLDivElement>(null);
+  const [cursorPosition, setCursorPosition] = useState<number>(0);
+
   const sanitizeHTMLConfig = {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "a"]),
     allowedAttributes: {
@@ -42,13 +48,11 @@ export default function EditorContent({
     },
     allowedStyles: {
       "*": {
-        // Match HEX and RGB
         color: [
           /^#(0x)?[0-9a-f]+$/i,
           /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/,
         ],
         "text-align": [/^left$/, /^right$/, /^center$/],
-        // Match any number with px, em, or %
         "font-size": [/^\d+(?:px|em|%)$/],
       },
       p: {
@@ -57,7 +61,7 @@ export default function EditorContent({
     },
   };
 
-  const htmlEdit = `<article>${markdownRef?.current?.innerHTML}</article>`;
+  const htmlEdit = `<article>${markdownRef?.current?.innerHTML || ""}</article>`;
 
   useEffect(() => {
     setIsMounted(true);
@@ -82,55 +86,146 @@ export default function EditorContent({
     <div className="flex gap-4 editor-area max-height-[1000px] overflow-y-auto">
       <div className="w-full relative transition ease-in-out delay-150">
         <div className={previewStyles} id="pdfExport">
-          <>
-            {/* Editable Content */}
-            {renderEditor()}
+          {/* Editable Content */}
+          {renderEditor()}
 
-            {/* Markdown Preview */}
-            {renderPreview()}
-          </>
+          {/* Markdown Preview */}
+          {renderPreview()}
         </div>
       </div>
     </div>
   );
 
+  function isChildOf(node: Node | null, parentId: string): boolean {
+    while (node !== null) {
+      if ((node as HTMLElement).id === parentId) {
+        return true;
+      }
+      node = node.parentNode;
+    }
+    return false;
+  }
+
+  function createRange(
+    node: Node,
+    chars: { count: number },
+    range?: Range
+  ): Range {
+    if (!range) {
+      range = document.createRange();
+      range.selectNode(node);
+      range.setStart(node, 0);
+    }
+
+    if (chars.count === 0) {
+      range.setEnd(node, chars.count);
+    } else if (node && chars.count > 0) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        if ((node.textContent?.length || 0) < chars.count) {
+          chars.count -= node.textContent?.length || 0;
+        } else {
+          range.setEnd(node, chars.count);
+          chars.count = 0;
+        }
+      } else {
+        for (let i = 0; i < node.childNodes.length; i++) {
+          range = createRange(node.childNodes[i], chars, range);
+
+          if (chars.count === 0) break;
+        }
+      }
+    }
+
+    return range;
+  }
+
+  function setCurrentCursorPosition(chars: number): void {
+    if (chars >= 0 && contentRef.current) {
+      const selection = window.getSelection();
+      const range = createRange(contentRef.current.parentNode as Node, {
+        count: chars,
+      });
+
+      if (range) {
+        range.collapse(false);
+        selection?.removeAllRanges();
+        selection?.addRange(range);
+      }
+    }
+  }
+
+  function getCurrentCursorPosition(parentId: string): number {
+    const selection = window.getSelection();
+    let charCount = -1;
+    let node;
+
+    if (selection?.focusNode) {
+      if (isChildOf(selection.focusNode, parentId)) {
+        node = selection.focusNode;
+        charCount = selection.focusOffset;
+
+        while (node) {
+          if ((node as HTMLElement).id === parentId) break;
+
+          if (node.previousSibling) {
+            node = node.previousSibling;
+            charCount += node.textContent?.length || 0;
+          } else {
+            node = node.parentNode;
+            if (!node) break;
+          }
+        }
+      }
+    }
+
+    return charCount;
+  }
+
   function renderPreview() {
     return (
       <div
         ref={markdownRef}
-        onClick={() => setIsEdit(true)}
-        className={`${isEdit && "hidden"} p-4`}
+        id="previewId"
+        onClick={(e) => handlePreviewClick(e)}
+        className={`${isEdit ? "hidden" : ""} p-4`}
       >
         <MarkdownPreview content={contentEdited} />
       </div>
     );
   }
 
+  function handlePreviewClick(e: React.MouseEvent<HTMLDivElement>): void {
+    setIsEdit(true);
+    setCursorPosition(getCurrentCursorPosition("previewId"));
+    setTimeout(() => contentRef.current?.focus(), 200);
+  }
+
   function renderEditor() {
     return (
-      <>
-        <div
-          className={`${
-            !isEdit && "hidden"
-          } border-none border-gray-300 rounded-lg p-4 shadow-sm focus:outline-none`}
-          ref={contentRef}
-          contentEditable
-          suppressContentEditableWarning={true}
-          onBlur={syncMarkdown} // Sync markdown on blur
-          dangerouslySetInnerHTML={{ __html: htmlEdit }}
-        ></div>
-      </>
+      <div
+        onFocus={() => setCurrentCursorPosition(cursorPosition)}
+        className={`${
+          !isEdit ? "hidden" : ""
+        } border-none border-gray-300 rounded-lg p-4 shadow-sm focus:outline-none`}
+        ref={contentRef}
+        contentEditable
+        suppressContentEditableWarning={true}
+        onBlur={syncMarkdown}
+        dangerouslySetInnerHTML={{ __html: htmlEdit }}
+      ></div>
     );
   }
-  function syncMarkdown(e: React.FocusEvent<HTMLDivElement, Element>) {
+
+  function syncMarkdown(e: React.FocusEvent<HTMLDivElement>): void {
     const html = replaceMarkdownWithHtml(e.currentTarget.innerHTML);
     const cleanHTML = sanitizeHtml(html, sanitizeHTMLConfig);
     const md = html2markdown(cleanHTML);
 
     setContentEdited(md); // Update markdown state
-    setHasChanges(true);
+    setHasChanges(true); // Mark changes as saved
     setIsEdit(false); // Exit edit mode
   }
 }
 
-const previewStyles = `w-full max-w-none prose my-6 rounded-sm bg-white prose-pre:bg-amber-100 prose-pre:text-gray-700`;
+const previewStyles =
+  "w-full max-w-none prose my-6 rounded-sm bg-white prose-pre:bg-amber-100 prose-pre:text-gray-700";
