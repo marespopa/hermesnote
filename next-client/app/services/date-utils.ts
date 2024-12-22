@@ -39,3 +39,21 @@ export function getFormattedTimeFromMs(milliseconds: number) {
 
   return `${hoursString}${padTo2Digits(minutes)}m ${padTo2Digits(seconds)}s`;
 }
+
+export function getDatesOfCurrentWeek(separator = '/') {
+  const currentDate = new Date();
+  // Find the start of the week (Monday)
+  const startOfWeek = new Date(
+    currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1)
+  );
+
+  // Generate the dates for the current week
+  const dates = [];
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(startOfWeek);
+    date.setDate(startOfWeek.getDate() + i);
+    dates.push(getDate(date, separator));
+  }
+
+  return dates;
+}

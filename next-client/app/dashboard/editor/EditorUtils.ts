@@ -143,3 +143,10 @@ export function replaceMarkdownWithHtml(input: string): string {
 
   return input;
 }
+
+export const EMPTY_PAGE_TEMPLATE = `# Heading
+
+## Subheading
+
+This is a placeholder paragraph. Replace this text with your content.
+`

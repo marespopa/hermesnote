@@ -8,6 +8,7 @@ import SASSTemplate from "./files/sass-template";
 import DailyStandupTemplate from "./files/daily-standup";
 import MeetingNotesTemplate from "./files/meeting-notes";
 import MonthlyBudgetTemplate from "./files/monthly-budget";
+import HabitTrackerTemplate from "./files/habit";
 
 export type MarkdownTemplate = {
   filename: string;
@@ -25,6 +26,7 @@ const MarkdownTemplateList = [
   MonthlyBudgetTemplate,
   ProjectManagementTemplate,
   SASSTemplate,
+  HabitTrackerTemplate
 ];
 
 export default MarkdownTemplateList;

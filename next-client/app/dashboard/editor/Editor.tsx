@@ -23,6 +23,7 @@ import { useCommand } from "@/app/hooks/use-command";
 import FileSelectionModal from "../components/FileSelectionModal";
 import FindAndReplaceModal from "../components/FindAndReplaceModal";
 import useIsMobile from "@/app/hooks/use-is-mobile";
+import { EMPTY_PAGE_TEMPLATE } from "./EditorUtils";
 
 export default function Editor() {
   const [isLoading, setIsLoading] = useState(false);
@@ -67,8 +68,8 @@ export default function Editor() {
       description: "",
       tags: "",
     });
-    setContent("# Title");
-    setContentEdited("# Title");
+    setContent(EMPTY_PAGE_TEMPLATE);
+    setContentEdited(EMPTY_PAGE_TEMPLATE);
     setIsLoading(false);
   }
 

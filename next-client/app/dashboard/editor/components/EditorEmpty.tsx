@@ -20,6 +20,7 @@ import ShowWelcomeCheckbox from "../../components/ShowWelcomeCheckbox";
 import { FaFile, FaFileAlt, FaFolderOpen } from "react-icons/fa";
 import Badge from "@/app/components/Badges/Badge";
 import useIsMobile from "@/app/hooks/use-is-mobile";
+import { EMPTY_PAGE_TEMPLATE } from "../EditorUtils";
 
 export const PICKER_OPTIONS: OpenFilePickerOptions = {
   types: [
@@ -360,8 +361,8 @@ export default function EditorEmpty() {
       description: "",
       tags: "",
     });
-    setContent("# Title");
-    setContentEdited("# Title");
+    setContent(EMPTY_PAGE_TEMPLATE);
+    setContentEdited(EMPTY_PAGE_TEMPLATE);
     setDisabledButtonsState({ ...disabledButtonsState, new: true });
     router.push("/dashboard/editor");
   }
