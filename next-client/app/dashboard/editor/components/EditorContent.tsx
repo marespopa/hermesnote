@@ -164,7 +164,7 @@ export default function EditorContent({
       tempSpan.scrollIntoView({
         block: "center",
         inline: "nearest",
-        behavior: "smooth",
+        behavior: "instant",
       });
 
       // Clean up by removing the temporary span
