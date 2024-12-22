@@ -61,7 +61,9 @@ export default function EditorContent({
     },
   };
 
-  const htmlEdit = `<article>${markdownRef?.current?.innerHTML || ""}</article>`;
+  const htmlEdit = `<article>${
+    markdownRef?.current?.innerHTML || ""
+  }</article>`;
 
   useEffect(() => {
     setIsMounted(true);
@@ -139,6 +141,38 @@ export default function EditorContent({
     return range;
   }
 
+  function scrollToCursorPosition(
+    contentEditableElement: HTMLElement | null
+  ): void {
+    if (!contentEditableElement) {
+      return;
+    }
+
+    const selection = window.getSelection();
+
+    if (!selection || selection.rangeCount === 0) return;
+
+    // Get the current range
+    const range = selection.getRangeAt(0);
+
+    // Create a temporary span element at the cursor position
+    const tempSpan = document.createElement("span");
+    range.insertNode(tempSpan);
+
+    // Scroll to the temporary span
+    tempSpan.scrollIntoView({
+      behavior: "instant",
+      block: "center",
+      inline: "nearest",
+    });
+
+    // Clean up by removing the temporary span
+    const parent = tempSpan.parentNode;
+    if (parent) {
+      parent.removeChild(tempSpan);
+    }
+  }
+
   function setCurrentCursorPosition(chars: number): void {
     if (chars >= 0 && contentRef.current) {
       const selection = window.getSelection();
@@ -203,7 +237,10 @@ export default function EditorContent({
   function renderEditor() {
     return (
       <div
-        onFocus={() => setCurrentCursorPosition(cursorPosition)}
+        onFocus={() => {
+          setCurrentCursorPosition(cursorPosition);
+          scrollToCursorPosition(contentRef.current);
+        }}
         className={`${
           !isEdit ? "hidden" : ""
         } border-none border-gray-300 rounded-lg p-4 shadow-sm focus:outline-none`}
