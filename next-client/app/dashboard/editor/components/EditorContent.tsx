@@ -237,7 +237,8 @@ export default function EditorContent({
   function renderEditor() {
     return (
       <div
-        onFocus={() => {
+        onFocus={(e) => {
+          e.preventDefault();
           setCurrentCursorPosition(cursorPosition);
           scrollToCursorPosition(contentRef.current);
         }}
