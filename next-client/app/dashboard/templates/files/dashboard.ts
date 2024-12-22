@@ -4,84 +4,60 @@ const ExampleTemplate: MarkdownTemplate = {
   filename: "dashboard",
   frontMatter: {
     title: "Dashboard",
-    description: `An organized template tailored for software engineers to effectively manage tasks and projects.`,
+    description: `An organized template tailored to effectively manage tasks and projects.`,
     tags: "software,tasks,dashboard",
   },
   content: `# 🧠 Dashboard
 
 ## 🌅 Morning Routine
-- Review goals for today
-- Check emails and messages
-- Prioritize tasks for the day
+- **Start your day intentionally.**
+  - Write down your top priorities for the day.
+  - Plan your tasks or schedule.
+  - (Optional) Check emails or messages briefly.
 
 ---
 
 ## ✅ Daily Tasks
-### Work
-- Attend stand-up meeting
-- Complete code review for [PR #123](#)
-- Fix bugs in [Feature XYZ](#)
-- Write documentation for [Project ABC](#)
-
-### Quick Wins (Small tasks to finish quickly)
-- Respond to pending emails
-- Update ticket status in project board
-- Sync with teammate on Task Y
-
+- **List the key tasks you want to complete today:**
+  - Task 1: [e.g., Finish report]
 ---
 
 ## 🎯 Weekly Goals
-### Learning & Development
-- Complete [Online Course](#)
-- Read [Book Title](#)
-
-### Project Management
-- Plan next sprint
-- Update project roadmap
-
+- **Set your focus for the week. Examples:**
+  - Goal 1: [e.g., Complete project milestone]
 ---
 
 ## 🚀 Long-term Projects
-### Project A
-- Phase 1: Research and Design  
-  - Task1  
-  - Task2  
-- Phase 2: Implementation  
-  - Task1  
-  - Task2  
-- Phase 3: Testing  
-  - Task1  
-
-### Project B
-- Gather Requirements  
-  - Task1  
-  - Task2  
-- Develop MVP  
-  - Task1  
+- **Break down big projects into smaller steps. Examples:**
+  - Project Name:
+    - Step 1:
+    - Step 2:
 
 ---
 
 ## 💡 Ideas & Improvements
-- Explore new frameworks (e.g., React, Vue, Angular)
-- Improve codebase structure
-- Automate repetitive tasks in CI/CD pipeline
+- **Capture any ideas or improvements you think of:**
+  - Idea 1: [e.g., Automate a repetitive task]
+  - Idea 2:
 
 ---
 
 ## 🌱 Personal Development
-- Attend networking event
-- Update resume and LinkedIn profile
-- Write a blog post about recent learning
+- **Track activities that help you grow personally or professionally:**
+  - Activity 1: [e.g., Attend a workshop]
+  - Activity 2:
 
 ---
 
 ## 📝 Notes & Reflections (End of Day)
 ### Wins:
-- Example: Finished code review for PR #123.
+- What went well today?
+
 ### Challenges:
-- Example: Blocked by dependency issue in Feature XYZ.
+- What was difficult or needs attention?
+
 ### Next Steps:
-- Example: Follow up with Product Manager on requirements for Project ABC.`
+- What do you plan to do next?`
 };
 
 export default ExampleTemplate;

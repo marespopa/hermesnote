@@ -17,16 +17,16 @@ export type MarkdownTemplate = {
 };
 
 const MarkdownTemplateList = [
-  ToDoListTemplate,
   DashboardTemplate,
-  WeeklyJournalTemplate,
-  DailyStandupTemplate,
-  SoftwareTaskTemplate,
-  MeetingNotesTemplate,
-  MonthlyBudgetTemplate,
   ProjectManagementTemplate,
+  ToDoListTemplate,
+  MonthlyBudgetTemplate,
+  SoftwareTaskTemplate,
+  DailyStandupTemplate,
+  MeetingNotesTemplate,
+  HabitTrackerTemplate,
+  WeeklyJournalTemplate,
   SASSTemplate,
-  HabitTrackerTemplate
 ];
 
 export default MarkdownTemplateList;
