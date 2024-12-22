@@ -4,7 +4,7 @@ import Button from "@/app/components/Button";
 import { useAtom } from "jotai";
 import EditorPreviewTrigger from "../EditorPreviewTrigger";
 import PenIcon from "@/app/components/Icons/PenIcon";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import EditorForm from "../EditorForm";
 import { FileMetadata } from "@/app/types/markdown";
 import { atom_content, atom_showDashboard } from "@/app/atoms/atoms";
@@ -42,6 +42,24 @@ export default function EditorHeader({
   const fileTitle = frontMatter.title;
   const fileName = frontMatter.fileName;
   const hasTitle = fileTitle.length > 0;
+  const fabMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        fabMenuRef.current &&
+        !fabMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsFabMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -92,7 +110,10 @@ export default function EditorHeader({
             <FaCog /> Options
           </Button>
           {isFabMenuOpen && (
-            <div className="fixed top-16 right-4 rounded-sm shadow-sm p-2 flex flex-col flex-wrap space-y-4 w-[164px] bg-white border border-gray-200 rounded shadow-sm z-10">
+            <div
+              ref={fabMenuRef}
+              className="fixed top-16 right-4 rounded-sm shadow-sm p-2 flex flex-col flex-wrap space-y-4 w-[164px] bg-white border border-gray-200 rounded shadow-sm z-10"
+            >
               {renderFileMenu()}
               {renderEditMenu()}
               {renderHelpMenu()}
