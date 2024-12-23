@@ -7,11 +7,7 @@ import PenIcon from "@/app/components/Icons/PenIcon";
 import { useEffect, useRef, useState } from "react";
 import EditorForm from "../EditorForm";
 import { FileMetadata } from "@/app/types/markdown";
-import {
-  atom_content,
-  atom_showDashboard,
-  atom_showTimer,
-} from "@/app/atoms/atoms";
+import { atom_content, atom_showTimer } from "@/app/atoms/atoms";
 import DropdownMenu from "@/app/components/DropdownMenu";
 import ExportService from "@/app/services/export-service";
 import { FaCaretDown, FaCog } from "react-icons/fa";
@@ -37,8 +33,6 @@ export default function EditorHeader({
   actions,
 }: Props) {
   const [, setFileContent] = useAtom(atom_content);
-  const [_, setShowDashboardOnStartup] = useAtom(atom_showDashboard);
-
   const [isFormatterDialogOpen, setIsFormatterDialogOpen] = useState(false);
   const [isFabMenuOpen, setIsFabMenuOpen] = useState(false);
   const [showTimer, setShowTimer] = useAtom(atom_showTimer);
@@ -49,19 +43,65 @@ export default function EditorHeader({
   const hasTitle = fileTitle.length > 0;
   const fabMenuRef = useRef<HTMLDivElement>(null);
 
-  let editMenuOptions = [
+  // Higher-order function to wrap actions with closeFabMenu
+  const withCloseFabMenu = (action: () => void) => () => {
+    action();
+    closeFabMenu();
+  };
+
+  // File menu options
+  const fileMenuOptions = [
+    {
+      label: "New File...",
+      action: withCloseFabMenu(actions.handleNewFile),
+    },
+    {
+      label: "New from template...",
+      action: withCloseFabMenu(actions.handleSelectTemplate),
+    },
+    {
+      label: "Open File...",
+      action: withCloseFabMenu(actions.handleOpenFile),
+    },
+    {
+      label: "Save As...",
+      action: withCloseFabMenu(exportToMD),
+    },
+  ];
+
+  // Help menu options
+  const helpMenuOptions = [
+    {
+      label: "Welcome",
+      action: withCloseFabMenu(() => {
+        router.push("/dashboard");
+      }),
+    },
+    {
+      label: "Documentation",
+      action: withCloseFabMenu(() => router.push("/documentation")),
+    },
+  ];
+
+  // Edit menu options
+  const editMenuOptions = [
     {
       label: "Copy as markdown",
-      action: () => navigator.clipboard.writeText(contentEdited),
+      action: withCloseFabMenu(() =>
+        navigator.clipboard.writeText(contentEdited)
+      ),
     },
     {
       label: "Find and replace...",
-      action: actions.handleOpenFindAndReplace,
+      action: withCloseFabMenu(actions.handleOpenFindAndReplace),
     },
     {
       label: "Toggle timer",
-      action: () => setShowTimer(!showTimer),
-    }
+      action: () => {
+        closeFabMenu();
+        setShowTimer(!showTimer);
+      },
+    },
   ];
 
   // Close dropdown when clicking outside
@@ -91,11 +131,9 @@ export default function EditorHeader({
         <div className="flex gap-2 flex-col">
           <h1 className="text-3xl leading-tight flex gap-2 items-center">
             <span>{hasTitle && `${fileTitle}`}</span>
-            {
-              <span className="cursor-pointer" onClick={() => showFileDialog()}>
-                <PenIcon tooltip="File Settings" size={16} alt="Edit Title" />
-              </span>
-            }
+            <span className="cursor-pointer" onClick={showFileDialog}>
+              <PenIcon tooltip="File Settings" size={16} alt="Edit Title" />
+            </span>
           </h1>
           <h2 className="text-sm leading-tight">{`${
             fileName?.endsWith(".md") ? fileName : fileName + ".md"
@@ -112,12 +150,14 @@ export default function EditorHeader({
           </span>
         </div>
       </div>
-      <EditorForm
-        isOpened={isFormatterDialogOpen}
-        handleClose={() => setIsFormatterDialogOpen(false)}
-      />
+      <EditorForm isOpened={isFormatterDialogOpen} handleClose={closeFabMenu} />
     </>
   );
+
+  function closeFabMenu() {
+    setIsFormatterDialogOpen(false);
+    setIsFabMenuOpen(false);
+  }
 
   function renderOptionsMenu() {
     if (isMobile) {
@@ -168,6 +208,7 @@ export default function EditorHeader({
       />
     );
   }
+
   function renderHelpMenu() {
     return (
       <DropdownMenu
@@ -176,21 +217,7 @@ export default function EditorHeader({
             Help <FaCaretDown />
           </span>
         }
-        options={[
-          {
-            label: "Welcome",
-            action: () => {
-              setShowDashboardOnStartup(true);
-              router.push("/dashboard");
-            },
-          },
-          {
-            label: "Documentation",
-            action: () => {
-              router.push("/documentation");
-            },
-          },
-        ]}
+        options={helpMenuOptions}
       />
     );
   }
@@ -203,24 +230,7 @@ export default function EditorHeader({
             File <FaCaretDown />
           </span>
         }
-        options={[
-          {
-            label: "New File...",
-            action: actions.handleNewFile,
-          },
-          {
-            label: "New from template...",
-            action: actions.handleSelectTemplate,
-          },
-          {
-            label: "Open File...",
-            action: actions.handleOpenFile,
-          },
-          {
-            label: "Save As...",
-            action: exportToMD,
-          },
-        ]}
+        options={fileMenuOptions}
       />
     );
   }

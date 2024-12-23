@@ -68,8 +68,7 @@ export const atom_frontMatter = atomWithStorage(
   storage
 ) as FrontmatterAtom;
 
-export const atom_showDashboard = atomWithStorage("showDashboard", true);
-export const atom_showTimer = atomWithStorage("showTimer", true)
+export const atom_showTimer = atomWithStorage("showTimer", true);
 
 export const atom_searchTerm = atom("");
 export const atom_hasChanges = atom(false);

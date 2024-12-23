@@ -5,3 +5,5 @@ export const TIMER_CONFIG = {
   step: 1,
   default: 40,
 };
+
+export const SPINNER_LOADING_DURATION = 1000;

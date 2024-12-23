@@ -15,7 +15,7 @@ function Badge({ label, variant }: Props) {
     }
 
   return (
-    <span className={`${variantStyleMap[variant]} px-2 py-1 rounded-sm text-xs font-bold mb-1 animate-pop-infinite -mt-4`}>
+    <span className={`${variantStyleMap[variant]} px-2 py-1 rounded-sm text-xs font-bold mb-1 animate-pop -mt-4`}>
       {label}
     </span>
   );

@@ -16,6 +16,7 @@ import {
   isSelectedFileValid,
 } from "../editor/EditorUtils";
 import Loading from "@/app/components/Loading";
+import { SPINNER_LOADING_DURATION } from "@/app/constants/timer";
 
 type Props = {
   isOpen: boolean;
@@ -98,7 +99,7 @@ const FileSelectionModal = ({ isOpen, handleClose }: Props) => {
 
     setTimeout(() => {
       handleClose();
-    }, 2000); // Delay of 2 seconds
+    }, SPINNER_LOADING_DURATION); // Delay of 2 seconds
 
     return;
   }

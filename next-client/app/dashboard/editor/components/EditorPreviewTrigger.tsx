@@ -32,7 +32,7 @@ export default function EditorPreviewTrigger() {
           <div className="h-full relative">
             <div className="fixed bottom-2 right-2 sm:flex sm:sticky sm:top-4">
               <Button
-                styles="pop-short flex-initial"
+                styles="animate-pop flex-initial"
                 variant="primary"
                 label="Export"
                 handler={() => handlePdfExport()}

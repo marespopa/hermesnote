@@ -13,6 +13,7 @@ import html2markdown from "@notable/html2markdown";
 import sanitizeHtml from "sanitize-html";
 import { replaceMarkdownWithHtml } from "../EditorUtils";
 import LoadingOverlay from "@/app/components/LoadingOverlay";
+import { SPINNER_LOADING_DURATION } from "@/app/constants/timer";
 
 interface Props {
   contentEdited: string;
@@ -138,12 +139,10 @@ export default function EditorContent({
   }
 
   function showLoadingTimer() {
-    const LOADING_DURATION = 500;
-
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-    }, LOADING_DURATION);
+    }, SPINNER_LOADING_DURATION);
   }
   function syncMarkdown(e: React.FocusEvent<HTMLDivElement>): void {
     const html = replaceMarkdownWithHtml(e.currentTarget.innerHTML);

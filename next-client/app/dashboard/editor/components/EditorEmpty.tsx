@@ -16,7 +16,6 @@ import TemplateSelectionModal from "../../templates/TemplateSelectionModal";
 import { StatusResponse } from "@/app/services/save-utils";
 import Button from "@/app/components/Button";
 import FileInput from "@/app/components/FileInput";
-import ShowWelcomeCheckbox from "../../components/ShowWelcomeCheckbox";
 import { FaFile, FaFileAlt, FaFolderOpen } from "react-icons/fa";
 import Badge from "@/app/components/Badges/Badge";
 import useIsMobile from "@/app/hooks/use-is-mobile";
@@ -72,7 +71,6 @@ export default function EditorEmpty() {
       {!isLoading && (
         <>
           {renderActions()}
-          <ShowWelcomeCheckbox />
         </>
       )}
       {isLoading && (
@@ -204,7 +202,6 @@ export default function EditorEmpty() {
             />
           )}
         </article>
-        <ShowWelcomeCheckbox />
       </div>
     );
   }

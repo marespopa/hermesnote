@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import Loading from "@/app/components/Loading";
 import TemplateTags from "./components/TemplateTags";
 import useIsMobile from "@/app/hooks/use-is-mobile";
+import { SPINNER_LOADING_DURATION } from "@/app/constants/timer";
 
 type Props = {
   isOpen: boolean;
@@ -223,7 +224,7 @@ const TemplateSelectionModal = ({ isOpen, handleClose }: Props) => {
     setTimeout(() => {
       setIsLoadingTemplate(false);
       handleClose();
-    }, 2000); // Delay of 2 seconds
+    }, SPINNER_LOADING_DURATION); // Delay of 2 seconds
   }
 };
 
