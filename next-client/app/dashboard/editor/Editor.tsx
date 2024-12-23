@@ -30,7 +30,7 @@ export default function Editor() {
   const [mounted, setMounted] = useState(false);
   const [timerSettings] = useAtom(atom_timerSettings);
   const searchParams = useSearchParams();
-  const isTimerVisible = searchParams.has("timer");
+  const isTimerVisible = true; //searchParams.has("timer");
   const [frontMatter] = useAtom(atom_frontMatter);
   const fileTitle = frontMatter.title || "File";
   const [contentEdited, setContentEdited] = useAtom(atom_contentEdited);

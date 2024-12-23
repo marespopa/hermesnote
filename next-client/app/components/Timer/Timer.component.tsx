@@ -15,6 +15,7 @@ import { useDocumentTitle } from "@/app/hooks/use-document-title";
 import TimerSettingsTrigger from "./TimerSettingsTrigger";
 import { useAtom } from "jotai";
 import { atom_frontMatter } from "@/app/atoms/atoms";
+import useIsMobile from "@/app/hooks/use-is-mobile";
 
 type Props = {
   isWorking: boolean;
@@ -46,6 +47,7 @@ const TimerComponent = ({
   const [_, setDocumentTitle] = useDocumentTitle("Hermes Markdown");
   const [frontMatter] = useAtom(atom_frontMatter);
   const fileTitle = frontMatter.title || "File";
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const pomodoroSettings = {
@@ -93,29 +95,31 @@ const TimerComponent = ({
   function renderDetails() {
     return (
       <>
-        <div>{renderControlButtons()}</div>
+        <div className="pb-8 sm:pb-0">{renderControlButtons()}</div>
 
-        <div className="mt-2 pb-8">
-          <p className="text-xs italic">
-            One finished cycle consists in four finished pomodoros
-          </p>
-          <div className="mt-4 text-sm">
-            <dl className="flex gap-4">
-              <dt className="font-medium leading-6">Finished pomodoros:</dt>
-              <dd className="font-bold leading-6">{numberOfPomodoros}</dd>
+        {!isMobile && (
+          <div className="mt-2 pb-8">
+            <p className="text-xs italic">
+              One finished cycle consists in four finished pomodoros
+            </p>
+            <div className="mt-4 text-sm">
+              <dl className="flex gap-4">
+                <dt className="font-medium leading-6">Finished pomodoros:</dt>
+                <dd className="font-bold leading-6">{numberOfPomodoros}</dd>
 
-              <dt className="font-medium leading-6">Finished cycles</dt>
-              <dd className="font-bold leading-6">{completedCycles}</dd>
-            </dl>
+                <dt className="font-medium leading-6">Finished cycles</dt>
+                <dd className="font-bold leading-6">{completedCycles}</dd>
+              </dl>
+            </div>
           </div>
-        </div>
+        )}
       </>
     );
   }
 
   function renderControlButtons() {
     return (
-      <div className="flex gap-4 mt-4 justify-center">
+      <div className="flex gap-4 mt-4 justify-center flex-wrap">
         {!isResting && !isWorking && !isTimerCounting && (
           <Button
             variant="success"
@@ -149,6 +153,7 @@ const TimerComponent = ({
               </>
             }
             handler={() => startRestInterval(false)}
+            styles="text-xs"
           ></Button>
         )}
         {isPauseButtonVisible && (
@@ -166,6 +171,7 @@ const TimerComponent = ({
               )
             }
             handler={togglePauseFn()}
+            styles="text-xs"
           ></Button>
         )}
         {(isPauseButtonVisible || isTimerCounting) && (
@@ -177,6 +183,7 @@ const TimerComponent = ({
               </>
             }
             handler={() => resetPomodoro()}
+            styles="text-xs"
           ></Button>
         )}
       </div>
@@ -219,8 +226,8 @@ function getHeadingText(
   return isDocumentTitle ? `${fileTitle}` : "Pomodoro Timer";
 }
 
-const timerPopStyles = `bg-slate-200 shadow-sm py-2 md:px-4 pt-2 my-4 rounded-sm
-                        w-full sm:w-1/2 z-10 md:w-1/4 sm:fixed sm:right-4 sm:bottom-2
+const timerPopStyles = `bg-amber-200 shadow-sm py-2 px-2 md:px-4 pt-2 my-4 rounded-sm
+                        w-1/2 z-10 md:w-1/4 sm:fixed sm:right-4 sm:bottom-2
                         opacity-95 relative`;
 
 export default TimerComponent;
