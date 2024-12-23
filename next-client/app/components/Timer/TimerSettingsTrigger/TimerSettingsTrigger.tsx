@@ -3,10 +3,11 @@ import { FormEvent, useRef, useState } from "react";
 import DialogModal from "@/app/components/DialogModal";
 import Button from "@/app/components/Button";
 import { useAtom } from "jotai";
-import { atom_timerSettings } from "@/app/atoms/atoms";
+import { atom_showTimer, atom_timerSettings } from "@/app/atoms/atoms";
 import Input from "../../Input";
 import SaveStateText, { SaveState } from "../../SaveStateText/SaveStateText";
 import { FaCog } from "react-icons/fa";
+import Checkbox from "../../Checkbox";
 
 type Timeout = ReturnType<typeof setTimeout> | null;
 
@@ -14,10 +15,13 @@ export default function TimerSettingsTrigger() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [timer, setTimer] = useAtom(atom_timerSettings);
   const [saveState, setSaveState] = useState<SaveState>("none");
+  const [showTimer, setShowTimer] = useAtom(atom_showTimer);
+  const [showTimerSetting, setShowTimerSetting] = useState(showTimer);
   const savingTimeout = useRef<Timeout>(null);
   const savedTimeout = useRef<Timeout>(null);
 
   function handleClose() {
+    setShowTimer(showTimerSetting);
     setIsModalOpen(false);
   }
 
@@ -77,10 +81,12 @@ export default function TimerSettingsTrigger() {
             <span>Timer Properties</span>
             <SaveStateText status={saveState} />
           </h3>
+
           <p className="mt-2 my-4 text-sm text-gray-500">
-            In here you can configure the default minutes for a work session or
-            for break sessions.
+            In here you can configure if you want to see the timer, and the
+            default minutes for a work session or for break sessions.
           </p>
+
           <Input
             label="Pomodoro"
             name="workSession"
@@ -121,6 +127,17 @@ export default function TimerSettingsTrigger() {
             }
             helperText="The duration of a long break session."
           />
+
+          <Checkbox
+            label="Show timer in the editor"
+            name="showTimer"
+            checked={showTimerSetting}
+            helperText="You can re-add the timer by using the Edit menu."
+            handleChange={(e: React.FormEvent<HTMLInputElement>) => {
+              setShowTimerSetting(e.currentTarget.checked);
+            }}
+          />
+
           <Button
             variant="primary"
             handler={handleClose}

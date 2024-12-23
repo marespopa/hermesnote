@@ -1,5 +1,6 @@
 import { getFormattedTimeFromMs } from "@/app/services/date-utils";
 import {
+  FaCross,
   FaMugHot,
   FaPause,
   FaPlay,
@@ -7,6 +8,7 @@ import {
   FaRegWindowMaximize,
   FaRegWindowMinimize,
   FaTerminal,
+  FaWindowClose,
 } from "react-icons/fa";
 
 import Button from "../Button";

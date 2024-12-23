@@ -7,10 +7,14 @@ import PenIcon from "@/app/components/Icons/PenIcon";
 import { useEffect, useRef, useState } from "react";
 import EditorForm from "../EditorForm";
 import { FileMetadata } from "@/app/types/markdown";
-import { atom_content, atom_showDashboard } from "@/app/atoms/atoms";
+import {
+  atom_content,
+  atom_showDashboard,
+  atom_showTimer,
+} from "@/app/atoms/atoms";
 import DropdownMenu from "@/app/components/DropdownMenu";
 import ExportService from "@/app/services/export-service";
-import { FaCaretDown, FaCog, FaEdit, FaPlusCircle } from "react-icons/fa";
+import { FaCaretDown, FaCog } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import useIsMobile from "@/app/hooks/use-is-mobile";
 
@@ -37,12 +41,28 @@ export default function EditorHeader({
 
   const [isFormatterDialogOpen, setIsFormatterDialogOpen] = useState(false);
   const [isFabMenuOpen, setIsFabMenuOpen] = useState(false);
+  const [showTimer, setShowTimer] = useAtom(atom_showTimer);
   const router = useRouter();
   const isMobile = useIsMobile();
   const fileTitle = frontMatter.title;
   const fileName = frontMatter.fileName;
   const hasTitle = fileTitle.length > 0;
   const fabMenuRef = useRef<HTMLDivElement>(null);
+
+  let editMenuOptions = [
+    {
+      label: "Copy as markdown",
+      action: () => navigator.clipboard.writeText(contentEdited),
+    },
+    {
+      label: "Find and replace...",
+      action: actions.handleOpenFindAndReplace,
+    },
+    {
+      label: "Toggle timer",
+      action: () => setShowTimer(!showTimer),
+    }
+  ];
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -107,7 +127,7 @@ export default function EditorHeader({
             variant="secondary"
             handler={() => setIsFabMenuOpen(!isFabMenuOpen)}
           >
-            <FaCog /> Options
+            <FaCog /> Menu
           </Button>
           {isFabMenuOpen && (
             <div
@@ -144,16 +164,7 @@ export default function EditorHeader({
             Edit <FaCaretDown />
           </span>
         }
-        options={[
-          {
-            label: "Copy as markdown",
-            action: () => navigator.clipboard.writeText(contentEdited),
-          },
-          {
-            label: "Find and replace...",
-            action: actions.handleOpenFindAndReplace,
-          },
-        ]}
+        options={editMenuOptions}
       />
     );
   }

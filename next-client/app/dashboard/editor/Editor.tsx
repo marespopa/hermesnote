@@ -9,9 +9,9 @@ import {
   atom_contentEdited,
   atom_frontMatter,
   atom_hasChanges,
+  atom_showTimer,
   atom_timerSettings,
 } from "@/app/atoms/atoms";
-import { useSearchParams } from "next/navigation";
 import { useDocumentTitle } from "@/app/hooks/use-document-title";
 import { useState, useEffect } from "react";
 import { PICKER_OPTIONS } from "./components/EditorEmpty";
@@ -29,8 +29,7 @@ export default function Editor() {
   const [isLoading, setIsLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [timerSettings] = useAtom(atom_timerSettings);
-  const searchParams = useSearchParams();
-  const isTimerVisible = true; //searchParams.has("timer");
+  const [isTimerVisible] = useAtom(atom_showTimer);
   const [frontMatter] = useAtom(atom_frontMatter);
   const fileTitle = frontMatter.title || "File";
   const [contentEdited, setContentEdited] = useAtom(atom_contentEdited);
