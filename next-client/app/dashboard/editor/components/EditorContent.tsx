@@ -124,6 +124,8 @@ export default function EditorContent({
   }
 
   function renderEditor() {
+    const showPlaceholder = contentRef?.current?.innerText?.trim().length === 0 && !(contentRef?.current === document.activeElement);
+
     return (
       <>
         <LoadingOverlay
@@ -144,7 +146,7 @@ export default function EditorContent({
           onBlur={syncMarkdown}
           dangerouslySetInnerHTML={{ __html: htmlEdit }}
         ></div>
-        {contentRef?.current?.innerHTML.length === 0 && (
+        {showPlaceholder && (
           <span
             className="absolute top-4 -left-2 p-4 text-gray-400 pointer-events-none"
             id="placeholder"
