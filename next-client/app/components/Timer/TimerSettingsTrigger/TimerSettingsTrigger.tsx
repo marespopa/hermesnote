@@ -56,19 +56,18 @@ export default function TimerSettingsTrigger() {
 
   return (
     <>
-      <div className="mt-4 flex justify-end absolute right-4 -bottom-4">
-        <Button
-          variant="secondary"
-          handler={() => {
-            setIsModalOpen(!isModalOpen);
-          }}
-          label={
-            <>
-              Settings <FaCog />
-            </>
-          }
-        ></Button>
-      </div>
+      <Button
+        variant="info"
+        styles="text-xs"
+        handler={() => {
+          setIsModalOpen(!isModalOpen);
+        }}
+        label={
+          <>
+            SETTINGS <FaCog />
+          </>
+        }
+      ></Button>
       <DialogModal
         isOpened={isModalOpen}
         onClose={() => {
@@ -76,7 +75,7 @@ export default function TimerSettingsTrigger() {
         }}
         styles="max-w-2xl"
       >
-        <form className="mt-8 max-w-xl">
+        <form className="mt-8 max-w-xl mx-auto">
           <h3 className="text-2xl mt-4 flex gap-2 items-center justify-between">
             <span>Timer Properties</span>
             <SaveStateText status={saveState} />

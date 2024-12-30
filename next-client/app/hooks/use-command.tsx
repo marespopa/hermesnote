@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
 
 // Define a type for available command names
-export type CommandNames = "save" | "open" | "new" | "export" | "home" | "template" | "escape";
+export type CommandNames = "save" | "open" | "new" | "export" | "home" | "template" | "escape" | "enter";
 
 interface Command {
   key: string;
@@ -17,6 +17,7 @@ const commandRegistry: Record<CommandNames, Command> = {
   home: { key: "Home", hasModifier: false },
   template: { key: "t", hasModifier: true },
   escape: { key: "Escape", hasModifier: false },
+  enter: { key: "Enter", hasModifier: false },
 };
 
 export function useCommand(

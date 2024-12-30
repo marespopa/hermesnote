@@ -90,7 +90,6 @@ const TimerComponent = ({
         </span>
       </h2>
       {!isTimerMinimized && renderDetails()}
-      {!isTimerMinimized && <TimerSettingsTrigger />}
     </section>
   );
 
@@ -188,6 +187,7 @@ const TimerComponent = ({
             styles="text-xs"
           ></Button>
         )}
+        {<TimerSettingsTrigger />}
       </div>
     );
   }

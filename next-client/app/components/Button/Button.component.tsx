@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 
-type ButtonVariant = "primary" | "secondary" | "danger" | "success";
+type ButtonVariant = "primary" | "secondary" | "danger" | "success" | "info";
 
 type Props = {
   children?: ReactNode;
@@ -44,6 +44,8 @@ const variantStyles = (variant: ButtonVariant) => {
       return `${baseStyles} bg-gray-800 text-white hover:bg-gray-700 focus:bg-gray-700 focus:ring-gray-500 ${disabledStyles}`;
     case "danger":
       return `${baseStyles} bg-red-600 text-white hover:bg-red-700 focus:bg-red-700 focus:ring-red-500 ${disabledStyles}`;
+    case "info":
+      return `${baseStyles} bg-sky-800 text-white hover:bg-sky-900 focus:bg-sky-900 focus:ring-sky-800 ${disabledStyles}`;
     case "success":
       return `${baseStyles} bg-emerald-600 text-white hover:bg-emerald-700 focus:bg-emerald-700 focus:ring-emerald-500 ${disabledStyles}`;
     default:
