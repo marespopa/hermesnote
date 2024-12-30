@@ -34,7 +34,7 @@ export default function Prices() {
   } as const;
 
   return (
-    <main className="py-4 bg-white">
+    <main className="p-4 md:px-2 bg-white">
       <div className={`${containerStyle}`}>
         <div className="prose">
           <section>

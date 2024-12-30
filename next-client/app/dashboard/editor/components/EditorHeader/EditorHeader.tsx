@@ -125,7 +125,7 @@ export default function EditorHeader({
     <>
       <div
         className={`bg-amber-100 p-4 ${
-          isMobile ? "mt-20" : "mt-8"
+          isMobile ? "mt-4" : "mt-8"
         } flex flex-col md:flex-row justify-between border-b-2 rounded-sm`}
       >
         <div className="flex gap-2 flex-col">

@@ -29,9 +29,9 @@ const MainPage = ({ children }: Props) => {
         <CustomProviders>
           <main className={monoFont.className}>
             <Toaster position="top-center" reverseOrder={false} />
-            <div className="min-h-screen flex flex-col bg-white ">
+            <div className="min-h-screen flex flex-col bg-white">
               {showHeader && <Header />}
-              <div className="flex-1 sm:px-4 md:px-2">{children}</div>
+              <div className="flex-1">{children}</div>
               <Footer />
             </div>
             <CookieConsent />

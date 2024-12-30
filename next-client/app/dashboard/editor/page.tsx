@@ -9,7 +9,7 @@ export default function EditorPage() {
   }
 
   return (
-    <div className={`${containerStyle} px-2 md:px-0`}>
+    <div className={`${containerStyle} !px-0 md:px-0`}>
       <Suspense fallback={<SearchBarFallback />}>
         <Editor />
       </Suspense>

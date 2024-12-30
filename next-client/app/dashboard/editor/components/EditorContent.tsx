@@ -97,14 +97,24 @@ export default function EditorContent({
 
   function renderPreview() {
     return (
-      <div
-        ref={markdownRef}
-        id="previewId"
-        onClick={(e) => handlePreviewClick(e)}
-        className={`${isEdit ? "hidden" : ""} p-4`}
-      >
-        <MarkdownPreview content={contentEdited} />
-      </div>
+      <>
+        <div
+          ref={markdownRef}
+          id="previewId"
+          onClick={(e) => handlePreviewClick(e)}
+          className={`${isEdit ? "hidden" : ""} p-4`}
+        >
+          <MarkdownPreview content={contentEdited} />
+        </div>
+        {contentRef?.current?.innerHTML.length === 0 && (
+          <span
+            className="absolute top-4 -left-2 p-4 text-gray-400 pointer-events-none"
+            id="placeholder"
+          >
+            Type something...
+          </span>
+        )}
+      </>
     );
   }
 
@@ -134,6 +144,14 @@ export default function EditorContent({
           onBlur={syncMarkdown}
           dangerouslySetInnerHTML={{ __html: htmlEdit }}
         ></div>
+        {contentRef?.current?.innerHTML.length === 0 && (
+          <span
+            className="absolute top-4 -left-2 p-4 text-gray-400 pointer-events-none"
+            id="placeholder"
+          >
+            Type something...
+          </span>
+        )}
       </>
     );
   }
