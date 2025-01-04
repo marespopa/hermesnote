@@ -9,11 +9,8 @@ import { useCommand } from "@/app/hooks/use-command";
 import { FileMetadata } from "@/app/types/markdown";
 import { SetAtom } from "../EditorTypes";
 
-import html2markdown from "@notable/html2markdown";
-import sanitizeHtml from "sanitize-html";
-import { replaceMarkdownWithHtml } from "../EditorUtils";
-import LoadingOverlay from "@/app/components/LoadingOverlay";
-import { SPINNER_LOADING_DURATION } from "@/app/constants/timer";
+import EditorTextarea from "./EditorTextarea";
+import { FaColumns, FaEye, FaPen } from "react-icons/fa";
 
 interface Props {
   contentEdited: string;
@@ -22,6 +19,8 @@ interface Props {
   setHasChanges: (hasChanges: boolean) => void;
 }
 
+type PanelState = "both" | "editor" | "preview";
+
 export default function EditorContent({
   contentEdited,
   setContentEdited,
@@ -29,49 +28,18 @@ export default function EditorContent({
   setHasChanges,
 }: Props) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const [panelState, setPanelState] = useState<PanelState>("editor");
   const markdownRef = useRef<HTMLDivElement>(null);
-
-  const sanitizeHTMLConfig = {
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "a"]),
-    allowedAttributes: {
-      ...sanitizeHtml.defaults.allowedAttributes,
-      p: ["style"],
-      div: ["style"],
-      a: ["href"],
-    },
-    allowedStyles: {
-      "*": {
-        color: [
-          /^#(0x)?[0-9a-f]+$/i,
-          /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/,
-        ],
-        "text-align": [/^left$/, /^right$/, /^center$/],
-        "font-size": [/^\d+(?:px|em|%)$/],
-      },
-      p: {
-        "font-size": [/^\d+rem$/],
-      },
-    },
-  };
-
-  const htmlEdit = `<article>${
-    markdownRef?.current?.innerHTML || ""
-  }</article>`;
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Save command using `useCommand` hook
   useCommand("save", () =>
     ExportService.exportMarkdown(contentEdited, frontMatter)
   );
 
-  // Navigate to home/dashboard
   useCommand("home", () => {
     setIsMounted(false);
     router.push("/dashboard");
@@ -82,98 +50,92 @@ export default function EditorContent({
   }
 
   return (
-    <div className="flex gap-4 editor-area max-height-[1000px] overflow-y-auto">
-      <div className="w-full relative transition ease-in-out delay-150">
-        <div className={previewStyles} id="pdfExport">
-          {/* Editable Content */}
-          {renderEditor()}
+    <div className="flex flex-col gap-4 editor-area max-height-[1000px] overflow-y-auto">
+      {/* Toggle Buttons */}
+      {renderToggleButtons()}
 
-          {/* Markdown Preview */}
-          {renderPreview()}
-        </div>
+      {/* Panels */}
+      <div
+        className={`w-full relative transition ease-in-out grid ${
+          panelState === "both" ? "grid-cols-2 gap-2" : "grid-cols-1"
+        }`}
+      >
+        {(panelState === "both" || panelState === "editor") && renderEditor()}
+        {(panelState === "both" || panelState === "preview") && renderPreview()}
       </div>
     </div>
   );
 
-  function renderPreview() {
+  function renderToggleButtons() {
     return (
-      <>
-        <div
-          ref={markdownRef}
-          id="previewId"
-          onClick={(e) => handlePreviewClick(e)}
-          className={`${isEdit ? "hidden" : ""} p-4`}
-        >
-          <MarkdownPreview content={contentEdited} />
-        </div>
-        {contentRef?.current?.innerHTML.length === 0 && (
-          <span
-            className="absolute top-4 -left-2 p-4 text-gray-400 pointer-events-none"
-            id="placeholder"
-          >
-            Type something...
-          </span>
-        )}
-      </>
+      <div className="flex justify-end gap-2 mb-2 p-4 bg-gray-100 rounded-md">
+        <ToggleButton
+          icon={<FaPen />}
+          title="Editor Only"
+          isActive={panelState === "editor"}
+          onClick={() => setPanelState("editor")}
+        />
+        <ToggleButton
+          icon={<FaEye />}
+          title="Preview Only"
+          isActive={panelState === "preview"}
+          onClick={() => setPanelState("preview")}
+        />
+        <ToggleButton
+          icon={<FaColumns />}
+          title="Split View (Editor + Preview)"
+          isActive={panelState === "both"}
+          onClick={() => setPanelState("both")}
+        />
+      </div>
     );
   }
 
-  function handlePreviewClick(e: React.MouseEvent<HTMLDivElement>): void {
-    setIsEdit(true);
-    setTimeout(() => contentRef.current?.focus(), 0);
+  function renderPreview() {
+    return (
+      <div className={previewStyles} id="pdfExport">
+        <div ref={markdownRef} id="previewId" className="p-4">
+          <MarkdownPreview content={contentEdited} />
+        </div>
+      </div>
+    );
   }
 
   function renderEditor() {
-    const showPlaceholder = contentRef?.current?.innerText?.trim().length === 0 && !(contentRef?.current === document.activeElement);
-
     return (
-      <>
-        <LoadingOverlay
-          isVisible={isLoading}
-          text="Getting editor ready..."
-        ></LoadingOverlay>
-        <div
-          onFocus={(e) => {
-            e.preventDefault();
-            showLoadingTimer();
-          }}
-          className={`${
-            !isEdit ? "hidden" : ""
-          } border-none border-gray-300 rounded-lg p-4 shadow-sm focus:outline-none`}
-          ref={contentRef}
-          contentEditable
-          suppressContentEditableWarning={true}
-          onBlur={syncMarkdown}
-          dangerouslySetInnerHTML={{ __html: htmlEdit }}
-        ></div>
-        {showPlaceholder && (
-          <span
-            className="absolute top-4 -left-2 p-4 text-gray-400 pointer-events-none"
-            id="placeholder"
-          >
-            Type something...
-          </span>
-        )}
-      </>
+      <EditorTextarea
+        contentEdited={contentEdited}
+        setContentEdited={(newContent) => {
+          setContentEdited(newContent); // Update content
+          setHasChanges(true); // Mark changes as true
+        }}
+      />
     );
   }
-
-  function showLoadingTimer() {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, SPINNER_LOADING_DURATION);
-  }
-  function syncMarkdown(e: React.FocusEvent<HTMLDivElement>): void {
-    const html = replaceMarkdownWithHtml(e.currentTarget.innerHTML);
-    const cleanHTML = sanitizeHtml(html, sanitizeHTMLConfig);
-    const md = html2markdown(cleanHTML);
-
-    setContentEdited(md); // Update markdown state
-    setHasChanges(true); // Mark changes as saved
-    setIsEdit(false); // Exit edit mode
-  }
 }
+
+const ToggleButton = ({
+  icon,
+  title,
+  isActive,
+  onClick,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  isActive: boolean;
+  onClick: () => void;
+}) => (
+  <button
+    onClick={onClick}
+    title={title} // Tooltip for accessibility
+    className={`px-4 py-2 border rounded-md transition-all ${
+      isActive ? "bg-gray-300" : "hover:bg-gray-200 active:bg-gray-300"
+    }`}
+    aria-label={title} // Screen reader support
+  >
+    {icon}
+  </button>
+);
 
 const previewStyles =
   "w-full max-w-none prose my-6 rounded-sm bg-white prose-pre:bg-amber-100 prose-pre:text-gray-700";
