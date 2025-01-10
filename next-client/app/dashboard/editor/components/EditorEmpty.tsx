@@ -53,9 +53,6 @@ export default function EditorEmpty() {
   const [mounted, setMounted] = useState(false);
   const [fileList, _] = useState<File[]>([]);
 
-  const hasExistingFile =
-    frontMatter?.fileName?.length > 0 && content?.length > 0;
-
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -67,6 +64,8 @@ export default function EditorEmpty() {
   if (isMobile) {
     return renderMobileView();
   }
+
+  const hasExistingFile = content?.length > 0;
 
   return (
     <div>

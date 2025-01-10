@@ -19,7 +19,6 @@ const MarkdownPreview = ({ content }: Props) => {
     );
   }
 
-
   return (
     <Markdown
       remarkPlugins={[remarkGfm]}
@@ -28,11 +27,7 @@ const MarkdownPreview = ({ content }: Props) => {
           const { children, className, node, ...rest } = props;
           const match = /language-(\w+)/.exec(className || "");
           return match ? (
-            <SyntaxHighlighter
-              PreTag="div"
-              language={match[1]}
-              style={nord}
-            >
+            <SyntaxHighlighter PreTag="div" language={match[1]} style={nord}>
               {String(children).replace(/\n$/, "")}
             </SyntaxHighlighter>
           ) : (
