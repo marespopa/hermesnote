@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ClassAttributes, HTMLAttributes } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -17,23 +17,26 @@ const MarkdownPreview = ({ content }: Props) => {
     );
   }
 
+  /* eslint-ignore */
+  /* tslint-ignore */
+
   return (
     <Markdown
       remarkPlugins={[remarkGfm]}
       components={{
-        code({ node, inline, className, children, ...props }) {
+        code(props) {
+          const { children, className, node, ...rest } = props;
           const match = /language-(\w+)/.exec(className || "");
-          return !inline && match ? (
+          return match ? (
             <SyntaxHighlighter
-              {...props}
-              style={nord}
-              language={match[1]}
+              {...rest}
               PreTag="div"
-            >
-              {String(children).replace(/\n$/, "")}
-            </SyntaxHighlighter>
+              children={String(children).replace(/\n$/, "")}
+              language={match[1]}
+              style={nord}
+            />
           ) : (
-            <code {...props} className={className}>
+            <code {...rest} className={className}>
               {children}
             </code>
           );
