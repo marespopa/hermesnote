@@ -36,9 +36,10 @@ export const PICKER_OPTIONS: OpenFilePickerOptions = {
 
 export default function EditorEmpty() {
   const router = useRouter();
-  const [frontMatter, setFrontMatter] = useAtom(atom_frontMatter);
+  const [, setFrontMatter] = useAtom(atom_frontMatter);
+  const [hasExistingFile, setHasExistingFile] = useState(false);
   const [content, setContent] = useAtom(atom_content);
-  const [contentEdited, setContentEdited] = useAtom(atom_contentEdited);
+  const [, setContentEdited] = useAtom(atom_contentEdited);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isFileInputVisible, setIsFileInputVisible] = useState(false);
@@ -57,6 +58,14 @@ export default function EditorEmpty() {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (content && content?.length > 0) {
+      setHasExistingFile(true);
+    } else {
+      setHasExistingFile(false);
+    }
+  }, [content]);
+
   if (!mounted) {
     return <></>;
   }
@@ -64,8 +73,6 @@ export default function EditorEmpty() {
   if (isMobile) {
     return renderMobileView();
   }
-
-  const hasExistingFile = content?.length > 0;
 
   return (
     <div>
@@ -95,7 +102,6 @@ export default function EditorEmpty() {
             {hasExistingFile && (
               <div className="flex flex-col items-center">
                 <Button
-                  isDisabled={disabledButtonsState.new}
                   variant="secondary"
                   handler={() => router.push("/dashboard/editor")}
                   label={
