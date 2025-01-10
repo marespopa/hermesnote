@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { ClassAttributes, HTMLAttributes } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -17,8 +19,6 @@ const MarkdownPreview = ({ content }: Props) => {
     );
   }
 
-  /* eslint-ignore */
-  /* tslint-ignore */
 
   return (
     <Markdown
@@ -29,12 +29,12 @@ const MarkdownPreview = ({ content }: Props) => {
           const match = /language-(\w+)/.exec(className || "");
           return match ? (
             <SyntaxHighlighter
-              {...rest}
               PreTag="div"
-              children={String(children).replace(/\n$/, "")}
               language={match[1]}
               style={nord}
-            />
+            >
+              {String(children).replace(/\n$/, "")}
+            </SyntaxHighlighter>
           ) : (
             <code {...rest} className={className}>
               {children}
