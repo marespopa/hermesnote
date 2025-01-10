@@ -68,7 +68,7 @@ export default function EditorContent({
 
   function renderToggleButtons() {
     return (
-      <div className="flex justify-end gap-2 mb-2 p-4 bg-gray-100 rounded-md">
+      <div className="flex justify-end gap-2 mb-2 p-4 bg-amber-100 rounded-b-lg">
         <ToggleButton
           icon={<FaPen />}
           title="Editor Only"
@@ -127,15 +127,17 @@ const ToggleButton = ({
 }) => (
   <button
     onClick={onClick}
-    title={title} // Tooltip for accessibility
-    className={`px-4 py-2 border rounded-md transition-all ${
-      isActive ? "bg-gray-300" : "hover:bg-gray-200 active:bg-gray-300"
-    }`}
+    title={title} // Tooltip for hover users
     aria-label={title} // Screen reader support
+    aria-pressed={isActive} // Indicates toggle state
+    className={`px-4 py-2 border rounded-md transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
+      isActive
+        ? "bg-emerald-600 text-white border-transparent"
+        : "bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
+    }`}
   >
     {icon}
   </button>
 );
-
 const previewStyles =
   "w-full max-w-none prose my-6 rounded-sm bg-white prose-pre:bg-amber-100 prose-pre:text-gray-700";

@@ -126,7 +126,7 @@ export default function EditorHeader({
       <div
         className={`bg-amber-100 p-4 ${
           isMobile ? "mt-4" : "mt-8"
-        } flex flex-col md:flex-row justify-between border-b-2 rounded-sm`}
+        } flex flex-col md:flex-row justify-between rounded-t-lg`}
       >
         <div className="flex gap-2 flex-col">
           <h1 className="text-3xl leading-tight flex gap-2 items-center">
@@ -162,7 +162,7 @@ export default function EditorHeader({
   function renderOptionsMenu() {
     if (isMobile) {
       return (
-        <div className="fixed top-4 right-4 z-50">
+        <div className="fixed top-8 right-4 z-50">
           <Button
             variant="secondary"
             handler={() => setIsFabMenuOpen(!isFabMenuOpen)}

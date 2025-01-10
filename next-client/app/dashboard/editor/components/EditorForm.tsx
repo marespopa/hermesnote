@@ -22,14 +22,12 @@ type Timeout = ReturnType<typeof setTimeout> | null;
 export default function EditorForm({ isOpened, handleClose }: Props) {
   const [, setHasChanges] = useAtom(atom_hasChanges);
   const [frontMatterData, setFrontMatterData] = useAtom(atom_frontMatter);
-  const [isMounted, setIsMounted] = useState(false);
   const [saveState, setSaveState] = useState<SaveState>("none");
   const savingTimeout = useRef<Timeout>(null);
   const savedTimeout = useRef<Timeout>(null);
 
   useEffect(() => {
     setSaveState("none");
-    setIsMounted(true);
   }, []);
 
   const handleChange = (e: FormEvent<any>, field: string) => {
@@ -56,10 +54,6 @@ export default function EditorForm({ isOpened, handleClose }: Props) {
     startSaving();
     finishSaving();
   };
-
-  if (!isMounted) {
-    return <Loading message="The template is now being read..." />;
-  }
 
   return (
     <DialogModal isOpened={isOpened} onClose={handleClose} styles="max-w-2xl">

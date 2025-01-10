@@ -1,13 +1,11 @@
 import { WritableAtom, atom, createStore } from "jotai";
-import { RESET, atomWithStorage, createJSONStorage } from "jotai/utils";
+import { RESET, atomWithStorage } from "jotai/utils";
 
 export type TimerData = {
   workSessionDurationInMin: number;
   shortBreakSessionDurationInMin: number;
   longBreakSessionDurationInMin: number;
 };
-
-const storage = createJSONStorage(() => sessionStorage);
 
 export const contentStore = createStore();
 
@@ -47,26 +45,17 @@ type ContentAtom = WritableAtom<
 >;
 
 // File Atoms
-export const atom_content = atomWithStorage(
-  "content",
-  "",
-  storage
-) as ContentAtom;
+export const atom_content = atomWithStorage("content", "") as ContentAtom;
 export const atom_contentEdited = atomWithStorage(
   "contentEdited",
-  "",
-  storage
+  ""
 ) as ContentAtom;
-export const atom_frontMatter = atomWithStorage(
-  "frontmatter",
-  {
-    title: "",
-    description: "",
-    fileName: "file",
-    tags: "",
-  },
-  storage
-) as FrontmatterAtom;
+export const atom_frontMatter = atomWithStorage("frontmatter", {
+  title: "",
+  description: "",
+  fileName: "file",
+  tags: "",
+}) as FrontmatterAtom;
 
 export const atom_showTimer = atomWithStorage("showTimer", true);
 
