@@ -52,9 +52,7 @@ export default function EditorEmpty() {
   const isMobile = useIsMobile();
   const [mounted, setMounted] = useState(false);
   const [fileList, _] = useState<File[]>([]);
-  console.dir(frontMatter);
-  console.dir(contentEdited);
-  console.dir(content);
+
   const hasExistingFile =
     frontMatter?.fileName?.length > 0 && content?.length > 0;
 
@@ -93,7 +91,7 @@ export default function EditorEmpty() {
           </p>
 
           {/* Buttons Section for Mobile View */}
-          <div className="prose  flex flex-col gap-4">
+          <div className="prose  flex flex-col gap-4 mx-auto">
             {/* Continue File Button */}
             {hasExistingFile && (
               <div className="flex flex-col items-center">
@@ -264,7 +262,7 @@ export default function EditorEmpty() {
 
   function renderActions() {
     return (
-      <section className="flex gap-8">
+      <section className="flex gap-4 lg:gap-8 mb-4">
         {renderNewFileOption()}
         {renderSelectTemplateOption()}
         {renderImportFileOption()}

@@ -12,7 +12,7 @@ const MarkdownPreview = ({ content }: Props) => {
   if (content?.length === 0) {
     return (
       <div>
-        <p>The file is currently empty...</p>
+        <p>The file is currently empty content...</p>
       </div>
     );
   }
@@ -21,12 +21,11 @@ const MarkdownPreview = ({ content }: Props) => {
     <Markdown
       remarkPlugins={[remarkGfm]}
       components={{
-        code(props) {
-          const { children, className, node, ...rest } = props;
+        code({ node, inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || "");
-          return match ? (
+          return !inline && match ? (
             <SyntaxHighlighter
-              {...rest}
+              {...props}
               style={nord}
               language={match[1]}
               PreTag="div"
@@ -34,7 +33,7 @@ const MarkdownPreview = ({ content }: Props) => {
               {String(children).replace(/\n$/, "")}
             </SyntaxHighlighter>
           ) : (
-            <code {...rest} className={className}>
+            <code {...props} className={className}>
               {children}
             </code>
           );
