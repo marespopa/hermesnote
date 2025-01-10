@@ -36,9 +36,9 @@ export const PICKER_OPTIONS: OpenFilePickerOptions = {
 
 export default function EditorEmpty() {
   const router = useRouter();
-  const [, setFrontMatter] = useAtom(atom_frontMatter);
-  const [, setContent] = useAtom(atom_content);
-  const [, setContentEdited] = useAtom(atom_contentEdited);
+  const [frontMatter, setFrontMatter] = useAtom(atom_frontMatter);
+  const [content, setContent] = useAtom(atom_content);
+  const [contentEdited, setContentEdited] = useAtom(atom_contentEdited);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isFileInputVisible, setIsFileInputVisible] = useState(false);
@@ -52,6 +52,11 @@ export default function EditorEmpty() {
   const isMobile = useIsMobile();
   const [mounted, setMounted] = useState(false);
   const [fileList, _] = useState<File[]>([]);
+  console.dir(frontMatter);
+  console.dir(contentEdited);
+  console.dir(content);
+  const hasExistingFile =
+    frontMatter?.fileName?.length > 0 && content?.length > 0;
 
   useEffect(() => {
     setMounted(true);
@@ -68,11 +73,7 @@ export default function EditorEmpty() {
   return (
     <div>
       {renderHeading()}
-      {!isLoading && (
-        <>
-          {renderActions()}
-        </>
-      )}
+      {!isLoading && <>{renderActions()}</>}
       {isLoading && (
         <Loading message={"Hang on tight. The editor is loading..."} />
       )}
@@ -93,10 +94,31 @@ export default function EditorEmpty() {
 
           {/* Buttons Section for Mobile View */}
           <div className="prose  flex flex-col gap-4">
+            {/* Continue File Button */}
+            {hasExistingFile && (
+              <div className="flex flex-col items-center">
+                <Button
+                  isDisabled={disabledButtonsState.new}
+                  variant="secondary"
+                  handler={() => router.push("/dashboard/editor")}
+                  label={
+                    <span>
+                      <i className="fa fa-file mr-2"></i> Continue Last Session
+                    </span>
+                  }
+                />
+                <p className="text-xs text-center text-gray-500 mt-1">
+                  Continue from where you left off.
+                </p>
+              </div>
+            )}
+
             {/* Start from Template Button */}
             <div className="flex flex-col items-center">
               {/* Recommended Badge */}
-              <Badge variant="success" label="Recommended" />
+              {!hasExistingFile && (
+                <Badge variant="success" label="Recommended" />
+              )}
               <Button
                 isDisabled={disabledButtonsState.template}
                 variant="secondary"
