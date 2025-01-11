@@ -63,7 +63,7 @@ export const atom_frontMatter = atomWithStorage("frontmatter", {
   tags: "",
 }) as FrontmatterAtom;
 export const atom_panelState = atomWithStorage("panelState", "both") as PanelStateAtom;
-export const atom_showTimer = atomWithStorage("showTimer", true);
+export const atom_showTimer = atomWithStorage("showTimer", false);
 
 export const atom_searchTerm = atom("");
 export const atom_hasChanges = atom(false);
