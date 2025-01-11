@@ -44,6 +44,12 @@ type ContentAtom = WritableAtom<
   void
 >;
 
+export type PanelStateAtom = WritableAtom<
+  "both" | "editor" | "preview",
+  [SetStateActionWithReset<"both" | "editor" | "preview">],
+  void
+>;
+
 // File Atoms
 export const atom_content = atomWithStorage("content", "") as ContentAtom;
 export const atom_contentEdited = atomWithStorage(
@@ -56,7 +62,7 @@ export const atom_frontMatter = atomWithStorage("frontmatter", {
   fileName: "file",
   tags: "",
 }) as FrontmatterAtom;
-
+export const atom_panelState = atomWithStorage("panelState", "both") as PanelStateAtom;
 export const atom_showTimer = atomWithStorage("showTimer", true);
 
 export const atom_searchTerm = atom("");

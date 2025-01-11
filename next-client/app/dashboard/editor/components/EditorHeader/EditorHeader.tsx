@@ -162,7 +162,7 @@ export default function EditorHeader({
   function renderOptionsMenu() {
     if (isMobile) {
       return (
-        <div className="fixed top-8 right-4 z-50">
+        <div className="fixed top-4 right-2 sm:top-8 sm:right-8 z-50">
           <Button
             variant="secondary"
             handler={() => setIsFabMenuOpen(!isFabMenuOpen)}

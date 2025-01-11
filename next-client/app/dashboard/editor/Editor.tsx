@@ -153,7 +153,7 @@ export default function Editor() {
   }
 
   return (
-    <div className="mb-8">
+    <div className="mb-8 px-2 sm:px-4">
       {isTimerVisible && <Timer settings={timerSettings} />}
       {isFileSelectModalVisible && (
         <FileSelectionModal

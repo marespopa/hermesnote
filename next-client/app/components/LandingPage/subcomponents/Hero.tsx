@@ -11,16 +11,18 @@ export default function Hero() {
   return (
     <div className="container max-w-screen-xl mx-auto">
       <section className="flex flex-wrap mt-4 sm:mt-8 md:mt-16 items-center">
-        <div className="w-full md:w-1/2 prose flex flex-col justify-center">
+        <div className="w-full mx-auto md:w-1/2 prose flex flex-col justify-center sm:px-4 xl:px-0">
           <h1 className="text-5xl mt-8 leading-tight">
             Write{" "}
             <span className="bg-emerald-600 text-white p-1">
               Freely, Securely, and Locally
             </span>
           </h1>
+
           <p className="text-xl mt-4">
-            Hermes Markdown is your go-to markdown editor for creating and
-            editing markdown files effortlessly.
+            Hermes Markdown makes working with markdown files a breeze! Whether
+            you're creating or editing, it offers a smooth and efficient
+            experience.
           </p>
           <p className="text-xl mt-4">
             Enjoy powerful features like <strong>templates</strong>,{" "}

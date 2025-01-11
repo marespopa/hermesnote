@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { SetStateAction } from "jotai";
+import { SetStateAction, useAtom } from "jotai";
 
 import Loading from "@/app/components/Loading/Loading";
 import MarkdownPreview from "../../components/MarkdownPreview";
@@ -11,6 +11,7 @@ import { SetAtom } from "../EditorTypes";
 
 import EditorTextarea from "./EditorTextarea";
 import { FaColumns, FaEye, FaPen } from "react-icons/fa";
+import { atom_panelState } from "@/app/atoms/atoms";
 
 interface Props {
   contentEdited: string;
@@ -19,7 +20,6 @@ interface Props {
   setHasChanges: (hasChanges: boolean) => void;
 }
 
-type PanelState = "both" | "editor" | "preview";
 
 export default function EditorContent({
   contentEdited,
@@ -29,7 +29,7 @@ export default function EditorContent({
 }: Props) {
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
-  const [panelState, setPanelState] = useState<PanelState>("editor");
+  const [panelState, setPanelState] = useAtom(atom_panelState);
   const markdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
