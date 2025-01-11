@@ -21,7 +21,7 @@ export default function Hero() {
 
           <p className="text-xl mt-4">
             Hermes Markdown makes working with markdown files a breeze! Whether
-            you're creating or editing, it offers a smooth and efficient
+            you&apos;re creating or editing, it offers a smooth and efficient
             experience.
           </p>
           <p className="text-xl mt-4">
