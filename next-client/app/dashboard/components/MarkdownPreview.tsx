@@ -14,7 +14,7 @@ const MarkdownPreview = ({ content }: Props) => {
   if (content?.length === 0) {
     return (
       <div>
-        <p>The file is currently empty content...</p>
+        <p>The file is currently empty...</p>
       </div>
     );
   }

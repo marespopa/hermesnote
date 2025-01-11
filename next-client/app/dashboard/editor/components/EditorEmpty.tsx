@@ -75,7 +75,7 @@ export default function EditorEmpty() {
   }
 
   return (
-    <div>
+    <div className="px-4">
       {renderHeading()}
       {!isLoading && <>{renderActions()}</>}
       {isLoading && (
@@ -359,7 +359,7 @@ export default function EditorEmpty() {
       <article className="my-16">
         <h2 className="text-2xl leading-tight">Choose Your Path:</h2>
         <h1 className="text-5xl leading-tight">
-          Editing Options in Hermes Markdown
+          Editing Options in <strong>Hermes Markdown</strong>
         </h1>
         {!isLoading && (
           <>
