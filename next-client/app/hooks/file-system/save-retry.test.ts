@@ -5,12 +5,16 @@ import * as jotai from "jotai";
 
 vi.hoisted(() => {
   if (typeof global !== 'undefined') {
-    (global as any).Worker = class {
-      addEventListener = vi.fn();
-      removeEventListener = vi.fn();
-      postMessage = vi.fn();
-      terminate = vi.fn();
-    };
+    Object.defineProperty(global, "Worker", {
+      configurable: true,
+      writable: true,
+      value: class {
+        addEventListener = vi.fn();
+        removeEventListener = vi.fn();
+        postMessage = vi.fn();
+        terminate = vi.fn();
+      },
+    });
   }
 });
 

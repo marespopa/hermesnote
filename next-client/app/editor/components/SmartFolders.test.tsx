@@ -2,26 +2,9 @@ import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import SmartFolders from "./SmartFolders";
 import "@testing-library/jest-dom";
-
-// Mock jotai's useAtom
-vi.mock("jotai", async (importOriginal) => {
-  const actual: any = await importOriginal();
-  return {
-    ...actual,
-    useAtom: vi.fn(),
-  };
-});
-
-// Mock atoms
-vi.mock("@/app/atoms/metadata", async (importOriginal) => {
-  const actual: any = await importOriginal();
-  return {
-    ...actual,
-    atom_fileMetadata: { toString: () => "atom_fileMetadata" },
-  };
-});
-
-import { useAtom } from "jotai";
+import { Provider } from "jotai";
+import { useHydrateAtoms } from "jotai/utils";
+import { atom_customWorkspaces, atom_fileMetadata } from "@/app/atoms/metadata";
 
 describe("SmartFolders Component", () => {
   const mockOnFileSelect = vi.fn();
@@ -31,29 +14,33 @@ describe("SmartFolders Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
-    (useAtom as any).mockImplementation((atom: any) => {
-      const atomStr = atom.toString();
-      if (atomStr === "atom_fileMetadata") {
-        return [mockMetadata || {}, vi.fn()];
-      }
-      if (atomStr === "atom_customWorkspaces") {
-        return [[], vi.fn()];
-      }
-      return [[], vi.fn()];
-    });
   });
 
   let mockMetadata: any = null;
 
+  function Hydrate({ children }: { children: React.ReactNode }) {
+    useHydrateAtoms([
+      [atom_fileMetadata, mockMetadata || {}],
+      [atom_customWorkspaces, []],
+    ]);
+    return children;
+  }
+
+  const renderSmartFolders = () => render(
+    <Provider>
+      <Hydrate>
+        <SmartFolders
+          onFileSelect={mockOnFileSelect}
+          renameFile={mockRenameFile}
+          deleteFile={mockDeleteFile}
+        />
+      </Hydrate>
+    </Provider>,
+  );
+
   it("renders default workspace names", () => {
     mockMetadata = {};
-    render(
-      <SmartFolders
-        onFileSelect={mockOnFileSelect}
-        renameFile={mockRenameFile}
-        deleteFile={mockDeleteFile}
-      />,
-    );
+    renderSmartFolders();
 
     expect(screen.getByText("Today's Work")).toBeInTheDocument();
   });
@@ -72,13 +59,7 @@ describe("SmartFolders Component", () => {
       },
     };
 
-    render(
-      <SmartFolders
-        onFileSelect={mockOnFileSelect}
-        renameFile={mockRenameFile}
-        deleteFile={mockDeleteFile}
-      />,
-    );
+    renderSmartFolders();
 
     // Click "Today's Work"
     const folder = screen.getByText("Today's Work");
@@ -101,13 +82,7 @@ describe("SmartFolders Component", () => {
       },
     };
 
-    render(
-      <SmartFolders
-        onFileSelect={mockOnFileSelect}
-        renameFile={mockRenameFile}
-        deleteFile={mockDeleteFile}
-      />,
-    );
+    renderSmartFolders();
 
     fireEvent.click(screen.getByText("Today's Work"));
 
@@ -136,13 +111,7 @@ describe("SmartFolders Component", () => {
       },
     };
 
-    render(
-      <SmartFolders
-        onFileSelect={mockOnFileSelect}
-        renameFile={mockRenameFile}
-        deleteFile={mockDeleteFile}
-      />,
-    );
+    renderSmartFolders();
 
     fireEvent.click(screen.getByText("Today's Work"));
 
@@ -159,13 +128,7 @@ describe("SmartFolders Component", () => {
 
   it("renders a New View affordance at the bottom of the list", () => {
     mockMetadata = {};
-    render(
-      <SmartFolders
-        onFileSelect={mockOnFileSelect}
-        renameFile={mockRenameFile}
-        deleteFile={mockDeleteFile}
-      />,
-    );
+    renderSmartFolders();
 
     expect(screen.getByText("New View")).toBeInTheDocument();
   });

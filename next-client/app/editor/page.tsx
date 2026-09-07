@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { HiChevronRight, HiOutlineViewGrid } from "react-icons/hi";
 import Button from "@/app/components/Button";
 import DialogModal from "@/app/components/DialogModal/DialogModal";
 import ConflictDialog from "./components/ConflictDialog";
@@ -20,7 +21,6 @@ import {
 } from "@/app/atoms/atoms";
 import useIsMobileChrome from "@/app/hooks/use-mobile-chrome";
 import VaultSidebar from "./components/VaultSidebar";
-import SidebarRail from "./components/SidebarRail";
 import WelcomeWizard from "./components/WelcomeWizard";
 import NewVaultDialog from "./components/NewVaultDialog";
 import WorkspaceSplitter from "./components/WorkspaceSplitter";
@@ -28,9 +28,7 @@ import PaneLeaf from "./components/PaneLeaf";
 import VaultPendingOverlay from "./components/VaultPendingOverlay";
 import LoadingOverlay from "@/app/components/LoadingOverlay";
 import EditorCommands from "./components/EditorCommands";
-import { CommandPaletteProvider } from "@/app/components/CommandPalette/CommandPaletteContext";
-import CommandPalette from "@/app/components/CommandPalette/CommandPalette";
-import KeyboardShortcutsOverlay from "@/app/components/KeyboardShortcutsOverlay/KeyboardShortcutsOverlay";
+import { useCommandPalette } from "@/app/components/CommandPalette/CommandPaletteContext";
 import MobileFileOverlay from "./components/MobileFileOverlay";
 import MobileTasksOverlay from "./components/MobileTasksOverlay";
 import MobileFileIndicator from "./components/MobileFileIndicator";
@@ -42,7 +40,6 @@ import { useVaultSync } from "@/app/hooks/use-vault-sync";
 import { useAutoSave } from "@/app/hooks/use-auto-save";
 import { useDialog } from "@/app/hooks/use-dialog";
 import toast from "react-hot-toast";
-import { showErrorToast } from "@/app/components/Toastr";
 import RepurposeNoteWizard from "./components/RepurposeNoteWizard";
 import MermaidDialog from "./components/MermaidDialog";
 import ImageDialog from "./components/ImageDialog";
@@ -51,12 +48,45 @@ import AIChatDialog from "./components/AIChatDialog";
 import { AIReviewDialog } from "./components/AIReviewDialog";
 import { AISelectionToolbar } from "./components/AISelectionToolbar";
 import { AIThinkingOverlay } from "./components/AIThinkingOverlay";
+import VoicePreviewPanel from "./components/VoicePreviewPanel";
+import { useGlobalVoiceInput } from "./hooks/use-global-voice-input";
 
 
 import { useRouter } from "next/navigation";
-import { atom_isAiConfigured, atom_aiBuilderRequest, atom_railPanel, atom_showHiddenFiles, RailPanel, atom_activeEditorView, atom_isSidebarResizing, atom_keyboardShortcutsOpen, atom_vimMode } from "@/app/atoms/ui-atoms";
+import { atom_isAiConfigured, atom_aiBuilderRequest, atom_railPanel, atom_lastSidebarPanel, atom_sidebarExpandedByDefault, atom_showHiddenFiles, RailPanel, atom_isSidebarResizing, atom_vimMode } from "@/app/atoms/ui-atoms";
 import { generateFileFromPrompt } from "@/app/services/ai";
 import { withRetry } from "@/app/hooks/file-system/shared";
+import { formatShortcut } from "@/app/utils/platform";
+
+function CollapsedSidebarControls({ onShowSidebar }: { onShowSidebar: () => void }) {
+  const { open: openCommandPalette } = useCommandPalette();
+
+  return (
+    <div className="w-16 shrink-0 flex flex-col items-center gap-2 pt-4 text-ink-muted dark:text-stone border-r border-edge-subtle">
+      <button
+        type="button"
+        onClick={onShowSidebar}
+        title="Show sidebar"
+        aria-label="Show sidebar"
+        className="w-7 flex flex-col items-center gap-0.5 hover:text-ink-light dark:hover:text-ink-dark transition-colors"
+      >
+        <HiChevronRight size={17} />
+        <span className="text-[9px] leading-none">{formatShortcut("E", { shift: true })}</span>
+      </button>
+      <span aria-hidden="true" className="w-8 border-t border-edge-subtle" />
+      <button
+        type="button"
+        onClick={openCommandPalette}
+        title="Command palette"
+        aria-label="Command palette"
+        className="w-7 flex flex-col items-center gap-0.5 hover:text-ink-light dark:hover:text-ink-dark transition-colors"
+      >
+        <HiOutlineViewGrid size={17} />
+        <span className="text-[9px] leading-none">{formatShortcut("K")}</span>
+      </button>
+    </div>
+  );
+}
 
 export default function LiteEditor() {
   const router = useRouter();
@@ -73,21 +103,25 @@ export default function LiteEditor() {
   // any split tree a desktop session may have saved.
   const mobileLeaf = findLeaf(workspaceLayout.rootContainer, activePaneId) ?? getFirstLeaf(workspaceLayout.rootContainer);
   const [railPanel, setRailPanel] = useAtom(atom_railPanel);
-  const [, setKeyboardShortcutsOpen] = useAtom(atom_keyboardShortcutsOpen);
+  const lastSidebarPanel = useAtomValue(atom_lastSidebarPanel);
+  const sidebarExpandedByDefault = useAtomValue(atom_sidebarExpandedByDefault);
   const sidebarWidth = useAtomValue(atom_sidebarWidth);
   const isSidebarResizing = useAtomValue(atom_isSidebarResizing);
   // Kept mounted while collapsing/expanding so the wrapper's width transition
   // (below) can animate smoothly instead of the panel popping in/out on unmount.
   const [lastPanel, setLastPanel] = useState<RailPanel>(railPanel ?? "files");
+  const hasInitializedSidebarDefault = useRef(false);
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      if (hasInitializedSidebarDefault.current) return;
+      setRailPanel(sidebarExpandedByDefault ? lastSidebarPanel : null);
+      hasInitializedSidebarDefault.current = true;
+    }, 0);
+    return () => window.clearTimeout(timeoutId);
+  }, [lastSidebarPanel, setRailPanel, sidebarExpandedByDefault]);
   useEffect(() => {
     if (railPanel !== null) setLastPanel(railPanel);
   }, [railPanel]);
-  // Rail icon click: open/switch to that panel, or collapse if it's already
-  // the one showing. The rail itself is always visible, so there's no
-  // separate "reveal" step — a click just toggles the detail panel beside it.
-  const handleSelectPanel = useCallback((id: RailPanel) => {
-    setRailPanel((prev) => (prev === id ? null : id));
-  }, [setRailPanel]);
   const isFileLoading = useAtomValue(atom_isFileLoading);
   const isAiConfigured = useAtomValue(atom_isAiConfigured);
   const vimMode = useAtomValue(atom_vimMode);
@@ -95,11 +129,20 @@ export default function LiteEditor() {
   // Single dictation session shared by the whole app (not one per pane), so
   // switching the active pane mid-dictation never drops the in-progress
   // preview — "Insert" lands wherever the active pane currently is.
-  const activeEditorView = useAtomValue(atom_activeEditorView);
   // Single AI-chat/actions session shared by the whole app (not one per
   // pane) — targets whichever CM6 view is currently active, same convention
   // as useGlobalVoiceInput.
   const aiActions = useAIEditorActions();
+  const {
+    isVoiceSupported,
+    isVoiceListening,
+    toggleVoiceListening,
+    voicePreviewText,
+    setVoicePreviewText,
+    voiceInterimText,
+    commitVoicePreview,
+    discardVoicePreview,
+  } = useGlobalVoiceInput();
   const isMobileChrome = useIsMobileChrome();
   const [isMobileFileOverlayOpen, setIsMobileFileOverlayOpen] = useState(false);
   const [isMobileTasksOverlayOpen, setIsMobileTasksOverlayOpen] = useState(false);
@@ -243,6 +286,12 @@ export default function LiteEditor() {
         setRailPanel(null);
       }
 
+      // Toggle the sidebar navigator (Ctrl+/ or Cmd+/).
+      if ((e.ctrlKey || e.metaKey) && e.key === "/") {
+        e.preventDefault();
+        setRailPanel((prev) => (prev !== null ? null : lastPanel));
+      }
+
       // Expand/collapse sidebar
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "e") {
         e.preventDefault();
@@ -254,6 +303,13 @@ export default function LiteEditor() {
         if (isAiConfigured) {
           e.preventDefault();
           setAiBuilderRequest((v) => v + 1);
+        }
+      }
+
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "v") {
+        if (isVoiceSupported) {
+          e.preventDefault();
+          toggleVoiceListening();
         }
       }
 
@@ -271,7 +327,7 @@ export default function LiteEditor() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [flush, railPanel, setRailPanel, lastPanel, isAiConfigured, setAiBuilderRequest, vimMode]);
+  }, [flush, railPanel, setRailPanel, lastPanel, isAiConfigured, setAiBuilderRequest, vimMode, isVoiceSupported, toggleVoiceListening]);
 
   const handleNewFile = () => {
     if (!vaultHandle) {
@@ -405,7 +461,6 @@ export default function LiteEditor() {
 
   return (
     <ErrorBoundary>
-      <CommandPaletteProvider>
       <EditorCommands
         onNewFile={handleNewFile}
         onExport={handleExport}
@@ -416,9 +471,16 @@ export default function LiteEditor() {
         onHome={() => navigateWithGuard("/", "Home")}
         onOpenDocumentation={() => navigateWithGuard("/documentation", "Documentation")}
         onRefreshVault={handleRefreshVault}
+        onImport={handleImport}
+        onNewAIFile={handleNewAIFile}
+        onRunAIAction={aiActions.runAIActionById}
+        isVoiceSupported={isVoiceSupported}
+        isVoiceListening={isVoiceListening}
+        onToggleVoice={toggleVoiceListening}
+        onCommitVoice={commitVoicePreview}
+        onDiscardVoice={discardVoicePreview}
+        hasVoicePreview={voicePreviewText.length > 0 || voiceInterimText !== null}
       />
-      <CommandPalette />
-      <KeyboardShortcutsOverlay />
       <LoadingOverlay isVisible={isMounting || isFileLoading || !!navigatingLabel} text={isFileLoading ? "Loading file..." : navigatingLabel ? `${navigatingLabel}...` : "Loading..."} />
       <div className={`fixed inset-0 flex flex-col bg-surface text-fg selection:bg-sage-light/30 font-sans overflow-hidden overscroll-none transition-all duration-500 ${isVaultPending ? "blur-md pointer-events-none select-none" : ""}`}>
         <h1 className="sr-only">HermesMarkdown Editor</h1>
@@ -448,39 +510,11 @@ export default function LiteEditor() {
         {/* --- MAIN LAYOUT --- */}
         <div className="flex flex-1 min-h-0 overflow-hidden relative">
 
-        {/* Icon rail (SidebarRail) stays out of the way on desktop until a
-            panel is open or the edge is hovered — a thin 8px grip peeks out
-            and the full rail slides in over the content. Once a panel is
-            open the rail takes its normal place in the layout so it doesn't
-            vanish mid-use. Also reachable via the command palette and
-            Ctrl+Shift+E. Mobile uses MobileFileOverlay/MobileTasksOverlay
-            instead. */}
+        {/* The navigator is a plain, persistent column. Ctrl+/ toggles it. */}
         {!isMobileChrome && (
-          <div className="flex shrink-0 h-full items-center">
-            {railPanel !== null ? (
-              <SidebarRail
-                panel={railPanel}
-                onSelectPanel={handleSelectPanel}
-                onSettings={() => navigateWithGuard("/editor/settings", "Settings")}
-                onRefreshVault={handleRefreshVault}
-                onOpenAIChat={isAiConfigured ? openAiChat : undefined}
-                onOpenDocumentation={() => navigateWithGuard("/documentation", "Documentation")}
-                onOpenKeyboardShortcuts={() => setKeyboardShortcutsOpen(true)}
-              />
-            ) : (
-              <div className="group/railzone relative h-full w-2 shrink-0">
-                <div className="absolute left-0 top-0 h-full w-14 -translate-x-[calc(100%-0.5rem)] group-hover/railzone:translate-x-0 transition-transform duration-200 ease-in-out z-30">
-                  <SidebarRail
-                    panel={railPanel}
-                    onSelectPanel={handleSelectPanel}
-                    onSettings={() => navigateWithGuard("/editor/settings", "Settings")}
-                    onRefreshVault={handleRefreshVault}
-                    onOpenAIChat={isAiConfigured ? openAiChat : undefined}
-                    onOpenDocumentation={() => navigateWithGuard("/documentation", "Documentation")}
-                    onOpenKeyboardShortcuts={() => setKeyboardShortcutsOpen(true)}
-                  />
-                </div>
-              </div>
+          <div className="flex shrink-0 h-full">
+            {railPanel === null && (
+              <CollapsedSidebarControls onShowSidebar={() => setRailPanel(lastPanel)} />
             )}
             <div
               className={`h-full overflow-hidden shrink-0 ${isSidebarResizing ? "" : "transition-[width] duration-300 ease-in-out"}`}
@@ -500,6 +534,8 @@ export default function LiteEditor() {
                   onNewAIFile={isAiConfigured ? handleNewAIFile : undefined}
                   onImport={handleImport}
                   onExport={handleExport}
+                  onSettings={() => navigateWithGuard("/editor/settings", "Settings")}
+                  onDocumentation={() => navigateWithGuard("/documentation", "Documentation")}
                   onClose={() => setRailPanel(null)}
                 />
               </div>
@@ -558,6 +594,17 @@ export default function LiteEditor() {
           onInsertBelow={aiActions.applyInsertBelow}
         />
         {aiActions.isAiLoading && <AIThinkingOverlay />}
+        <VoicePreviewPanel
+          isListening={isVoiceListening}
+          previewText={voicePreviewText}
+          onPreviewTextChange={setVoicePreviewText}
+          interimText={voiceInterimText}
+          onCommit={commitVoicePreview}
+          onDiscard={() => {
+            discardVoicePreview();
+            if (isVoiceListening) toggleVoiceListening();
+          }}
+        />
 
         {isMobileChrome && (
           <>
@@ -575,7 +622,6 @@ export default function LiteEditor() {
           </>
         )}
       </div>
-      </CommandPaletteProvider>
     </ErrorBoundary>
   );
 }

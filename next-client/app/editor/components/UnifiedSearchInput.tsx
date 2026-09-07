@@ -158,7 +158,7 @@ export default function UnifiedSearchInput({
           "rounded-xl",
           "bg-paper-light dark:bg-paper-dark",
           "border border-edge",
-          "focus-within:ring-2 focus-within:ring-sage/20",
+          "focus-within:ring-2 focus-within:ring-inset focus-within:ring-sage/20",
           "transition-all duration-150",
         ].join(" ")}
       >

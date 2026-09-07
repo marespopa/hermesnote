@@ -1,45 +1,41 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useAtom } from "jotai";
 import { HiOutlineX } from "react-icons/hi";
 import OverlayPanel from "@/app/components/OverlayLayer/OverlayPanel";
 import { atom_keyboardShortcutsOpen } from "@/app/atoms/ui-atoms";
 import { formatShortcut, isMacPlatform } from "@/app/utils/platform";
 import useIsMobileChrome from "@/app/hooks/use-mobile-chrome";
+import { useCommandPalette, type Command } from "@/app/components/CommandPalette/CommandPaletteContext";
 
 type ShortcutGroup = {
   title: string;
   shortcuts: { label: string; keys: string }[];
 };
 
-// Static reference list — deliberately not derived from the command palette
-// registry (app/components/CommandPalette/CommandPaletteContext.tsx), since
-// most global bindings (page.tsx's keydown handler, CodeMirror's
-// formatKeymap/historyKeymap, the table keymap) aren't Command entries and
-// only a handful of Commands set `shortcut` at all. Keep this in sync by
-// hand when bindings change.
-function getShortcutGroups(): ShortcutGroup[] {
+function commandShortcuts(commands: Command[], ids: string[]) {
+  return ids.flatMap((id) => {
+    const command = commands.find((candidate) => candidate.id === id);
+    return command?.shortcut ? [{ label: command.label.replace(/^Format: /, ""), keys: command.shortcut }] : [];
+  });
+}
+
+function getShortcutGroups(commands: Command[]): ShortcutGroup[] {
   const mac = isMacPlatform();
   return [
     {
       title: "General",
       shortcuts: [
-        { label: "Command palette", keys: formatShortcut("P", { shift: true }) },
-        { label: "Save", keys: formatShortcut("S") },
-        { label: "Toggle sidebar", keys: formatShortcut("E", { shift: true }) },
-        { label: "Open AI chat", keys: formatShortcut("B", { shift: true }) },
-        { label: "Toggle voice input", keys: formatShortcut("V", { shift: true }) },
+        { label: "Command palette", keys: `${formatShortcut("K")} / ${formatShortcut("P", { shift: true })}` },
+        ...commandShortcuts(commands, ["save-file", "toggle-sidebar", "ai-builder", "toggle-voice-input"]),
         { label: "Close dialog / collapse sidebar", keys: "Esc" },
       ],
     },
     {
       title: "Formatting",
       shortcuts: [
-        { label: "Bold", keys: formatShortcut("B") },
-        { label: "Italic", keys: formatShortcut("I") },
-        { label: "Strikethrough", keys: formatShortcut("X", { shift: true }) },
-        { label: "Inline code", keys: formatShortcut("E") },
+        ...commandShortcuts(commands, ["format-bold", "format-italic", "format-strikethrough", "format-inline-code"]),
         { label: "Undo", keys: formatShortcut("Z") },
         { label: "Redo", keys: mac ? "⌘⇧Z" : "Ctrl+Y" },
       ],
@@ -57,8 +53,9 @@ function getShortcutGroups(): ShortcutGroup[] {
 
 export default function KeyboardShortcutsOverlay() {
   const [isOpen, setIsOpen] = useAtom(atom_keyboardShortcutsOpen);
+  const { commands } = useCommandPalette();
   const isMobileChrome = useIsMobileChrome();
-  const groups = getShortcutGroups();
+  const groups = useMemo(() => getShortcutGroups(commands), [commands]);
   const [activeTab, setActiveTab] = useState(groups[0].title);
 
   useEffect(() => {

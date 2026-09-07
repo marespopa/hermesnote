@@ -1,24 +1,15 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
-import toast from "react-hot-toast";
+import { useState, useCallback } from "react";
 import { useFileSystem } from "@/app/hooks/use-file-system";
 import { useDialog } from "@/app/hooks/use-dialog";
 import {
-  HiOutlineCloud,
-  HiOutlineDocumentAdd,
-  HiOutlineEye,
-  HiOutlineEyeOff,
-  HiChevronLeft,
-} from "react-icons/hi";
-import {
   atom_activeFilePath,
   atom_activePaneId,
-  atom_sidebarWidth,
   atom_isCloudVault,
   atom_splitPane,
 } from "@/app/atoms/atoms";
-import { atom_railPanel, atom_newVaultFlowOpen, atom_pendingScrollTarget, atom_showHiddenFiles, atom_isSidebarResizing, atom_userName, RailPanel } from "@/app/atoms/ui-atoms";
+import { atom_railPanel, atom_lastSidebarPanel, atom_newVaultFlowOpen, atom_pendingScrollTarget, atom_selectedFileTags, atom_userName, RailPanel } from "@/app/atoms/ui-atoms";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import SmartFolders from "./SmartFolders";
 import VaultSidebarTasks from "./VaultSidebarTasks";
@@ -28,18 +19,21 @@ import { useSidebarSearch } from "../hooks/useSidebarSearch";
 import VaultSidebarEmpty from "./VaultSidebarEmpty";
 import VaultSidebarFiles from "./VaultSidebarFiles";
 import UnifiedSearchInput from "./UnifiedSearchInput";
+import VaultSidebarHeader from "./VaultSidebarHeader";
+import VaultSidebarNavigator from "./VaultSidebarNavigator";
+import { useSidebarResize } from "../hooks/useSidebarResize";
 
 // The rail (SidebarRail.tsx) is always visible at a fixed width, so this
 // panel's own floor is just whatever its content needs — the search input
 // with tag tokens and file-tree rows with hover actions are the narrowest
 // things it has to fit, not a footer icon row (that lives in the rail now).
-const MIN_SIDEBAR_WIDTH = 200;
-
 interface VaultSidebarProps {
   panel: RailPanel;
   onClose?: () => void;
   onNewFile?: () => void;
   onNewAIFile?: () => void;
+  onSettings?: () => void;
+  onDocumentation?: () => void;
   onImport?: () => void;
   onExport?: () => void;
 }
@@ -48,7 +42,8 @@ export default function VaultSidebar({
   panel,
   onClose,
   onNewFile,
-  onNewAIFile,
+  onSettings,
+  onDocumentation,
   onImport,
   onExport,
 }: VaultSidebarProps) {
@@ -64,24 +59,11 @@ export default function VaultSidebar({
     openVault,
     isVaultSupported,
     scanVault,
-    indexVaultTags,
   } = useFileSystem();
 
   const dialog = useDialog();
   const setNewVaultFlowOpen = useSetAtom(atom_newVaultFlowOpen);
   const setPendingScrollTarget = useSetAtom(atom_pendingScrollTarget);
-  const [showHiddenFiles, setShowHiddenFiles] = useAtom(atom_showHiddenFiles);
-
-  // Settings has the full description of what this reveals; here it's a quick
-  // toggle so hiding system/skill files never requires leaving the sidebar.
-  const handleToggleHiddenFiles = useCallback(() => {
-    const next = !showHiddenFiles;
-    setShowHiddenFiles(next);
-    if (!vaultHandle) return;
-    scanVault(vaultHandle as any, next);
-    indexVaultTags?.(vaultHandle as any, next);
-  }, [showHiddenFiles, setShowHiddenFiles, vaultHandle, scanVault, indexVaultTags]);
-
   // Resolves a directory handle for an arbitrary nested path (e.g. "a/b/c").
   // Tree nodes only carry path strings (built from the flat indexed file list),
   // so folder actions (rename/delete/new file/move) need this to get a real handle.
@@ -102,13 +84,13 @@ export default function VaultSidebar({
   const [activeFilePath, setActiveFilePath] = useAtom(atom_activeFilePath);
   const activePaneId = useAtomValue(atom_activePaneId);
   const [, splitPane] = useAtom(atom_splitPane);
-  const [sidebarWidth, setSidebarWidth] = useAtom(atom_sidebarWidth);
   const isCloudVault = useAtomValue(atom_isCloudVault);
   const userName = useAtomValue(atom_userName);
   const setRailPanel = useSetAtom(atom_railPanel);
-  const [isResizing, setIsResizing] = useAtom(atom_isSidebarResizing);
+  const setLastSidebarPanel = useSetAtom(atom_lastSidebarPanel);
+  const { sidebarWidth, isResizing, startResizing } = useSidebarResize();
 
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useAtom(atom_selectedFileTags);
   const [isTasksExpanded, setIsTasksExpanded] = useState(false);
 
   const {
@@ -132,43 +114,6 @@ export default function VaultSidebar({
     onClose?.();
   }, [activePaneId, onClose, openFile, splitPane]);
 
-  // Resize logic
-  const startResizing = React.useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsResizing(true);
-  }, []);
-
-  const stopResizing = React.useCallback(() => {
-    setIsResizing(false);
-  }, []);
-
-  const resize = React.useCallback((e: MouseEvent) => {
-    if (isResizing) {
-      const newWidth = Math.max(MIN_SIDEBAR_WIDTH, Math.min(600, e.clientX));
-      setSidebarWidth(newWidth);
-    }
-  }, [isResizing, setSidebarWidth]);
-
-  React.useEffect(() => {
-    window.addEventListener('mousemove', resize);
-    window.addEventListener('mouseup', stopResizing);
-    return () => {
-      window.removeEventListener('mousemove', resize);
-      window.removeEventListener('mouseup', stopResizing);
-    };
-  }, [resize, stopResizing]);
-
-  // Persisted widths saved before MIN_SIDEBAR_WIDTH existed (or otherwise
-  // corrupted) can be narrower than the content needs, clipping the search
-  // input or file-tree row actions. Self-heal once on mount rather than
-  // trusting the stored value forever.
-  React.useEffect(() => {
-    if (sidebarWidth < MIN_SIDEBAR_WIDTH) {
-      setSidebarWidth(MIN_SIDEBAR_WIDTH);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   if (!isMounted) return null;
 
   return (
@@ -186,60 +131,15 @@ export default function VaultSidebar({
         `}
       />
 
-      {/* Header */}
-      <div className="p-3 flex flex-col gap-2 shrink-0">
-        {panel === "files" && userName && (
-          <p className="text-ui-footnote text-ink-muted dark:text-stone truncate">
-            Welcome back, {userName}!
-          </p>
-        )}
-        <div className="flex justify-between items-center gap-2 h-11 md:h-8">
-          <div className="flex items-center gap-2 min-w-0">
-            <h2 className="text-ui-body md:text-ui-subhead font-medium text-ink-light dark:text-ink-dark opacity-80 md:opacity-60 hover:opacity-100 transition-opacity flex items-center gap-1.5 min-w-0">
-              <span className="truncate">{vaultHandle?.name || "Notes"}</span>
-              {isCloudVault && vaultHandle && (
-                <span title="Cloud sync detected. HermesMarkdown will use enhanced error recovery if files are locked." className="shrink-0 text-sage/60 dark:text-sage/60 cursor-help">
-                  <HiOutlineCloud size={14} />
-                </span>
-              )}
-            </h2>
-          </div>
-          <button
-            type="button"
-            onClick={() => setRailPanel(null)}
-            title="Collapse sidebar"
-            aria-label="Collapse sidebar"
-            className="shrink-0 flex items-center justify-center w-6 h-6 rounded text-ink-muted hover:text-ink-light dark:text-stone dark:hover:text-ink-dark hover:bg-paper-softgray dark:hover:bg-paper-dark-surface transition-colors"
-          >
-            <HiChevronLeft size={16} />
-          </button>
-        </div>
-
-        {vaultHandle && panel === "files" && (
-          <div className="-mx-3 px-1 flex items-stretch border-t border-b border-edge-subtle">
-            <button
-              type="button"
-              onClick={onNewFile}
-              title="New file"
-              aria-label="New file"
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 text-ink-muted hover:text-ink-light dark:text-stone dark:hover:text-ink-dark hover:bg-paper-softgray dark:hover:bg-paper-dark-surface transition-colors"
-            >
-              <HiOutlineDocumentAdd size={15} />
-              <span className="text-ui-footnote leading-none">New file</span>
-            </button>
-            <button
-              type="button"
-              onClick={handleToggleHiddenFiles}
-              title="Show hidden files"
-              aria-label="Show hidden files"
-              aria-pressed={showHiddenFiles}
-              className="shrink-0 w-9 flex items-center justify-center text-ink-muted hover:text-ink-light dark:text-stone dark:hover:text-ink-dark hover:bg-paper-softgray dark:hover:bg-paper-dark-surface transition-colors"
-            >
-              {showHiddenFiles ? <HiOutlineEye size={15} /> : <HiOutlineEyeOff size={15} />}
-            </button>
-          </div>
-        )}
-      </div>
+      <VaultSidebarHeader
+        vaultName={vaultHandle?.name}
+        userName={userName}
+        isCloudVault={isCloudVault}
+        hasVault={Boolean(vaultHandle)}
+        onSettings={onSettings}
+        onDocumentation={onDocumentation}
+        onCollapse={() => setRailPanel(null)}
+      />
 
       <div className="flex-1 flex flex-col overflow-hidden min-h-0">
         {!vaultHandle ? (
@@ -255,7 +155,42 @@ export default function VaultSidebar({
               onClose={onClose}
             />
           </div>
-        ) : panel === "tags" ? (
+        ) : (
+          <VaultSidebarNavigator
+            panel={panel}
+            onSelectPanel={(nextPanel) => {
+              setLastSidebarPanel(nextPanel);
+              setRailPanel(nextPanel);
+            }}
+            onNewFile={onNewFile}
+            onNewFolder={async () => {
+              if (!vaultHandle) return;
+              const folderName = await dialog.prompt("Enter folder name:", "", "New Folder");
+              if (!folderName) return;
+              await vaultHandle.getDirectoryHandle(folderName, { create: true });
+              await scanVault(vaultHandle);
+            }}
+            search={
+              <UnifiedSearchInput
+                autoFocus={panel === "search"}
+                tokens={selectedTags}
+                text={searchQuery}
+                allTags={tags}
+                onTokenAdd={(tag) => {
+                  setSelectedTags((prev) => (prev.includes(tag) ? prev : [...prev, tag]));
+                  setLastSidebarPanel("search");
+                  setRailPanel("search");
+                }}
+                onTokenRemove={(tag) => setSelectedTags((prev) => prev.filter((t) => t !== tag))}
+                onTextChange={(text) => {
+                  setSearchQuery(text);
+                  setLastSidebarPanel("search");
+                  setRailPanel("search");
+                }}
+              />
+            }
+          >
+            {panel === "tags" ? (
           <VaultSidebarTags
             tags={tags}
             tagCounts={tagCounts}
@@ -291,20 +226,6 @@ export default function VaultSidebar({
           </div>
         ) : (
           <div className="flex flex-col h-full overflow-hidden">
-            {panel === "search" && (
-              <div className="px-3 pt-3 pb-2 shrink-0">
-                <UnifiedSearchInput
-                  autoFocus
-                  tokens={selectedTags}
-                  text={searchQuery}
-                  allTags={tags}
-                  onTokenAdd={(tag) => setSelectedTags(prev => prev.includes(tag) ? prev : [...prev, tag])}
-                  onTokenRemove={(tag) => setSelectedTags(prev => prev.filter(t => t !== tag))}
-                  onTextChange={setSearchQuery}
-                />
-              </div>
-            )}
-
             <div className="flex-1 overflow-hidden flex flex-col">
               <VaultSidebarFiles
                 processedFiles={panel === "search" ? processedFiles : allFiles}
@@ -333,6 +254,8 @@ export default function VaultSidebar({
               )}
             </div>
           </div>
+            )}
+            </VaultSidebarNavigator>
         )}
       </div>
       </div>

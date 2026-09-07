@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import type { EditorView } from "@codemirror/view";
-import type { Compartment, EditorState } from "@codemirror/state";
+import type { Compartment } from "@codemirror/state";
 import { getCM, Vim, vim } from "@replit/codemirror-vim";
 import type { SlashMenuCallbacks } from "../codemirror/slash-menu";
 import type { WikiLinkTriggerCallback } from "../codemirror/wikilink-trigger";
@@ -68,7 +68,7 @@ export function useCodeMirrorEditor({
     let handleVimEscape: ((event: KeyboardEvent) => void) | null = null;
 
     (async () => {
-      const [{ EditorState, Compartment }, { EditorView: CMView, lineNumbers: cmLineNumbers }, extensionsModule] = await Promise.all([
+      const [{ EditorState, Compartment }, { EditorView: CMView }, extensionsModule] = await Promise.all([
         import("@codemirror/state"),
         import("@codemirror/view"),
         import("../codemirror/extensions"),

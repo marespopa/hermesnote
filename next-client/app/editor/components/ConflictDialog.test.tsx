@@ -57,9 +57,11 @@ describe("ConflictDialog Component", () => {
       callIdx++;
       if (callIdx === 1) return [mockActiveFileHandle];
       if (callIdx === 2) return [{ remoteContent: "remote content" }, setConflict];
-      if (callIdx === 3) return ["local content", setContent];
-      if (callIdx === 4) return ["original content", setLastSavedContent];
-      if (callIdx === 5) return [100000000, setFileLastModified];
+      if (callIdx === 3) return [{}, vi.fn()];
+      if (callIdx === 4) return ["test.md", vi.fn()];
+      if (callIdx === 5) return ["local content", setContent];
+      if (callIdx === 6) return ["original content", setLastSavedContent];
+      if (callIdx === 7) return [100000000, setFileLastModified];
       return [null, vi.fn()];
     });
 
@@ -75,6 +77,8 @@ describe("ConflictDialog Component", () => {
       callIdx++;
       if (callIdx === 1) return [mockActiveFileHandle];
       if (callIdx === 2) return [null, setConflict];
+      if (callIdx === 3) return [{}, vi.fn()];
+      if (callIdx === 4) return ["test.md", vi.fn()];
       return [null, vi.fn()];
     });
 
@@ -88,9 +92,11 @@ describe("ConflictDialog Component", () => {
       callIdx++;
       if (callIdx === 1) return [mockActiveFileHandle];
       if (callIdx === 2) return [{ remoteContent: "remote content" }, setConflict];
-      if (callIdx === 3) return ["local content", setContent];
-      if (callIdx === 4) return ["original content", setLastSavedContent];
-      if (callIdx === 5) return [100000000, setFileLastModified];
+      if (callIdx === 3) return [{}, vi.fn()];
+      if (callIdx === 4) return ["test.md", vi.fn()];
+      if (callIdx === 5) return ["local content", setContent];
+      if (callIdx === 6) return ["original content", setLastSavedContent];
+      if (callIdx === 7) return [100000000, setFileLastModified];
       return [null, vi.fn()];
     });
 
@@ -113,9 +119,11 @@ describe("ConflictDialog Component", () => {
       callIdx++;
       if (callIdx === 1) return [mockActiveFileHandle];
       if (callIdx === 2) return [{ remoteContent: "remote content" }, setConflict];
-      if (callIdx === 3) return ["local content", setContent];
-      if (callIdx === 4) return ["original content", setLastSavedContent];
-      if (callIdx === 5) return [100000000, setFileLastModified];
+      if (callIdx === 3) return [{}, vi.fn()];
+      if (callIdx === 4) return ["test.md", vi.fn()];
+      if (callIdx === 5) return ["local content", setContent];
+      if (callIdx === 6) return ["original content", setLastSavedContent];
+      if (callIdx === 7) return [100000000, setFileLastModified];
       return [null, vi.fn()];
     });
 

@@ -66,7 +66,7 @@ const DEFAULT_TABLE =
   `|          |          |          |\n` +
   `|          |          |          |`;
 
-function applyTemplate(
+export function applyTemplate(
   view: EditorView,
   from: number,
   to: number,

@@ -1,7 +1,11 @@
 // app/utils/metadataExtractor.ts
 
 const REGEX_TAG = /(?<=^|\s)#(?=[a-zA-Z0-9_\-/]*[a-zA-Z])([a-zA-Z0-9_\-/]+)/g;
-const REGEX_FRONTMATTER = /^---\n([\s\S]*?)\n---/;
+const REGEX_FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---/;
+
+function normalizeTag(tag: string): string {
+  return tag.trim().replace(/^["']|["']$/g, "").replace(/^#/, "").toLowerCase();
+}
 
 export interface ExtractedMetadata {
   tags: string[];
@@ -15,7 +19,7 @@ function parseFrontmatterTags(fmContent: string): string[] {
   if (inlineMatch) {
     return inlineMatch[1]
       .split(",")
-      .map((t) => t.trim().toLowerCase())
+      .map(normalizeTag)
       .filter(Boolean);
   }
 
@@ -23,14 +27,14 @@ function parseFrontmatterTags(fmContent: string): string[] {
   // tags:
   //   - tag1
   //   - tag2
-  const lines = fmContent.split("\n");
+  const lines = fmContent.split(/\r?\n/);
   const tagsLineIdx = lines.findIndex((l) => /^tags:\s*$/.test(l));
   if (tagsLineIdx !== -1) {
     const result: string[] = [];
     for (let i = tagsLineIdx + 1; i < lines.length; i++) {
       const listMatch = lines[i].match(/^\s*-\s+(.+)/);
       if (listMatch) {
-        result.push(listMatch[1].trim().toLowerCase());
+        result.push(normalizeTag(listMatch[1]));
       } else {
         break;
       }
@@ -50,7 +54,7 @@ export const extractMetadata = (content: string): ExtractedMetadata => {
     const fmContent = fmMatch[1];
     fmTags = parseFrontmatterTags(fmContent);
 
-    const lines = fmContent.split("\n");
+    const lines = fmContent.split(/\r?\n/);
     let skipUntilNextKey = false;
     for (const line of lines) {
       // Skip YAML list items — they're handled by parseFrontmatterTags

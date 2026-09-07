@@ -7,6 +7,11 @@ import CustomProviders from "./CustomProviders";
 import Footer from "./Footer/Footer.component";
 import Header from "./Header";
 import { usePathname } from "next/navigation";
+import CommandPalette from "./CommandPalette/CommandPalette";
+import { CommandPaletteProvider } from "./CommandPalette/CommandPaletteContext";
+import AppCommands from "./CommandPalette/AppCommands";
+import KeyboardShortcutsOverlay from "./KeyboardShortcutsOverlay/KeyboardShortcutsOverlay";
+import SettingsCommands from "../editor/settings/components/SettingsCommands";
 
 const GlobalDialog = dynamic(() => import("./DialogModal/GlobalDialog"));
 
@@ -24,6 +29,11 @@ const MainPage = ({ children }: Props) => {
 
   return (
     <CustomProviders>
+      <CommandPaletteProvider>
+      <AppCommands />
+      <SettingsCommands />
+      <CommandPalette />
+      <KeyboardShortcutsOverlay />
       <Toaster
         position="top-center"
         reverseOrder={false}
@@ -39,7 +49,7 @@ const MainPage = ({ children }: Props) => {
         </main>
         
         {showFooter && <Footer />}
-        {isEditor && <GlobalDialog />}
+        <GlobalDialog />
       </div>
       {process.env.NODE_ENV === "production" && (
         <Script
@@ -49,6 +59,7 @@ const MainPage = ({ children }: Props) => {
           src="https://liteanalytics.com/lite.js"
         ></Script>
       )}
+      </CommandPaletteProvider>
     </CustomProviders>
   );
 };

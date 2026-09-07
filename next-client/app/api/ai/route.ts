@@ -6,8 +6,8 @@ import { NextResponse } from 'next/server';
 
 const sanitizeMessage = (message: string): string => {
   const stripped = message.replace(/^Failed after \d+ attempts?\. Last error:\s*/i, "");
-  return stripped.replace(/((?:sk|ghp|github_pat|xox[baprs]-|AIza)[A-Za-z0-9_\-]{12,})/g, "[REDACTED]")
-    .replace(/(Bearer\s+)[A-Za-z0-9._\-]+/gi, "$1[REDACTED]")
+  return stripped.replace(/((?:sk|ghp|github_pat|xox[baprs]-|AIza)[A-Za-z0-9_-]{12,})/g, "[REDACTED]")
+    .replace(/(Bearer\s+)[A-Za-z0-9._-]+/gi, "$1[REDACTED]")
     .replace(/(api[_-]?key\s*[:=]\s*)([^\s,;]+)/gi, "$1[REDACTED]")
     .replace(/([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})/g, "[REDACTED_EMAIL]");
 };

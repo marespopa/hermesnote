@@ -33,6 +33,14 @@ describe("metadataExtractor", () => {
     expect(meta.frontmatter.status).toBe("active");
   });
 
+  it("extracts normalized frontmatter tags from CRLF notes", () => {
+    const content = "---\r\ntags:\r\n  - Planning\r\n  - \"#Urgent\"\r\n---\r\nBody";
+    const meta = extractMetadata(content);
+
+    expect(meta.tags).toEqual(["planning", "urgent"]);
+    expect(meta.frontmatter.tags).toBe("");
+  });
+
   it("should count words", () => {
     const content = "One two three four.";
     const meta = extractMetadata(content);

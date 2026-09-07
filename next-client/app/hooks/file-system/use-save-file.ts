@@ -324,7 +324,7 @@ export function useSaveFile() {
               const f = await fileToSave.getFile();
               const remoteText = await f.text();
               remoteSnapshot = { timestamp: ts, type: "remote", content: remoteText } as any;
-            } catch (readErr) {
+            } catch {
               // ignore - may be locked
             }
             setOpenFiles(prev => {

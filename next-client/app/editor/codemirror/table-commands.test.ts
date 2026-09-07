@@ -80,7 +80,6 @@ describe("tablePipeEscapeCommand", () => {
 
 describe("tableEnterCommand", () => {
   it("adds a new row when Enter is pressed at the end of the last row", () => {
-    const lastLine = "| 3 | 4 |";
     const pos = TABLE.length; // end of doc, end of last row
     const view = makeView(TABLE, pos);
     const applied = tableEnterCommand(view);

@@ -122,6 +122,10 @@ export const atom_vaultCreationError = atom<string | null>(null);
 // Post-onboarding trigger: set true to open the NewVaultDialog
 export const atom_newVaultFlowOpen = atom<boolean>(false);
 export const atom_keyboardShortcutsOpen = atom<boolean>(false);
+export const atom_workspaceBuilderRequest = atom<number>(0);
+export const atom_selectedWorkspaceId = atom<string | null>(null);
+export const atom_selectedFileTags = atom<string[]>([]);
+export const atom_tabsBarToggleRequest = atom<number>(0);
 
 // Tasks panel grouping mode ("status" or "file"), remembered across sessions
 export const atom_tasksGroupBy = atomWithStorage<"status" | "file">(
@@ -143,12 +147,16 @@ export const atom_sidebarWidth = atomWithStorage<number>("sidebarWidth", 260);
 // leaving a lagging gap for ~300ms after the drag ends.
 export const atom_isSidebarResizing = atom<boolean>(false);
 
-// The icon rail (SidebarRail.tsx) is always visible; atom_railPanel is
-// which panel (if any) is open next to it — null means the sidebar is
-// collapsed to just the rail. Transient — never persisted, since writing
-// mode always starts clean (collapsed) on load.
+// The expanded navigator is visible by default; null means it has been
+// explicitly collapsed from the sidebar header. Transient — never persisted,
+// so each editor session starts with the navigator open.
 export type RailPanel = "files" | "search" | "tags" | "views" | "tasks";
-export const atom_railPanel = atom<RailPanel | null>(null);
+export const atom_railPanel = atom<RailPanel | null>("files");
+export const atom_lastSidebarPanel = atomWithStorage<RailPanel>("lastSidebarPanel", "files");
+export const atom_sidebarExpandedByDefault = atomWithStorage<boolean>(
+  "sidebarExpandedByDefault",
+  true,
+);
 
 // Set when navigating to a task from the Tasks view; consumed once by the
 // editor pane whose filePath matches, to move the caret to that line, then
@@ -261,6 +269,7 @@ export const atom_activeEditorView = atom<EditorView | null>(null);
 // Most-recently-used command ids for the command palette's empty-query state
 // ("feels intelligent" with zero visible "recent" UI). Capped at 8 on write.
 export const atom_recentCommandIds = atomWithStorage<string[]>("recentCommandIds", []);
+export const atom_recentFilePaths = atomWithStorage<string[]>("recentFilePaths", []);
 
 export const atom_indexTimestamp = atom<number | null>(null);
 

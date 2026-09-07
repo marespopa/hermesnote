@@ -3,11 +3,6 @@
 import React from "react";
 import { useAtom } from "jotai";
 import {
-  HiOutlineFolder,
-  HiOutlineSearch,
-  HiOutlineTag,
-  HiOutlineCollection,
-  HiOutlineClipboardList,
   HiOutlineChatAlt2,
   HiOutlineBookOpen,
   HiOutlineCog,
@@ -19,6 +14,7 @@ import {
   HiOutlineDatabase,
   HiOutlineQuestionMarkCircle,
   HiOutlineViewGrid,
+  HiOutlineFolder,
 } from "react-icons/hi";
 import Button from "@/app/components/Button";
 import Tooltip from "@/app/components/Tooltip";
@@ -27,14 +23,6 @@ import { useFileSystem } from "@/app/hooks/use-file-system";
 import { formatShortcut } from "@/app/utils/platform";
 import { atom_theme, RailPanel, type Theme } from "@/app/atoms/ui-atoms";
 import { version } from "@/package.json";
-
-const SIDEBAR_PANELS: { id: RailPanel; label: string; Icon: React.ComponentType<{ size?: number }> }[] = [
-  { id: "files", label: "Files", Icon: HiOutlineFolder },
-  { id: "search", label: "Search", Icon: HiOutlineSearch },
-  { id: "tags", label: "Tags", Icon: HiOutlineTag },
-  { id: "views", label: "Views", Icon: HiOutlineCollection },
-  { id: "tasks", label: "Tasks", Icon: HiOutlineClipboardList },
-];
 
 // Click cycles system -> light -> dark -> system. Each entry's Icon/label
 // describes that state itself (not the state the click leads to).
@@ -47,6 +35,7 @@ const THEME_CYCLE: { value: Theme; label: string; Icon: React.ComponentType<{ si
 interface SidebarRailProps {
   panel: RailPanel | null;
   onSelectPanel: (id: RailPanel) => void;
+  reopenPanel?: RailPanel;
   onSettings?: () => void;
   onRefreshVault?: () => void;
   onOpenAIChat?: () => void;
@@ -54,7 +43,9 @@ interface SidebarRailProps {
   onOpenKeyboardShortcuts?: () => void;
 }
 
-export default function SidebarRail({ panel, onSelectPanel, onSettings, onRefreshVault, onOpenAIChat, onOpenDocumentation, onOpenKeyboardShortcuts }: SidebarRailProps) {
+export default function SidebarRail({ panel, onSelectPanel, reopenPanel = "files", onSettings, onRefreshVault, onOpenAIChat, onOpenDocumentation, onOpenKeyboardShortcuts }: SidebarRailProps) {
+  void panel;
+  void onSelectPanel;
   const { vaultHandle, closeVault, openVault, isVaultSupported } = useFileSystem();
   const { open: openCommandPalette } = useCommandPalette();
   const [rawTheme, setTheme] = useAtom(atom_theme);
@@ -64,35 +55,26 @@ export default function SidebarRail({ panel, onSelectPanel, onSettings, onRefres
   return (
     <nav className="w-14 h-full shrink-0 flex flex-col items-center justify-between py-3 bg-chrome border-r border-edge-subtle">
       <div className="flex flex-col items-center gap-1 w-full">
-        {SIDEBAR_PANELS.map(({ id, label, Icon }) => (
-          <div key={id} className="w-full flex justify-center">
-            <Tooltip label={label} position="right">
-              <button
-                type="button"
-                onClick={() => onSelectPanel(id)}
-                aria-label={label}
-                aria-pressed={panel === id}
-                className={`w-11 h-10 flex items-center justify-center border-l-2 transition-colors ${
-                  panel === id
-                    ? "text-sage border-sage bg-sage/5"
-                    : "text-ink-muted border-transparent hover:text-ink-light dark:text-stone dark:hover:text-ink-dark"
-                }`}
-              >
-                <Icon size={18} />
-              </button>
-            </Tooltip>
-          </div>
-        ))}
-      </div>
-
-      <div className="flex flex-col items-center gap-1 w-full">
+        <div className="w-full flex justify-center">
+          <Tooltip label="Show sidebar" position="right">
+            <button
+              type="button"
+              onClick={() => onSelectPanel(reopenPanel)}
+              aria-label="Show sidebar"
+              className="w-11 h-10 flex items-center justify-center text-sage hover:text-sage/80 transition-colors"
+            >
+              <HiOutlineFolder size={18} />
+            </button>
+          </Tooltip>
+        </div>
         <div className="w-full flex justify-center mt-2 pt-2 border-t border-edge-subtle">
-          <Tooltip label="Command palette" shortcut={formatShortcut("P", { shift: true })} position="right">
+          <Tooltip label="Command palette" shortcut={formatShortcut("K")} position="right">
             <Button
               variant="icon"
               onClick={openCommandPalette}
               className="w-10 h-10 opacity-80 hover:opacity-100 !rounded-none"
               aria-label="Command palette"
+              data-command-palette-trigger
             >
               <HiOutlineViewGrid size={18} />
             </Button>

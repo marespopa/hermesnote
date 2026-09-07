@@ -8,7 +8,7 @@ import { HiOutlinePlus, HiOutlineDotsVertical, HiOutlinePencil, HiOutlineDuplica
 import Button from "@/app/components/Button";
 import WorkspaceBuilder from "./WorkspaceBuilder";
 import { useDialog } from "@/app/hooks/use-dialog";
-import { atom_activeFilePath } from "@/app/atoms/atoms";
+import { atom_activeFilePath, atom_selectedWorkspaceId, atom_workspaceBuilderRequest } from "@/app/atoms/atoms";
 
 interface SmartFolderConfig {
   id: string;
@@ -47,12 +47,20 @@ export default function SmartFolders({
   const [fileMetadata] = useAtom(atom_fileMetadata);
   const [customWorkspaces, setCustomWorkspaces] = useAtom(atom_customWorkspaces);
   const activeFilePath = useAtomValue(atom_activeFilePath);
-  const [selectedFolderId, setSelectedFolderId] = React.useState<string | null>(null);
+  const [selectedFolderId, setSelectedFolderId] = useAtom(atom_selectedWorkspaceId);
   const [actionMenuOpen, setActionMenuOpen] = React.useState<{ x: number, y: number, id: string } | null>(null);
   const [fileActionMenuOpen, setFileActionMenuOpen] = React.useState<{ x: number, y: number, path: string } | null>(null);
   const [isBuilderOpen, setIsBuilderOpen] = React.useState(false);
+  const [workspaceBuilderRequest, setWorkspaceBuilderRequest] = useAtom(atom_workspaceBuilderRequest);
   const [editingWorkspace, setEditingWorkspace] = React.useState<CustomWorkspace | null>(null);
   const dialog = useDialog();
+
+  React.useEffect(() => {
+    if (workspaceBuilderRequest === 0) return;
+    setEditingWorkspace(null);
+    setIsBuilderOpen(true);
+    setWorkspaceBuilderRequest(0);
+  }, [workspaceBuilderRequest, setWorkspaceBuilderRequest]);
 
   const allWorkspaces = React.useMemo(() => {
     const customConverted: SmartFolderConfig[] = customWorkspaces.map(cw => ({

@@ -4,23 +4,27 @@ import { extractTasks } from "@/app/utils/taskExtractor";
 
 const REGEX_TAG = /(?<=^|\s)#(?=[a-zA-Z0-9_\-/]*[a-zA-Z])([a-zA-Z0-9_\-/]+)/g;
 const REGEX_LINK = /\[\[(.*?)\]\]/g;
-const REGEX_FRONTMATTER = /^---\n([\s\S]*?)\n---/;
+const REGEX_FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---/;
+
+function normalizeTag(tag: string): string {
+  return tag.trim().replace(/^["']|["']$/g, "").replace(/^#/, "").toLowerCase();
+}
 
 function parseFrontmatterTags(fmContent: string): string[] {
   const inlineMatch = fmContent.match(/^tags:\s*\[(.*?)\]/m);
   if (inlineMatch) {
     return inlineMatch[1]
       .split(",")
-      .map((t) => t.trim().replace(/^["']|["']$/g, "").toLowerCase())
+      .map(normalizeTag)
       .filter(Boolean);
   }
-  const lines = fmContent.split("\n");
+  const lines = fmContent.split(/\r?\n/);
   const idx = lines.findIndex((l) => /^tags:\s*$/.test(l));
   if (idx !== -1) {
     const result: string[] = [];
     for (let i = idx + 1; i < lines.length; i++) {
       const m = lines[i].match(/^\s*-\s+(.+)/);
-      if (m) result.push(m[1].trim().replace(/^["']|["']$/g, "").toLowerCase());
+      if (m) result.push(normalizeTag(m[1]));
       else break;
     }
     return result;

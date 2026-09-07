@@ -4,7 +4,8 @@ import { EditorView } from "@codemirror/view";
 import { undo } from "@codemirror/commands";
 import MarkdownEditor from "./MarkdownEditor";
 import { CODE_BLOCK_TEMPLATE_CONTENT, CURSOR_SENTINEL, TEMPLATES } from "./constants";
-import { Provider } from "jotai";
+import { Provider, useAtomValue } from "jotai";
+import { atom_activeEditorView } from "@/app/atoms/ui-atoms";
 import "@testing-library/jest-dom";
 
 // MarkdownEditor now runs on CodeMirror 6, which renders a contenteditable
@@ -46,6 +47,11 @@ function getView(container: HTMLElement): EditorView {
   return view;
 }
 
+function ActiveEditorObserver() {
+  const activeEditorView = useAtomValue(atom_activeEditorView);
+  return <output data-testid="active-editor-state">{activeEditorView ? "registered" : "none"}</output>;
+}
+
 describe("MarkdownEditor", () => {
   const mockOnChange = vi.fn();
 
@@ -58,6 +64,7 @@ describe("MarkdownEditor", () => {
     render(
       <Provider>
         <MarkdownEditor value={value} onChange={mockOnChange} {...props} />
+        <ActiveEditorObserver />
       </Provider>,
     );
 
@@ -67,6 +74,13 @@ describe("MarkdownEditor", () => {
   it("mounts a CodeMirror 6 editor", async () => {
     const { container } = renderEditor("hello world");
     await waitForEditor(container);
+  });
+
+  it("registers the asynchronously created active editor view", async () => {
+    const { container } = renderEditor("# Active heading", { isActivePane: true });
+    await waitForEditor(container);
+
+    await waitFor(() => expect(screen.getByTestId("active-editor-state")).toHaveTextContent("registered"));
   });
 
   it("shows the initial value in the editor", async () => {
@@ -96,8 +110,8 @@ describe("MarkdownEditor", () => {
   it("defines the Code template as an empty fenced block with a language cursor", () => {
     const codeTemplate = TEMPLATES.find((template) => template.label === "Code");
     expect(codeTemplate?.content).toBe(CODE_BLOCK_TEMPLATE_CONTENT);
-    expect(codeTemplate?.content).toContain(`\`\`\`${CURSOR_SENTINEL}`);
-    expect(codeTemplate?.content).toContain("\n\n\`\`\`");
+    expect(codeTemplate?.content).toContain(`\x60\x60\x60${CURSOR_SENTINEL}`);
+    expect(codeTemplate?.content).toContain("\n\n```");
   });
 
   it("strips frontmatter out of the CM6 doc and shows it via FrontmatterPanel instead", async () => {

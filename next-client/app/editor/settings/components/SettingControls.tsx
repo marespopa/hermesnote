@@ -8,7 +8,7 @@ export function SegmentedControl<T extends string>({
   value,
   onChange,
 }: {
-  options: { label: string; value: T }[];
+  options: { label: string; value: T; Icon?: React.ComponentType<{ size?: number }> }[];
   value: T;
   onChange: (v: T) => void;
 }) {
@@ -25,6 +25,7 @@ export function SegmentedControl<T extends string>({
               : "text-ink-muted hover:text-ink-light dark:hover:text-ink-dark hover:bg-black/8"
           }`}
         >
+          {opt.Icon && <opt.Icon size={14} />}
           {opt.label}
         </button>
       ))}

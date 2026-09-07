@@ -1,10 +1,10 @@
-export const FM_REGEX = /^---\n([\s\S]*?)\n---\n?/;
+export const FM_REGEX = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n)?/;
 
 export function parseFmFields(content: string): Record<string, string> {
   const m = FM_REGEX.exec(content);
   if (!m) return {};
   const fields: Record<string, string> = {};
-  const lines = m[1].split("\n");
+  const lines = m[1].split(/\r?\n/);
 
   let i = 0;
   while (i < lines.length) {
@@ -81,7 +81,7 @@ export function updateFmFields(
   }
 
   const seen = new Set<string>();
-  const lines = m[1].split("\n");
+  const lines = m[1].split(/\r?\n/);
   const updatedLines: string[] = [];
 
   let i = 0;

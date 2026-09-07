@@ -106,7 +106,6 @@ describe("VoicePreviewPanel", () => {
   it("stops keydown events from bubbling out to ancestors outside the portal", () => {
     const outerHandler = vi.fn();
     render(
-      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
       <div onKeyDown={outerHandler}>
         <VoicePreviewPanel
           isListening

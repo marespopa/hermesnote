@@ -29,6 +29,7 @@ vi.mock("@/app/atoms/ui-atoms", async (importOriginal) => {
   return {
     ...actual,
     atom_railPanel: { toString: () => "atom_railPanel", read: () => {} },
+    atom_selectedFileTags: { toString: () => "atom_selectedFileTags", read: () => {} },
   };
 });
 
@@ -110,6 +111,7 @@ describe("VaultSidebar Component", () => {
       const atomStr = atom.toString();
       if (atomStr === "atom_activeFilePath") return ["test.md", vi.fn()];
       if (atomStr === "atom_sidebarWidth") return [260, vi.fn()];
+      if (atomStr === "atom_selectedFileTags") return [[], vi.fn()];
       if (atomStr === "atom_fileMetadata") {
         return [
           {
