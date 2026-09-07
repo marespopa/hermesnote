@@ -17,7 +17,7 @@ import {
   atom_vaultHandle,
   atom_workspaceLayout,
 } from "@/app/atoms/atoms";
-import { atom_newVaultFlowOpen, atom_isVoicePreviewVisible, atom_tabsBarVisibleByDefault } from "@/app/atoms/ui-atoms";
+import { atom_newVaultFlowOpen, atom_isVoicePreviewVisible, atom_tabsBarToggleRequest, atom_tabsBarVisibleByDefault } from "@/app/atoms/ui-atoms";
 import { HiOutlineDocumentText, HiOutlineChartBar, HiOutlineX, HiOutlineClipboardCopy, HiOutlineSave, HiOutlineDotsHorizontal, HiOutlinePlus, HiOutlineFolderOpen, HiOutlineDatabase, HiOutlineCollection, HiOutlineChevronDown, HiOutlineChevronUp } from "react-icons/hi";
 import { VscSplitHorizontal } from "react-icons/vsc";
 import PaneTab, { TabSaveState, statusMeta } from "./PaneTab";
@@ -152,6 +152,12 @@ export default function PaneLeaf({ leaf }: PaneLeafProps) {
   // only affects panes opened after.
   const tabsBarVisibleByDefault = useAtomValue(atom_tabsBarVisibleByDefault);
   const [tabBarVisible, setTabBarVisible] = useState(tabsBarVisibleByDefault && !isMobileChrome);
+  const [tabsBarToggleRequest, setTabsBarToggleRequest] = useAtom(atom_tabsBarToggleRequest);
+  React.useEffect(() => {
+    if (!isActive || tabsBarToggleRequest === 0) return;
+    setTabBarVisible((visible) => !visible);
+    setTabsBarToggleRequest(0);
+  }, [isActive, setTabsBarToggleRequest, tabsBarToggleRequest]);
 
   const handleDragStart = (e: React.DragEvent, path: string) => {
     const data = JSON.stringify({ 
@@ -488,7 +494,7 @@ export default function PaneLeaf({ leaf }: PaneLeafProps) {
               >
                 <HiOutlineDotsHorizontal size={16} className="shrink-0" />
                 <span className="truncate min-w-0 flex-1 text-left">Command Palette</span>
-                <span className="text-ui-caption opacity-50 shrink-0 whitespace-nowrap">{formatShortcut("P", { shift: true })}</span>
+                <span className="text-ui-caption opacity-50 shrink-0 whitespace-nowrap">{formatShortcut("K")}</span>
               </button>
             </div>
             <input

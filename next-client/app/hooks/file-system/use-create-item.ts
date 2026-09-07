@@ -20,6 +20,49 @@ export function useCreateItem({ scanVault, openFile }: UseCreateItemProps) {
   const [currentDirectoryHandle] = useAtom(atom_currentDirectoryHandle);
   const dialog = useDialog();
 
+  const chooseTargetDirectory = useCallback(async () => {
+    if (!vaultHandle) return null;
+
+    const subDirs: FileSystemDirectoryHandle[] = [];
+    try {
+      for await (const entry of (vaultHandle as any).values()) {
+        if (entry.kind === "directory" && !entry.name.startsWith(".")) {
+          subDirs.push(entry);
+        }
+      }
+    } catch (err: any) {
+      console.warn("Failed to list vault subdirectories:", err?.message || err);
+    }
+    subDirs.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+
+    const options = [
+      { label: `/ ${vaultHandle.name} (root)`, value: "__root__" },
+      ...subDirs.map((d) => ({ label: d.name, value: d.name })),
+      { label: "+ New Folder", value: "__new_folder__" },
+    ];
+    const chosen = await dialog.select("Choose a folder for the new file:", options, "New File");
+    if (!chosen) return null;
+
+    if (chosen === "__new_folder__") {
+      const folderName = await dialog.prompt("Enter folder name:", "", "New Folder");
+      if (!folderName) return null;
+      try {
+        const newDir = await withRetry(() =>
+          vaultHandle.getDirectoryHandle(folderName, { create: true })
+        );
+        await scanVault(vaultHandle);
+        return newDir;
+      } catch (err: any) {
+        console.error("File System Error:", err?.message || err);
+        toast.error("Failed to create folder");
+        return null;
+      }
+    }
+
+    if (chosen === "__root__") return vaultHandle;
+    return subDirs.find((d) => d.name === chosen) || null;
+  }, [dialog, scanVault, vaultHandle]);
+
   const createFile = useCallback(
     async (name: string, content: string = "", dirOverride?: FileSystemDirectoryHandle) => {
       const targetDir = dirOverride || currentDirectoryHandle || vaultHandle;
@@ -103,6 +146,60 @@ export function useCreateItem({ scanVault, openFile }: UseCreateItemProps) {
     [vaultHandle, currentDirectoryHandle, scanVault, openFile],
   );
 
+  const createWikiLinkFile = useCallback(async (name: string) => {
+    const targetDir = await chooseTargetDirectory();
+    if (!targetDir) return null;
+
+    const baseName = name.endsWith(".md") ? name.slice(0, -3) : name;
+    let fileName = `${baseName}.md`;
+    let counter = 1;
+    let newFileHandle: FileSystemFileHandle | null = null;
+
+    try {
+      while (true) {
+        try {
+          await withRetry(() => targetDir.getFileHandle(fileName, { create: false }));
+          fileName = `${baseName} (${counter++}).md`;
+        } catch (err: any) {
+          if (err.name === "NotFoundError") {
+            newFileHandle = await withRetry(() => targetDir.getFileHandle(fileName, { create: true }));
+            break;
+          }
+          throw err;
+        }
+      }
+
+      if (!newFileHandle) throw new Error("Failed to resolve file handle");
+      await withRetry(async () => {
+        const writable = await (newFileHandle as any).createWritable();
+        await writable.write("\n");
+        await writable.close();
+      });
+      await scanVault(targetDir);
+
+      let path = fileName;
+      if (vaultHandle) {
+        let isRoot = false;
+        try {
+          isRoot = await (vaultHandle as any).isSameEntry(targetDir);
+        } catch {
+          isRoot = vaultHandle.name === targetDir.name;
+        }
+        if (!isRoot) {
+          const relativePath = await (vaultHandle as any).resolve(targetDir);
+          if (relativePath) path = [...relativePath, fileName].join("/");
+        }
+      }
+
+      toast.success("Created: " + fileName);
+      return path.replace(/\.md$/, "");
+    } catch (err: any) {
+      console.warn("File System Error:", err?.message || err);
+      toast.error("Failed to create file");
+      return null;
+    }
+  }, [chooseTargetDirectory, scanVault, vaultHandle]);
+
   const createNewFile = useCallback(async (dirHandle?: FileSystemDirectoryHandle) => {
     if (!vaultHandle) return;
 
@@ -110,49 +207,9 @@ export function useCreateItem({ scanVault, openFile }: UseCreateItemProps) {
 
     // Only show folder picker when called from the header (no dirHandle)
     if (!dirHandle) {
-      // Read the vault root's subdirectories directly rather than relying on
-      // vaultFiles, which reflects whatever directory was last scanned (e.g.
-      // a subfolder from Content navigation) and can be stale/empty in Views.
-      const subDirs: FileSystemDirectoryHandle[] = [];
-      try {
-        for await (const entry of (vaultHandle as any).values()) {
-          if (entry.kind === "directory" && !entry.name.startsWith(".")) {
-            subDirs.push(entry);
-          }
-        }
-      } catch (err: any) {
-        // Transient (e.g. cloud sync momentarily unreachable) — fall back to
-        // root-only options rather than crashing the whole "New File" action.
-        console.warn("Failed to list vault subdirectories:", err?.message || err);
-      }
-      subDirs.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
-
-      const options = [
-        { label: `/ ${vaultHandle.name} (root)`, value: "__root__" },
-        ...subDirs.map((d) => ({ label: d.name, value: d.name })),
-        { label: "+ New Folder", value: "__new_folder__" },
-      ];
-      const chosen = await dialog.select("Choose a folder for the new file:", options, "New File");
-      if (!chosen) return;
-
-      if (chosen === "__new_folder__") {
-        const folderName = await dialog.prompt("Enter folder name:", "", "New Folder");
-        if (!folderName) return;
-        try {
-          const newDir = await withRetry(() =>
-            vaultHandle.getDirectoryHandle(folderName, { create: true })
-          );
-          await scanVault(vaultHandle);
-          targetDir = newDir;
-        } catch (err: any) {
-          console.error("File System Error:", err?.message || err);
-          toast.error("Failed to create folder");
-          return;
-        }
-      } else if (chosen !== "__root__") {
-        const found = subDirs.find((d) => d.name === chosen);
-        if (found) targetDir = found;
-      }
+      const chosenDir = await chooseTargetDirectory();
+      if (!chosenDir) return;
+      targetDir = chosenDir;
     }
 
     const result = await dialog.newFile();
@@ -165,10 +222,11 @@ export function useCreateItem({ scanVault, openFile }: UseCreateItemProps) {
     const fm = `---\nid: ${slug}\ntitle: ${result.name}\ntype: ${result.type || "note"}\nstatus: "#draft"\ntags: ${tagsStr}\n---\n\n`;
 
     return await createFile(result.name, fm, targetDir);
-  }, [vaultHandle, scanVault, createFile, dialog]);
+  }, [vaultHandle, createFile, chooseTargetDirectory, dialog]);
 
   return {
     createFile,
+    createWikiLinkFile,
     createNewFile,
   };
 }

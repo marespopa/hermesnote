@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import {
   atom_workspaceLayout,
   atom_activePaneId,

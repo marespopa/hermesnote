@@ -134,7 +134,9 @@ export default function VoicePreviewPanel({
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) setPos(JSON.parse(raw));
-    } catch {}
+    } catch {
+      // Ignore unavailable storage or malformed persisted positions.
+    }
   }, [isMobileChrome]);
 
   useEffect(() => {
@@ -187,7 +189,9 @@ export default function VoicePreviewPanel({
       if (dragState.current?.moved && lastDragPosRef.current) {
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(lastDragPosRef.current));
-        } catch {}
+        } catch {
+          // Ignore unavailable storage; dragging still works for this session.
+        }
       }
       dragState.current = null;
     };

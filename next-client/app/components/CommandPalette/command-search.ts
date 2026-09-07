@@ -1,0 +1,63 @@
+export type SearchableCommand = {
+  id: string;
+  label: string;
+  description?: string;
+  keywords?: string | string[];
+  category?: string;
+};
+
+export type MatchResult = {
+  score: number;
+  indices: number[];
+};
+
+function normalizeKeywords(keywords?: string | string[]) {
+  return Array.isArray(keywords) ? keywords.join(" ") : keywords ?? "";
+}
+
+export function fuzzyMatch(query: string, target: string): MatchResult | null {
+  const normalizedQuery = query.trim().toLowerCase();
+  const normalizedTarget = target.toLowerCase();
+  if (!normalizedQuery) return { score: 0, indices: [] };
+
+  const exactIndex = normalizedTarget.indexOf(normalizedQuery);
+  if (exactIndex !== -1) {
+    const indices = Array.from({ length: normalizedQuery.length }, (_, index) => exactIndex + index);
+    const startsWord = exactIndex === 0 || /[\s/._-]/.test(normalizedTarget[exactIndex - 1]);
+    return {
+      score: 1000 - exactIndex * 2 + (exactIndex === 0 ? 300 : 0) + (startsWord ? 150 : 0),
+      indices,
+    };
+  }
+
+  let queryIndex = 0;
+  let score = 0;
+  let previousIndex = -2;
+  const indices: number[] = [];
+
+  for (let targetIndex = 0; targetIndex < normalizedTarget.length && queryIndex < normalizedQuery.length; targetIndex++) {
+    if (normalizedTarget[targetIndex] !== normalizedQuery[queryIndex]) continue;
+    indices.push(targetIndex);
+    score += 10;
+    if (targetIndex === previousIndex + 1) score += 12;
+    if (targetIndex === 0 || /[\s/._-]/.test(normalizedTarget[targetIndex - 1])) score += 8;
+    score -= Math.min(targetIndex, 20) * 0.1;
+    previousIndex = targetIndex;
+    queryIndex++;
+  }
+
+  return queryIndex === normalizedQuery.length ? { score, indices } : null;
+}
+
+export function matchCommand(query: string, command: SearchableCommand): MatchResult | null {
+  const labelMatch = fuzzyMatch(query, command.label);
+  const metadataMatch = fuzzyMatch(
+    query,
+    [command.description, normalizeKeywords(command.keywords), command.category].filter(Boolean).join(" "),
+  );
+
+  if (!labelMatch) return metadataMatch ? { ...metadataMatch, indices: [] } : null;
+  if (!metadataMatch) return labelMatch;
+  return labelMatch.score >= metadataMatch.score ? labelMatch : { ...metadataMatch, indices: [] };
+}
+

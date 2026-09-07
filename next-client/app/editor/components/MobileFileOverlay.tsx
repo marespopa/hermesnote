@@ -12,7 +12,7 @@ import VaultSidebarFiles from "./VaultSidebarFiles";
 import VaultSidebarEmpty from "./VaultSidebarEmpty";
 import UnifiedSearchInput from "./UnifiedSearchInput";
 import { HiOutlineX, HiOutlineEye, HiOutlineEyeOff, HiOutlineLogout } from "react-icons/hi";
-import { atom_newVaultFlowOpen, atom_showHiddenFiles, atom_userName } from "@/app/atoms/ui-atoms";
+import { atom_newVaultFlowOpen, atom_selectedFileTags, atom_showHiddenFiles, atom_userName } from "@/app/atoms/ui-atoms";
 
 export default function MobileFileOverlay({
   isOpen,
@@ -44,7 +44,7 @@ export default function MobileFileOverlay({
   const setNewVaultFlowOpen = useSetAtom(atom_newVaultFlowOpen);
   const [showHiddenFiles, setShowHiddenFiles] = useAtom(atom_showHiddenFiles);
   const userName = useAtomValue(atom_userName);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useAtom(atom_selectedFileTags);
   const [activeTab, setActiveTab] = useState<"files" | "views">("files");
   const { searchQuery, setSearchQuery, processedFiles, totalResultsCount, hasMoreResults, setShowAllResults, allFiles, tags } =
     useSidebarSearch({ selectedTags, panel: "search" });

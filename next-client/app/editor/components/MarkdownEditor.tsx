@@ -19,10 +19,12 @@ import TaskDialog from "./TaskDialog";
 import { LinkPill } from "./LinkPill";
 import { WorkflowPill } from "./WorkflowPill";
 import { TableCallout } from "./TableCallout";
-import { PILL_CONTAINER_CLASSES } from "./constants";
+import { PILL_CONTAINER_CLASSES, TEMPLATES } from "./constants";
+import { applyTemplate } from "../codemirror/slash-menu";
 import { FM_REGEX } from "@/app/utils/frontmatter-utils";
 import useKeyboardInset from "@/app/hooks/use-keyboard-inset";
 import { useDialog } from "@/app/hooks/use-dialog";
+import { useFileSystem } from "@/app/hooks/use-file-system";
 import { useEditorAppearance } from "../hooks/use-editor-appearance";
 import { useCodeMirrorEditor } from "../hooks/use-codemirror-editor";
 import { useCodeMirrorFeatures } from "../hooks/use-codemirror-features";
@@ -89,8 +91,11 @@ export default function MarkdownEditor(props: MarkdownEditorProps) {
 
   const handleEditorResizeStart = useCallback((event: React.PointerEvent<HTMLButtonElement>) => {
     if (!maxContentWidth || isMobile) return;
+    const parent = event.currentTarget.parentElement;
+    if (!parent) return;
     event.preventDefault();
-    resizeRef.current = { center: event.currentTarget.parentElement?.getBoundingClientRect().left! + event.currentTarget.parentElement!.getBoundingClientRect().width / 2 };
+    const rect = parent.getBoundingClientRect();
+    resizeRef.current = { center: rect.left + rect.width / 2 };
     event.currentTarget.setPointerCapture?.(event.pointerId);
   }, [isMobile, maxContentWidth]);
 
@@ -108,6 +113,7 @@ export default function MarkdownEditor(props: MarkdownEditorProps) {
   const viewRef = useRef<EditorView | null>(null);
 
   const dialog = useDialog();
+  const { createWikiLinkFile } = useFileSystem();
   const csvConfirmRef = useRef<((preview: string) => Promise<boolean>) | null>(null);
   csvConfirmRef.current = useCallback(
     (preview: string) =>
@@ -117,7 +123,6 @@ export default function MarkdownEditor(props: MarkdownEditorProps) {
         "Convert to table",
         "Paste as text",
       ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [dialog],
   );
 
@@ -178,6 +183,21 @@ export default function MarkdownEditor(props: MarkdownEditorProps) {
     onFrontmatterWizard: useCallback(() => setFrontmatterWizardOpen(filePath), [setFrontmatterWizardOpen, filePath]),
   });
 
+  useEffect(() => {
+    if (props.isActivePane === false) return;
+    const handleTemplateCommand = (event: Event) => {
+      const label = (event as CustomEvent<{ label?: string }>).detail?.label;
+      const template = TEMPLATES.find((item) => item.label === label && !item.aiOnly);
+      const view = viewRef.current;
+      if (!template || !view) return;
+      const { from, to } = view.state.selection.main;
+      applyTemplate(view, from, to, template.content, slashMenuCallbacksRef.current);
+      view.focus();
+    };
+    document.addEventListener("hermes:insert-template", handleTemplateCommand);
+    return () => document.removeEventListener("hermes:insert-template", handleTemplateCommand);
+  }, [props.isActivePane, slashMenuCallbacksRef]);
+
   const {
     tableInfo, calloutPos, currentAlignment, isOnHeader, canRemoveRow, canRemoveCol, cursorDataRowNumber,
     handleRemoveTable, handleCycleAlign, handleCopyCSV, handleAddRow, handleRemoveRow,
@@ -233,12 +253,19 @@ export default function MarkdownEditor(props: MarkdownEditorProps) {
   const { chevrons, toggle: toggleCalloutFold, onCursorActivity: onFoldCursorActivity, onViewCreated } =
     useCodeMirrorCalloutFold({ containerRef });
 
+  const setActiveEditorView = useSetAtom(atom_activeEditorView);
+  const registeredActiveViewRef = useRef<EditorView | null>(null);
+
   // Auto-focus so typing works immediately after opening the editor, no
   // click required. Skipped for inactive split panes.
   const handleViewCreated = useCallback((view: EditorView) => {
     onViewCreated(view);
-    if (props.isActivePane !== false) view.focus();
-  }, [onViewCreated, props.isActivePane]);
+    if (props.isActivePane !== false) {
+      registeredActiveViewRef.current = view;
+      setActiveEditorView(view);
+      view.focus();
+    }
+  }, [onViewCreated, props.isActivePane, setActiveEditorView]);
 
   const onCombinedCursorActivity = useCallback((view: EditorView) => {
     onCursorActivity(view);
@@ -273,14 +300,21 @@ export default function MarkdownEditor(props: MarkdownEditorProps) {
   // instance shared by the whole app, not one per pane. It inserts a
   // committed dictation into whichever view this atom currently points at,
   // so this pane only needs to claim that slot while it's the active one.
-  const setActiveEditorView = useSetAtom(atom_activeEditorView);
   useEffect(() => {
-    if (!props.isActivePane) return;
-    setActiveEditorView(viewRef.current);
+    if (props.isActivePane === false) return;
+    const view = viewRef.current;
+    if (view) {
+      registeredActiveViewRef.current = view;
+      setActiveEditorView(view);
+    }
     // Cleared on unmount/deactivation so a later dictation commit can't
     // target a torn-down view.
     return () => {
-      setActiveEditorView(null);
+      const registeredView = registeredActiveViewRef.current;
+      if (registeredView) {
+        setActiveEditorView((current) => current === registeredView ? null : current);
+      }
+      registeredActiveViewRef.current = null;
     };
   }, [props.isActivePane, setActiveEditorView, viewRef]);
 
@@ -527,6 +561,7 @@ export default function MarkdownEditor(props: MarkdownEditorProps) {
             isOpen={wikiLinkDialogOpen}
             onClose={() => setWikiLinkDialogOpen(false)}
             onConfirm={insertWikiLink}
+            onCreateAndConfirm={createWikiLinkFile}
             title="Insert WikiLink"
           />
 

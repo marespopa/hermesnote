@@ -189,8 +189,8 @@ const GROUPS: Group[] = [
       {
         id: "editor-layout",
         title: "Editor layout",
-        lead: "The app opens straight into a full-screen editor — every panel is summoned, not docked by default.",
-        keywords: "sidebar pin pane split toolbar command palette",
+        lead: "The app opens straight into a full-screen editor with a docked, collapsible sidebar.",
+        keywords: "sidebar collapse expand files search views tags tasks settings theme pane split toolbar command palette",
         body: (
           <>
             <p>
@@ -198,14 +198,17 @@ const GROUPS: Group[] = [
               keyboard shortcuts, and the slash command menu.
             </p>
             <p>
-              The sidebar (files, search, tasks) stays hidden at rest. Move the mouse to the left edge
-              to open it, or pin it with <code>CTRL+SHIFT+E</code>; switching between its panels happens
-              from the command palette rather than a row of icons.
+              The sidebar contains expandable <strong>Files</strong>, <strong>Views</strong>, <strong>Tags</strong>,
+              and <strong>Tasks</strong> sections. The Files section includes the search field, New File, and
+              New Folder actions. Use the chevron in the sidebar header to collapse it; use the sidebar
+              button in the narrow rail, or <code>CTRL+SHIFT+E</code>, to expand it again.
             </p>
             <KV
               rows={[
-                { label: "Sidebar", value: "Hover edge / CTRL+SHIFT+E" },
-                { label: "Command Palette", value: "CTRL+SHIFT+P" },
+                { label: "Sidebar", value: "Docked panel / CTRL+SHIFT+E to toggle" },
+                { label: "Command Palette", value: "CTRL/CMD+K or CTRL+SHIFT+P" },
+                { label: "Palette modes", value: "# vault tags · > commands · ! tasks · % views · : current-note headings" },
+                { label: "Sidebar header", value: "Settings, theme, and collapse controls" },
                 { label: "AI Chat", value: "CTRL+SHIFT+B" },
                 { label: "Voice input", value: "CTRL+SHIFT+V" },
                 { label: "Frontmatter panel", value: "✎ in document header" },
@@ -259,7 +262,7 @@ const GROUPS: Group[] = [
               {
                 context: "Command Palette",
                 rows: [
-                  { label: "Open", shortcut: "CTRL+SHIFT+P" },
+                  { label: "Open", shortcut: "CTRL/CMD+K or CTRL/CMD+SHIFT+P" },
                   { label: "Filter", shortcut: "Keep typing" },
                   { label: "Navigate results", shortcut: "↑ / ↓" },
                   { label: "Run command", shortcut: "ENTER" },
@@ -634,53 +637,68 @@ graph TD
         body: (
           <>
             <p>
-              <code>CTRL+SHIFT+P</code>. Keep typing to filter — matching characters are highlighted, and
-              each entry shows its own shortcut if it has one.
+              Open it anywhere with <code>CTRL/CMD+K</code> or <code>CTRL/CMD+SHIFT+P</code>. On mobile,
+              tap the active-file bar. The palette opens in Quick Open mode, where plain text searches
+              note names and paths only.
             </p>
+            <KV
+              rows={[
+                { label: "Plain text", value: "Files by name or path" },
+                { label: "#", value: "All unique vault tags; choose one to filter Files" },
+                { label: ">", value: "Commands by name, description, category, or keyword" },
+                { label: "!", value: "Tasks; choose one to open its note at the source line" },
+                { label: "%", value: "Smart Views" },
+                { label: ":", value: "Headings in the active note; choose one to place it at the top" },
+              ]}
+            />
+            <Callout type="tip">
+              Prefixes select a result type; they are not combined. For example, <code>#project</code>{" "}
+              searches tags only, while <code>&gt;project</code> searches commands only.
+            </Callout>
             <p>
-              Every command here is a second entry point to something also reachable another way —
-              there's no command-only behavior. The palette adapts to context: pane- and file-scoped
-              commands only appear when there's an active pane or open file to act on.
+              Matching is fuzzy and deterministic. Recently opened files and recently run commands
+              receive a ranking boost. Commands that need a vault, active note, selection, AI provider,
+              voice support, or another pane remain visible when useful and explain why they are disabled.
+              Async commands show a running state and cannot be submitted twice.
             </p>
             <KV
               rows={[
                 { label: "Save", value: "CTRL+S" },
-                { label: "New file", value: "—" },
-                { label: "Export current file", value: "—" },
-                { label: "Rename current file", value: "—" },
-                { label: "Delete current file", value: "—" },
-                { label: "Copy Markdown", value: "—" },
-                { label: "Undo / Redo", value: "—" },
-                { label: "Close current tab", value: "—" },
-                { label: "Close all tabs", value: "—" },
+                { label: "Files", value: "New, import, export, copy, rename, duplicate, move, delete" },
+                { label: "Folders", value: "Create nested paths; open the active file's folder" },
+                { label: "Editing", value: "Undo, redo, focus, formatting, tasks, and templates" },
+                { label: "AI", value: "Chat, generate note, repurpose, and selection/document actions" },
               ]}
             />
             <KV
               rows={[
                 { label: "Open Files / Search / Open Tags / Open Views / Open Tasks", value: "—" },
                 { label: "Toggle sidebar", value: "CTRL+SHIFT+E" },
-                { label: "Split Right / Close Pane / Close other tabs", value: "When more than one pane is open" },
-                { label: "Switch pane to Source / Rendered", value: "—" },
+                { label: "Panes", value: "Split right/down, next/previous, close" },
+                { label: "Tabs", value: "Next/previous, close current/other/all, toggle tab bar" },
+                { label: "Tasks", value: "Grouping, due-date filters, and clear filters" },
+                { label: "Smart Views", value: "Open or create" },
                 { label: "Toggle hidden files", value: "—" },
-                { label: "Toggle word wrap", value: "—" },
-                { label: "Toggle tabs bar by default", value: "—" },
-                { label: "Switch theme", value: "—" },
-                { label: "Open settings", value: "—" },
-                { label: "Start welcome tour", value: "—" },
+                { label: "Appearance", value: "Theme, wrapping, line numbers, and tab defaults" },
+                { label: "Settings", value: "Typography, layout, autosave, frontmatter, Vim, and AI provider" },
               ]}
             />
             <KV
               rows={[
                 { label: "Open vault / Close vault / Refresh vault", value: "—" },
                 { label: "Create new vault", value: "—" },
-                { label: "New folder", value: "When a vault is open" },
+                { label: "New folder", value: "Supports nested paths when a vault is open" },
                 { label: "Start / Stop voice input", value: "CTRL+SHIFT+V" },
+                { label: "Insert / discard voice preview", value: "When a preview exists" },
                 { label: "Open AI Chat", value: "CTRL+SHIFT+B · when AI is configured" },
-                { label: "Repurpose note into blog / social / newsletter draft…", value: "When AI is configured, on a note with content" },
-                { label: "Home / Documentation", value: "—" },
-                { label: "Focus editor", value: "—" },
+                { label: "Navigate", value: "Home, editor, settings, documentation, and welcome tour" },
               ]}
             />
+            <p>
+              Use <code>↑</code>/<code>↓</code> to move through results, <code>Enter</code> or{" "}
+              <code>Tab</code> to run the selected item, and <code>Escape</code> to close. The controlled
+              clear button resets the query without closing the palette and returns focus to the search field.
+            </p>
             <p>
               Combine this with the per-context shortcuts in{" "}
               <a href="#keyboard-shortcuts" className="text-sage font-semibold hover:underline">Keyboard shortcuts</a>{" "}

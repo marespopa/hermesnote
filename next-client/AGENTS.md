@@ -7,3 +7,35 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## TypeScript and Testing
+
+Run JavaScript tooling from `next-client`, not the repository root. This
+project pins Yarn 4.3.1 in `package.json`; use Corepack so a globally
+installed Yarn 1.x or `npm exec` does not bypass the repository dependencies.
+
+```powershell
+Set-Location next-client
+corepack enable
+corepack yarn install
+corepack yarn tsc --noEmit
+corepack yarn vitest run
+```
+
+For a focused test, pass the test file to Vitest:
+
+```powershell
+corepack yarn vitest run app/editor/components/VaultSidebar.test.tsx
+```
+
+The package scripts are also available after dependencies are installed:
+
+```powershell
+corepack yarn check
+corepack yarn test --run app/editor/components/VaultSidebar.test.tsx
+```
+
+Do not use `npm exec tsc` or a globally installed `yarn` command for
+validation. If `node_modules` is absent, install dependencies first; the
+repository's TypeScript and Vitest binaries are expected to come from the
+local install.

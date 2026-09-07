@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import {
   atom_wordWrap,
@@ -20,7 +20,7 @@ import {
   atom_geminiKey,
   atom_vimMode,
 } from "@/app/atoms/atoms";
-import { atom_availableGeminiModels, atom_availableClaudeModels, atom_lineNumbers, atom_showHiddenFiles, atom_tabsBarVisibleByDefault, atom_renderedFontSize } from "@/app/atoms/ui-atoms";
+import { atom_availableGeminiModels, atom_availableClaudeModels, atom_lineNumbers, atom_showHiddenFiles, atom_sidebarExpandedByDefault, atom_tabsBarVisibleByDefault, atom_renderedFontSize } from "@/app/atoms/ui-atoms";
 import { useFileSystem } from "@/app/hooks/use-file-system";
 import { testAIConnection, fetchGeminiModels, fetchClaudeModels } from "@/app/services/ai";
 import {
@@ -29,6 +29,9 @@ import {
   HiOutlineAcademicCap,
   HiOutlineLightningBolt,
   HiOutlineRefresh,
+  HiOutlineSun,
+  HiOutlineMoon,
+  HiOutlineDesktopComputer,
 } from "react-icons/hi";
 import Button from "@/app/components/Button";
 import Toggle from "@/app/components/Toggle";
@@ -56,6 +59,7 @@ const SettingsPage = () => {
   const [editorWidth, setEditorWidth] = useAtom(atom_editorWidth);
   const [frontmatterDefaultMode, setFrontmatterDefaultMode] = useAtom(atom_frontmatterDefaultMode);
   const [showHiddenFiles, setShowHiddenFiles] = useAtom(atom_showHiddenFiles);
+  const [sidebarExpandedByDefault, setSidebarExpandedByDefault] = useAtom(atom_sidebarExpandedByDefault);
   const [tabsBarVisibleByDefault, setTabsBarVisibleByDefault] = useAtom(atom_tabsBarVisibleByDefault);
   const [editorFontFamily, setEditorFontFamily] = useAtom(atom_editorFontFamily);
   const [renderedFontSize, setRenderedFontSize] = useAtom(atom_renderedFontSize);
@@ -149,10 +153,10 @@ const SettingsPage = () => {
     { label: "Wide", value: "wide" },
   ];
 
-  const THEME_OPTIONS: { label: string; value: Theme }[] = [
-    { label: "Light", value: "light" },
-    { label: "Dark", value: "dark" },
-    { label: "System", value: "system" },
+  const THEME_OPTIONS: { label: string; value: Theme; Icon: React.ComponentType<{ size?: number }> }[] = [
+    { label: "Light", value: "light", Icon: HiOutlineSun },
+    { label: "Dark", value: "dark", Icon: HiOutlineMoon },
+    { label: "System", value: "system", Icon: HiOutlineDesktopComputer },
   ];
 
   const startTour = () => {
@@ -198,6 +202,11 @@ const SettingsPage = () => {
               label="Show Tabs Bar"
               description="Show the open-file tabs strip by default. On by default on desktop; each pane can still be toggled with the chevron above it."
               control={<Toggle variant="soft" active={tabsBarVisibleByDefault} onChange={setTabsBarVisibleByDefault} />}
+            />
+            <SettingItem
+              label="Expand Sidebar by Default"
+              description="Open the Files sidebar automatically when starting or refreshing the editor."
+              control={<Toggle variant="soft" active={sidebarExpandedByDefault} onChange={setSidebarExpandedByDefault} />}
             />
             <SettingItem
               label="Editor Width"

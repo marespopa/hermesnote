@@ -16,6 +16,39 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import { useFileSystem } from "@/app/hooks/use-file-system";
 
+interface SaveMergedButtonProps {
+  activeFileHandle: FileSystemFileHandle | null;
+  mergedText: string;
+  onSaved: (lastModified: number) => void;
+}
+
+function SaveMergedButton({
+  activeFileHandle,
+  mergedText,
+  onSaved,
+}: SaveMergedButtonProps) {
+  const { saveFile } = useFileSystem();
+
+  const handleSave = async () => {
+    if (!activeFileHandle) return;
+    try {
+      const ok = await saveFile(mergedText, activeFileHandle, 0, false, undefined);
+      if (ok) {
+        const file = await activeFileHandle.getFile();
+        onSaved(file.lastModified);
+        toast.success("Merged changes saved");
+      } else {
+        toast.error("Failed to save merged content");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to save merged content");
+    }
+  };
+
+  return <Button variant="primary" onClick={handleSave}>Save merged</Button>;
+}
+
 export default function ConflictDialog() {
   const [activeFileHandle] = useAtom(atom_activeFileHandle);
   const [conflict, setConflict] = useAtom(atom_fileConflict);
@@ -24,6 +57,8 @@ export default function ConflictDialog() {
   const [, setContent] = useAtom(atom_content);
   const [, setLastSavedContent] = useAtom(atom_lastSavedContent);
   const [, setFileLastModified] = useAtom(atom_fileLastModified);
+  const [mergeOpen, setMergeOpen] = useState(false);
+  const [mergedText, setMergedText] = useState("");
 
   if (!conflict) return null;
 
@@ -46,8 +81,6 @@ export default function ConflictDialog() {
     }
   };
 
-  const { saveFile } = useFileSystem();
-
   const handleKeepLocal = async () => {
     if (!activeFileHandle) return;
     try {
@@ -61,9 +94,6 @@ export default function ConflictDialog() {
     }
   };
 
-  const [mergeOpen, setMergeOpen] = useState(false);
-  const [mergedText, setMergedText] = useState("");
-
   const openMergeEditor = () => {
     // Default merged editor: start with local content, but user can load any snapshot
     const local = activePath ? openFiles[activePath!]?.content || "" : "";
@@ -71,30 +101,17 @@ export default function ConflictDialog() {
     setMergeOpen(true);
   };
 
-  const handleSaveMerged = async () => {
-    if (!activeFileHandle) return;
-    try {
-      const ok = await saveFile(mergedText, activeFileHandle, 0, false, undefined);
-      if (ok) {
-        const file = await activeFileHandle.getFile();
-        setFileLastModified(file.lastModified);
-        setLastSavedContent(mergedText);
-        setConflict(null);
-        setMergeOpen(false);
-        // Clear snapshots for this file now that merge resolved
-        if (activePath) {
-          setOpenFiles(prev => {
-            if (!prev[activePath!]) return prev;
-            return { ...prev, [activePath!]: { ...prev[activePath!], snapshots: [] } };
-          });
-        }
-        toast.success("Merged changes saved");
-      } else {
-        toast.error("Failed to save merged content");
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to save merged content");
+  const handleMergedSaved = (lastModified: number) => {
+    setFileLastModified(lastModified);
+    setLastSavedContent(mergedText);
+    setConflict(null);
+    setMergeOpen(false);
+    // Clear snapshots for this file now that merge resolved
+    if (activePath) {
+      setOpenFiles(prev => {
+        if (!prev[activePath!]) return prev;
+        return { ...prev, [activePath!]: { ...prev[activePath!], snapshots: [] } };
+      });
     }
   };
 
@@ -174,7 +191,11 @@ export default function ConflictDialog() {
               className="w-full h-48 mt-2 p-2 font-mono text-sm border rounded"
             />
             <div className="flex gap-2 mt-2">
-              <Button variant="primary" onClick={handleSaveMerged}>Save merged</Button>
+              <SaveMergedButton
+                activeFileHandle={activeFileHandle}
+                mergedText={mergedText}
+                onSaved={handleMergedSaved}
+              />
               <Button variant="secondary" onClick={() => setMergeOpen(false)}>Cancel</Button>
             </div>
           </div>

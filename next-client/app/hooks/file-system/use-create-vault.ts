@@ -11,15 +11,16 @@ import {
   atom_vaultCreationError,
   atom_newVaultFlowOpen,
   atom_frontmatterHasPrompted,
-  type VaultCreationSubStep,
 } from "@/app/atoms/ui-atoms";
 
-const INVALID_NAME_CHARS = /[<>:"/\\|?*\x00-\x1F]/;
+const INVALID_NAME_CHARS = /[<>:"/\\|?*]/;
 
 function validateVaultName(name: string): string | null {
   const trimmed = name.trim();
   if (!trimmed) return "Vault name is required.";
-  if (INVALID_NAME_CHARS.test(trimmed)) return 'Name cannot contain: < > : " / \\ | ? *';
+  if (INVALID_NAME_CHARS.test(trimmed) || Array.from(trimmed).some((character) => character.charCodeAt(0) <= 31)) {
+    return 'Name cannot contain: < > : " / \\ | ? * or control characters';
+  }
   if (trimmed.startsWith(".")) return "Name cannot start with a dot.";
   if (trimmed.endsWith(" ") || trimmed.endsWith(".")) return "Name cannot end with a space or dot.";
   if (trimmed.length > 255) return "Name is too long (max 255 characters).";

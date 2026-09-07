@@ -2,7 +2,7 @@ import { ChangeSet, EditorSelection } from "@codemirror/state";
 import { EditorView } from "@codemirror/view";
 
 const LIST_LINE = /^(\s*)([-*+]\s+|\d+[.)]\s+)(.*)$/;
-const TASK_LINE = /^(\s*)(?:[-*+]\s+|\d+[.)]\s+)\[([ xX/\-])\]/;
+const TASK_LINE = /^(\s*)(?:[-*+]\s+|\d+[.)]\s+)\[([ xX/-])\]/;
 const INDENT = "  ";
 
 function subtreeEnd(lines: string[], lineNumber: number): number {
@@ -83,7 +83,6 @@ export function moveSubtreeInContent(content: string, lineNumber: number, direct
     }
     const sibling = lines[siblingStart]?.match(LIST_LINE);
     if (!sibling || sibling[1].replace(/\t/g, "    ").length !== indent) return content;
-    const siblingEnd = subtreeEnd(lines, siblingStart);
     const block = lines.splice(lineNumber, end - lineNumber);
     lines.splice(siblingStart, 0, ...block);
     return lines.join("\n");

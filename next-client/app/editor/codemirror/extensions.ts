@@ -1,4 +1,4 @@
-import { Compartment, Extension, EditorSelection } from "@codemirror/state";
+import { Compartment, Extension } from "@codemirror/state";
 import { EditorView, keymap, drawSelection, lineNumbers, placeholder as placeholderExt } from "@codemirror/view";
 import { history, historyKeymap, defaultKeymap } from "@codemirror/commands";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";

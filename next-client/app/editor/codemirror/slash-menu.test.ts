@@ -7,7 +7,6 @@ import {
   CURSOR_SENTINEL,
   DATE_EDITOR_SENTINEL,
   LINK_EDITOR_SENTINEL,
-  TABLE_DIALOG_SENTINEL,
   TASK_EDITOR_SENTINEL,
   WIKILINK_EDITOR_SENTINEL,
 } from "../components/constants";
@@ -74,7 +73,7 @@ describe("createSlashMenuSource", () => {
     ["Date", DATE_EDITOR_SENTINEL, "onOpenDatePicker"],
     ["Task", TASK_EDITOR_SENTINEL, "onOpenTaskDialog"],
   ] as const)("routes the %s template to its callback", (label, _sentinel, callbackName) => {
-    const { callbacks, result } = applyOption(`/${label}`, label);
+    const { callbacks } = applyOption(`/${label}`, label);
     expect(callbacks[callbackName]).toHaveBeenCalledWith({ from: 0, to: label.length + 1 });
   });
 

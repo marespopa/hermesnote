@@ -8,8 +8,13 @@ export type Command = {
   id: string;
   label: string;
   shortcut?: string;
-  keywords?: string;
-  action: () => void;
+  description?: string;
+  category?: "Navigation" | "Document" | "Editor" | "Workspace" | "Vault" | "Tasks" | "Views" | "AI" | "Voice" | "Settings" | "Help";
+  keywords?: string | string[];
+  disabledReason?: string;
+  danger?: boolean;
+  closeOnRun?: boolean;
+  action: () => unknown | Promise<unknown>;
 };
 
 type CommandPaletteContextValue = {
@@ -26,15 +31,20 @@ const CommandPaletteContext = createContext<CommandPaletteContextValue | null>(n
 
 export function CommandPaletteProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
-  const commandsRef = useRef<Map<string, Command>>(new Map());
+  const commandsRef = useRef<Map<string, Map<symbol, Command>>>(new Map());
   const [version, setVersion] = useState(0);
   const [recentCommandIds, setRecentCommandIds] = useAtom(atom_recentCommandIds);
 
   const register = useCallback((command: Command) => {
-    commandsRef.current.set(command.id, command);
+    const registrationId = Symbol(command.id);
+    const registrations = commandsRef.current.get(command.id) ?? new Map<symbol, Command>();
+    registrations.set(registrationId, command);
+    commandsRef.current.set(command.id, registrations);
     setVersion((v) => v + 1);
     return () => {
-      commandsRef.current.delete(command.id);
+      const current = commandsRef.current.get(command.id);
+      current?.delete(registrationId);
+      if (current?.size === 0) commandsRef.current.delete(command.id);
       setVersion((v) => v + 1);
     };
   }, []);
@@ -48,16 +58,29 @@ export function CommandPaletteProvider({ children }: { children: React.ReactNode
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "p") {
+      const key = e.key.toLowerCase();
+      const isPaletteShortcut =
+        (e.ctrlKey || e.metaKey) && (key === "k" || (e.shiftKey && key === "p"));
+      if (isPaletteShortcut) {
         e.preventDefault();
-        setIsOpen((prev) => !prev);
+        setIsOpen(true);
       }
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const commands = useMemo(() => Array.from(commandsRef.current.values()), [version]);
+  const commands = useMemo(
+    () => {
+      void version;
+      return (
+      Array.from(commandsRef.current.values())
+        .map((registrations) => Array.from(registrations.values()).at(-1))
+        .filter((command): command is Command => command !== undefined)
+      );
+    },
+    [version],
+  );
 
   const value = useMemo(
     () => ({ isOpen, open, close, commands, register, recentCommandIds, markUsed }),
@@ -91,7 +114,12 @@ export function useRegisterCommand(command: Command | null) {
       id,
       get label() { return latest.current?.label ?? ""; },
       get shortcut() { return latest.current?.shortcut; },
+      get description() { return latest.current?.description; },
+      get category() { return latest.current?.category; },
       get keywords() { return latest.current?.keywords; },
+      get disabledReason() { return latest.current?.disabledReason; },
+      get danger() { return latest.current?.danger; },
+      get closeOnRun() { return latest.current?.closeOnRun; },
       action: (...args: Parameters<Command["action"]>) => latest.current?.action(...args),
     } as Command;
     return register(stable);

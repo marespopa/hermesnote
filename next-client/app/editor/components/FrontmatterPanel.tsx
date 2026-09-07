@@ -30,6 +30,54 @@ interface FrontmatterPanelProps {
   isMobile: boolean;
 }
 
+interface SummaryBarProps {
+  displayFontSize: number | string;
+  displayTitle: string;
+  fontFamily: string;
+  hasFrontmatter: boolean;
+  hasTitle: boolean;
+  onOpen: () => void;
+  sticky?: boolean;
+  summaryLine: string;
+}
+
+function SummaryBar({
+  displayFontSize,
+  displayTitle,
+  fontFamily,
+  hasFrontmatter,
+  hasTitle,
+  onOpen,
+  sticky = false,
+  summaryLine,
+}: SummaryBarProps) {
+  return (
+    <button
+      type="button"
+      disabled={!hasFrontmatter}
+      onClick={onOpen}
+      className={`flex items-center gap-2 w-full text-left select-none px-0.5 ${
+        hasFrontmatter ? "" : "cursor-default"
+      } ${
+        sticky ? "sticky top-0 z-30 bg-chrome/95 backdrop-blur-sm py-1.5 border-b border-edge-subtle" : "mb-1"
+      }`}
+      style={{ fontFamily, fontSize: displayFontSize }}
+    >
+      {displayTitle && (
+        <span
+          className={`shrink min-w-0 max-w-[30ch] truncate text-[0.72em] ${
+            hasTitle ? "opacity-50 font-medium" : "opacity-35"
+          }`}
+        >
+          {displayTitle}
+        </span>
+      )}
+      {summaryLine && <span className="flex-1 min-w-0 truncate text-right opacity-30 text-[0.72em]">{summaryLine}</span>}
+      {hasFrontmatter && <HiChevronRight size={13} className="shrink-0 text-ink-muted dark:text-fg-faint" />}
+    </button>
+  );
+}
+
 export default function FrontmatterPanel({
   filePath,
   content,
@@ -147,35 +195,19 @@ export default function FrontmatterPanel({
   // Frontmatter is optional — the bar is purely informational (save status +
   // title) for a file that doesn't have any. Only files that already have a
   // frontmatter block are clickable into the fields/YAML editor.
-  const SummaryBar = ({ sticky = false }: { sticky?: boolean }) => (
-    <button
-      type="button"
-      disabled={!rawFrontmatter}
-      onClick={() => {
-        if (!rawFrontmatter) return;
-        if (isMobile) setSheetOpen(true);
-        else setExpanded(true);
-      }}
-      className={`flex items-center gap-2 w-full text-left select-none px-0.5 ${
-        rawFrontmatter ? "" : "cursor-default"
-      } ${
-        sticky ? "sticky top-0 z-30 bg-chrome/95 backdrop-blur-sm py-1.5 border-b border-edge-subtle" : "mb-1"
-      }`}
-      style={{ fontFamily, fontSize: displayFontSize }}
-    >
-      {displayTitle && (
-        <span
-          className={`shrink min-w-0 max-w-[30ch] truncate text-[0.72em] ${
-            title ? "opacity-50 font-medium" : "opacity-35"
-          }`}
-        >
-          {displayTitle}
-        </span>
-      )}
-      {summaryLine && <span className="flex-1 min-w-0 truncate text-right opacity-30 text-[0.72em]">{summaryLine}</span>}
-      {rawFrontmatter && <HiChevronRight size={13} className="shrink-0 text-ink-muted dark:text-fg-faint" />}
-    </button>
-  );
+  const summaryBarProps = {
+    displayFontSize,
+    displayTitle,
+    fontFamily,
+    hasFrontmatter: Boolean(rawFrontmatter),
+    hasTitle: Boolean(title),
+    onOpen: () => {
+      if (!rawFrontmatter) return;
+      if (isMobile) setSheetOpen(true);
+      else setExpanded(true);
+    },
+    summaryLine,
+  };
 
   const FIXED_KEYS = ["title", "status", "tags"];
   const customKeys = Object.keys(fields).filter((k) => !FIXED_KEYS.includes(k));
@@ -240,7 +272,7 @@ export default function FrontmatterPanel({
   if (isMobile) {
     return (
       <>
-        <SummaryBar />
+        <SummaryBar {...summaryBarProps} />
         <DialogModal
           isOpened={sheetOpen}
           onClose={() => setSheetOpen(false)}
@@ -272,8 +304,8 @@ export default function FrontmatterPanel({
 
   return (
     <div ref={panelRootRef}>
-      {!expanded && <SummaryBar />}
-      {expanded && !inView && <SummaryBar sticky />}
+      {!expanded && <SummaryBar {...summaryBarProps} />}
+      {expanded && !inView && <SummaryBar {...summaryBarProps} sticky />}
       {expanded && (
         <div className="flex flex-col gap-2 mb-2 border-b border-edge-subtle pb-3">
           <div className="flex items-center justify-end">

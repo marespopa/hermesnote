@@ -38,7 +38,7 @@ export interface ParsedDocument {
 
 const HEADING_PATTERN = /^( {0,3})(#{1,6})\s+(.*?)\s*#*\s*$/;
 const LIST_PATTERN = /^(\s*)(?:[-*+]\s+|\d+[.)]\s+)(.*)$/;
-const TASK_PATTERN = /^\[([ xX/\-])\]\s*(.*)$/;
+const TASK_PATTERN = /^\[([ xX/-])\]\s*(.*)$/;
 const DIRECTIVE_PATTERN = /@([a-z]+)\(([^)]*)\)/gi;
 const TAG_PATTERN = /(^|\s)#([\w-]+)/g;
 

@@ -34,7 +34,6 @@ interface VaultSidebarTasksProps {
 }
 
 type Group = "todo" | "prog" | "hold" | "done";
-type GroupBy = "status" | "file";
 
 const GROUP_LABEL: Record<Group, string> = { todo: "To Do", prog: "In Progress", hold: "On Hold", done: "Done" };
 

@@ -91,7 +91,7 @@ function processInline(ranges: MarkRange[], label: string, base: number) {
 
   if (label.includes("`")) {
     for (const m of label.matchAll(REGEX_CODE_INLINE)) {
-      const [full, open, inner, close] = m;
+      const [full, open, inner] = m;
       const i = m.index!;
       push(i, i + open.length, FADED);
       push(i + open.length, i + open.length + inner.length, "bg-paper-softgray/80 dark:bg-paper-dark-surface/50 rounded-sm");
