@@ -498,7 +498,7 @@ const WelcomeWizard = ({ initialStep = 0 }: { initialStep?: number }) => {
                 <>
                   <span>Press</span>
                   <kbd className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-paper-softgray dark:bg-paper-dark-surface text-ink-muted dark:text-fg-faint border border-edge">
-                    {formatShortcut("p", { shift: true })}
+                    {formatShortcut("k")}
                   </kbd>
                   <span>anytime to open the command palette</span>
                 </>
