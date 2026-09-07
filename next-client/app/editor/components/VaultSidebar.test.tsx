@@ -59,6 +59,7 @@ import { useFileSystem } from "@/app/hooks/use-file-system";
 import { useAtomValue, useAtom } from "jotai";
 import { atom_userName } from "@/app/atoms/ui-atoms";
 import { atom_vaultFiles } from "@/app/atoms/vault-atoms";
+import { version } from "@/package.json";
 
 describe("VaultSidebar Component", () => {
   const mockOnClose = vi.fn();
@@ -86,6 +87,7 @@ describe("VaultSidebar Component", () => {
       restoreVault: vi.fn(),
       isVaultSupported: true,
       isMounted: true,
+      closeVault: vi.fn(),
     };
 
     (useFileSystem as any).mockReturnValue(mockFileSystem);
@@ -133,6 +135,17 @@ describe("VaultSidebar Component", () => {
   it("renders vault name", () => {
     render(<VaultSidebar panel="search" onClose={mockOnClose} />);
     expect(screen.getByText("My Vault")).toBeInTheDocument();
+  });
+
+  it("renders the HermesMarkdown version in the footer", () => {
+    render(<VaultSidebar panel="search" onClose={mockOnClose} />);
+    expect(screen.getByText(`HermesMarkdown v${version}`)).toBeInTheDocument();
+  });
+
+  it("closes the vault from the footer", () => {
+    render(<VaultSidebar panel="search" onClose={mockOnClose} />);
+    fireEvent.click(screen.getByRole("button", { name: "Close Vault" }));
+    expect(mockFileSystem.closeVault).toHaveBeenCalledOnce();
   });
 
   it("greets the user in the Files panel", () => {

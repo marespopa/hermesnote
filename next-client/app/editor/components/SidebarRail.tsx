@@ -10,7 +10,6 @@ import {
   HiOutlineMoon,
   HiOutlineDesktopComputer,
   HiOutlineRefresh,
-  HiOutlineLogout,
   HiOutlineDatabase,
   HiOutlineQuestionMarkCircle,
   HiOutlineViewGrid,
@@ -22,7 +21,6 @@ import { useCommandPalette } from "@/app/components/CommandPalette/CommandPalett
 import { useFileSystem } from "@/app/hooks/use-file-system";
 import { formatShortcut } from "@/app/utils/platform";
 import { atom_theme, RailPanel, type Theme } from "@/app/atoms/ui-atoms";
-import { version } from "@/package.json";
 
 // Click cycles system -> light -> dark -> system. Each entry's Icon/label
 // describes that state itself (not the state the click leads to).
@@ -46,7 +44,7 @@ interface SidebarRailProps {
 export default function SidebarRail({ panel, onSelectPanel, reopenPanel = "files", onSettings, onRefreshVault, onOpenAIChat, onOpenDocumentation, onOpenKeyboardShortcuts }: SidebarRailProps) {
   void panel;
   void onSelectPanel;
-  const { vaultHandle, closeVault, openVault, isVaultSupported } = useFileSystem();
+  const { vaultHandle, openVault, isVaultSupported } = useFileSystem();
   const { open: openCommandPalette } = useCommandPalette();
   const [rawTheme, setTheme] = useAtom(atom_theme);
   const themeCycleIndex = THEME_CYCLE.findIndex((t) => t.value === rawTheme);
@@ -174,20 +172,7 @@ export default function SidebarRail({ panel, onSelectPanel, reopenPanel = "files
           </Tooltip>
         </div>
 
-        {vaultHandle ? (
-          <div className={`w-full flex justify-center ${onRefreshVault ? "" : "mt-2 pt-2 border-t border-edge-subtle"}`}>
-            <Tooltip label="Close Vault" position="right">
-              <Button
-                variant="icon"
-                onClick={closeVault}
-                className="w-10 h-10 text-red-500/80 hover:text-red-500 !rounded-none"
-                aria-label="Close Vault"
-              >
-                <HiOutlineLogout size={20} />
-              </Button>
-            </Tooltip>
-          </div>
-        ) : (
+        {!vaultHandle && (
           <div className="w-full flex justify-center mt-2 pt-2 border-t border-edge-subtle">
             <Tooltip label={isVaultSupported ? "Open Vault" : "Vault not supported"} position="right">
               <Button
@@ -203,13 +188,6 @@ export default function SidebarRail({ panel, onSelectPanel, reopenPanel = "files
           </div>
         )}
 
-        <div className="w-full flex justify-center pt-1 pb-0.5">
-          <Tooltip label={`Hermes Markdown v${version}`} position="right">
-            <span className="text-[10px] font-mono select-none text-ink-muted/60 hover:text-ink-light dark:text-stone/60 dark:hover:text-ink-dark transition-colors cursor-default">
-              v{version}
-            </span>
-          </Tooltip>
-        </div>
       </div>
     </nav>
   );

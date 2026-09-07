@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { HiOutlineLogout } from "react-icons/hi";
 import { useFileSystem } from "@/app/hooks/use-file-system";
 import { useDialog } from "@/app/hooks/use-dialog";
+import Button from "@/app/components/Button";
 import {
   atom_activeFilePath,
   atom_activePaneId,
@@ -22,6 +24,7 @@ import UnifiedSearchInput from "./UnifiedSearchInput";
 import VaultSidebarHeader from "./VaultSidebarHeader";
 import VaultSidebarNavigator from "./VaultSidebarNavigator";
 import { useSidebarResize } from "../hooks/useSidebarResize";
+import { version } from "@/package.json";
 
 // The rail (SidebarRail.tsx) is always visible at a fixed width, so this
 // panel's own floor is just whatever its content needs — the search input
@@ -57,6 +60,7 @@ export default function VaultSidebar({
     createNewFile,
     isMounted,
     openVault,
+    closeVault,
     isVaultSupported,
     scanVault,
   } = useFileSystem();
@@ -256,6 +260,22 @@ export default function VaultSidebar({
           </div>
             )}
             </VaultSidebarNavigator>
+        )}
+      </div>
+      <div className="shrink-0 border-t border-edge-subtle px-3 py-2 flex items-center justify-between gap-3">
+        <span className="text-[10px] font-mono select-none text-fg-faint">
+          HermesMarkdown v{version}
+        </span>
+        {vaultHandle && (
+          <Button
+            variant="bare"
+            onClick={closeVault}
+            className="shrink-0 text-fg-faint hover:text-red-500"
+            aria-label="Close Vault"
+          >
+            <HiOutlineLogout size={14} />
+            Close Vault
+          </Button>
         )}
       </div>
       </div>
