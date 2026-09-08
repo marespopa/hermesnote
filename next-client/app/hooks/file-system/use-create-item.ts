@@ -12,10 +12,11 @@ import { withRetry } from "./shared";
 
 interface UseCreateItemProps {
   scanVault: (handle: FileSystemDirectoryHandle) => Promise<void>;
+  indexVaultTags: (passedHandle?: FileSystemDirectoryHandle) => Promise<void>;
   openFile: (fileHandle: FileSystemFileHandle, providedPath?: string, force?: boolean) => Promise<void>;
 }
 
-export function useCreateItem({ scanVault, openFile }: UseCreateItemProps) {
+export function useCreateItem({ scanVault, indexVaultTags, openFile }: UseCreateItemProps) {
   const [vaultHandle] = useAtom(atom_vaultHandle);
   const [currentDirectoryHandle] = useAtom(atom_currentDirectoryHandle);
   const dialog = useDialog();
@@ -104,6 +105,7 @@ export function useCreateItem({ scanVault, openFile }: UseCreateItemProps) {
         });
 
         await scanVault(targetDir);
+        await indexVaultTags(targetDir);
 
         // Calculate path for opening
         let path = fileName;
@@ -143,7 +145,7 @@ export function useCreateItem({ scanVault, openFile }: UseCreateItemProps) {
         return null;
       }
     },
-    [vaultHandle, currentDirectoryHandle, scanVault, openFile],
+    [vaultHandle, currentDirectoryHandle, scanVault, indexVaultTags, openFile],
   );
 
   const createWikiLinkFile = useCallback(async (name: string) => {
@@ -176,6 +178,7 @@ export function useCreateItem({ scanVault, openFile }: UseCreateItemProps) {
         await writable.close();
       });
       await scanVault(targetDir);
+      await indexVaultTags(targetDir);
 
       let path = fileName;
       if (vaultHandle) {
@@ -198,7 +201,7 @@ export function useCreateItem({ scanVault, openFile }: UseCreateItemProps) {
       toast.error("Failed to create file");
       return null;
     }
-  }, [chooseTargetDirectory, scanVault, vaultHandle]);
+  }, [chooseTargetDirectory, scanVault, indexVaultTags, vaultHandle]);
 
   const createNewFile = useCallback(async (dirHandle?: FileSystemDirectoryHandle) => {
     if (!vaultHandle) return;
