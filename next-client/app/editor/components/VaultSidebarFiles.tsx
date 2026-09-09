@@ -33,6 +33,7 @@ interface VaultSidebarFilesProps {
   isSearchActive?: boolean;
   highlightQuery?: string;
   treeView?: boolean;
+  folderPaths?: string[];
   // Tree-only: folders are inferred from paths, so folder actions need a way
   // to resolve a real FileSystemDirectoryHandle.
   resolveFolderHandle?: (path: string) => Promise<any | null>;
@@ -63,15 +64,12 @@ interface TreeFileNode {
 
 type TreeNode = TreeFolderNode | TreeFileNode;
 
-function buildFileTree(files: any[]): TreeNode[] {
+function buildFileTree(files: any[], folderPaths: string[]): TreeNode[] {
   const root: TreeFolderNode = { type: "folder", name: "", path: "", children: [] };
   const folderByPath = new Map<string, TreeFolderNode>([["", root]]);
 
-  for (const entry of files) {
-    const path: string = getEntryPath(entry) || entry.name;
+  const ensureFolder = (path: string) => {
     const segments = path.split("/");
-    const fileName = segments.pop()!;
-
     let parentPath = "";
     let parent = root;
     for (const segment of segments) {
@@ -85,6 +83,18 @@ function buildFileTree(files: any[]): TreeNode[] {
       parent = folder;
       parentPath = folderPath;
     }
+    return parent;
+  };
+
+  for (const folderPath of folderPaths) {
+    ensureFolder(folderPath);
+  }
+
+  for (const entry of files) {
+    const path: string = getEntryPath(entry) || entry.name;
+    const segments = path.split("/");
+    const fileName = segments.pop()!;
+    const parent = ensureFolder(segments.join("/"));
 
     parent.children.push({ type: "file", name: fileName, path, entry });
   }
@@ -597,6 +607,7 @@ export default function VaultSidebarFiles({
   isSearchActive = false,
   highlightQuery = "",
   treeView = false,
+  folderPaths = [],
   resolveFolderHandle,
   createNewFile,
   moveItem,
@@ -615,7 +626,10 @@ export default function VaultSidebarFiles({
   const [draggedEntry, setDraggedEntry] = useState<DraggedEntry | null>(null);
   const [rootDragOver, setRootDragOver] = useState(false);
 
-  const tree = useMemo(() => (treeView ? buildFileTree(processedFiles) : []), [treeView, processedFiles]);
+  const tree = useMemo(
+    () => (treeView ? buildFileTree(processedFiles, folderPaths) : []),
+    [treeView, processedFiles, folderPaths],
+  );
 
   const activeAncestorPaths = useMemo(() => {
     const ancestors = new Set<string>();

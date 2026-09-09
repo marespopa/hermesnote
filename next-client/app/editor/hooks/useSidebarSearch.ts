@@ -72,6 +72,17 @@ export function useSidebarSearch({ selectedTags, panel }: UseSidebarSearchProps)
       .map((f: any) => ({ name: f.name, kind: "file" as const, handle: f as FileSystemFileHandle, path: (f as any).path || f.name }));
   }, [fileMetadata, vaultFiles, showHiddenFiles]);
 
+  // Metadata only indexes files, so retain scanned directory paths separately
+  // for the Files tree. This lets empty folders remain visible.
+  const folderPaths = useMemo(() =>
+    (Array.isArray(vaultFiles) ? vaultFiles : [])
+      .filter((entry: any) =>
+        entry.kind === "directory" &&
+        (showHiddenFiles || !entry.name.startsWith(".")),
+      )
+      .map((entry: any) => entry.path || entry.name),
+  [vaultFiles, showHiddenFiles]);
+
   const [showAllResults, setShowAllResults] = useState(false);
 
   useEffect(() => {
@@ -123,6 +134,7 @@ export function useSidebarSearch({ selectedTags, panel }: UseSidebarSearchProps)
     showAllResults,
     setShowAllResults,
     allFiles,
+    folderPaths,
     tags,
     tagCounts,
   };

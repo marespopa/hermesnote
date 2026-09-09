@@ -1,7 +1,11 @@
-import { render, screen, fireEvent, cleanup } from "@testing-library/react";
+import { render, screen, fireEvent, cleanup, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import VaultSidebar from "./VaultSidebar";
 import "@testing-library/jest-dom";
+
+const { mockFolderPrompt } = vi.hoisted(() => ({
+  mockFolderPrompt: vi.fn(),
+}));
 
 // Mock jotai
 vi.mock("jotai", async (importOriginal) => {
@@ -47,6 +51,12 @@ vi.mock("@/app/hooks/use-file-system", () => ({
   useFileSystem: vi.fn(),
 }));
 
+vi.mock("@/app/hooks/use-dialog", () => ({
+  useDialog: vi.fn(() => ({
+    prompt: mockFolderPrompt,
+  })),
+}));
+
 // Mock next/navigation
 vi.mock("next/navigation", () => ({
   useRouter: vi.fn(() => ({
@@ -64,14 +74,18 @@ import { version } from "@/package.json";
 describe("VaultSidebar Component", () => {
   const mockOnClose = vi.fn();
   let mockFileSystem: any;
+  let mockVaultFiles: any[];
 
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
+    mockVaultFiles = [];
+    mockFolderPrompt.mockResolvedValue("Projects");
 
     const mockVaultHandle = {
       name: "My Vault",
       kind: "directory",
+      getDirectoryHandle: vi.fn(),
     };
 
     mockFileSystem = {
@@ -88,12 +102,16 @@ describe("VaultSidebar Component", () => {
       isVaultSupported: true,
       isMounted: true,
       closeVault: vi.fn(),
+      scanVault: vi.fn(async () => {
+        mockVaultFiles = [{ name: "Projects", kind: "directory", path: "Projects" }];
+      }),
     };
 
     (useFileSystem as any).mockReturnValue(mockFileSystem);
 
     (useAtomValue as any).mockImplementation((atom: any) => {
       if (atom === atom_userName) return "Ada";
+      if (atom === atom_vaultFiles) return mockVaultFiles;
       const str = atom.toString();
       if (str === "atom_fileMetadata") {
         return {
@@ -176,6 +194,20 @@ describe("VaultSidebar Component", () => {
     const file = await screen.findByText("test");
     fireEvent.click(file);
     expect(mockFileSystem.openFile).toHaveBeenCalled();
+  });
+
+  it("shows a newly created empty folder in the Files tree", async () => {
+    render(<VaultSidebar panel="files" onClose={mockOnClose} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "New Folder" }));
+
+    await waitFor(() => {
+      expect(mockFileSystem.vaultHandle.getDirectoryHandle).toHaveBeenCalledWith("Projects", { create: true });
+      expect(mockFileSystem.scanVault).toHaveBeenCalledWith(mockFileSystem.vaultHandle);
+    });
+
+    render(<VaultSidebar panel="files" onClose={mockOnClose} />);
+    expect(screen.getByText("Projects")).toBeInTheDocument();
   });
 
   it("shows tag suggestion #work when typing # in search", () => {

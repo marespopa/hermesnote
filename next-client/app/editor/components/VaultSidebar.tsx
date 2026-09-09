@@ -105,6 +105,7 @@ export default function VaultSidebar({
     hasMoreResults,
     setShowAllResults,
     allFiles,
+    folderPaths,
     tags,
     tagCounts,
   } = useSidebarSearch({ selectedTags, panel });
@@ -243,6 +244,7 @@ export default function VaultSidebar({
                 isSearchActive={panel === "search" && isSearching}
                 highlightQuery={panel === "search" ? searchQuery : ""}
                 treeView={panel === "files"}
+                folderPaths={folderPaths}
                 resolveFolderHandle={resolveFolderHandle}
                 createNewFile={createNewFile}
                 moveItem={moveItem}
