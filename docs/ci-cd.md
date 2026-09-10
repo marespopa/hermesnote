@@ -4,8 +4,6 @@
 
 The `CI` workflow runs type-checking, linting, unit tests, and a production build for pull requests targeting `trunk` and for direct pushes to `trunk`. Configure the repository branch-protection rule for `trunk` to require the `Verify application` check before merging.
 
-Internal pull requests also create a Netlify deploy preview and smoke-test its deployed URL. Create a GitHub `preview` environment containing `NETLIFY_AUTH_TOKEN` and `NETLIFY_SITE_ID`. Pull requests from forks intentionally do not receive preview secrets.
-
 ## Releasing
 
 After the desired version has been committed to `trunk`, run the `Create release` workflow. It checks out and validates `trunk`, then creates the annotated `vX.Y.Z` tag and its GitHub Release before dispatching `CD`. Deployments also run when a maintainer pushes a matching `v*` tag. Both paths require approval from the protected `production` environment.
