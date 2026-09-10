@@ -2,6 +2,11 @@ name: Create release
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - trunk
+    types:
+      - closed
 
 permissions:
   actions: write
@@ -14,6 +19,7 @@ concurrency:
 jobs:
   release:
     name: Tag and publish release
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'release'))
     runs-on: ubuntu-latest
 
     steps:
@@ -78,4 +84,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: v${{ steps.version.outputs.value }}
-        run: gh workflow run deploy-production.yml --ref "$TAG"
+        run: gh workflow run deploy-production.yml --ref trunk -f "release_ref=$TAG"
