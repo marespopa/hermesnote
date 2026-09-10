@@ -1,141 +1,106 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import ConflictDialog from "./ConflictDialog";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import "@testing-library/jest-dom";
+import ConflictDialog from "./ConflictDialog";
+import {
+  atom_activeFileHandle,
+  atom_activeFilePath,
+  atom_content,
+  atom_fileConflict,
+  atom_fileLastModified,
+  atom_lastSavedContent,
+  atom_openFiles,
+} from "@/app/atoms/atoms";
 
-// Mock jotai
 vi.mock("jotai", async (importOriginal) => {
-  const actual: any = await importOriginal();
-  return {
-    ...actual,
-    useAtom: vi.fn(),
-  };
+  const actual = await importOriginal<typeof import("jotai")>();
+  return { ...actual, useAtom: vi.fn() };
 });
 
-import { useAtom } from "jotai";
+vi.mock("@/app/hooks/use-file-system", () => ({
+  useFileSystem: vi.fn(),
+}));
 
-describe("ConflictDialog Component", () => {
+vi.mock("react-hot-toast", () => ({
+  default: { success: vi.fn(), error: vi.fn() },
+}));
+
+import { useAtom } from "jotai";
+import { useFileSystem } from "@/app/hooks/use-file-system";
+
+describe("ConflictDialog", () => {
   const setConflict = vi.fn();
   const setContent = vi.fn();
   const setLastSavedContent = vi.fn();
   const setFileLastModified = vi.fn();
-
-  const mockActiveFileHandle = {
+  const setOpenFiles = vi.fn();
+  const saveFile = vi.fn();
+  const fileHandle = {
     getFile: vi.fn().mockResolvedValue({
-      lastModified: 123456789,
-      text: vi.fn().mockResolvedValue("remote content"),
+      lastModified: 200,
+      text: vi.fn().mockResolvedValue("incoming change"),
     }),
   };
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
-    (useAtom as any).mockImplementation((atom: any) => {
-      // Logic to return different values based on atom usage in the component
-      const atomStr = atom?.debugLabel || atom?.toString() || "";
-      
-      if (atomStr.includes("activeFileHandle")) return [mockActiveFileHandle];
-      if (atomStr.includes("fileConflict")) return [{ remoteContent: "remote content" }, setConflict];
-      if (atomStr.includes("content")) return ["local content", setContent];
-      if (atomStr.includes("lastSavedContent")) return ["original content", setLastSavedContent];
-      if (atomStr.includes("fileLastModified")) return [100000000, setFileLastModified];
-      
-      // Fallback based on call order if toString/debugLabel is unhelpful
-      // 1. activeFileHandle
-      // 2. conflict (fileConflict)
-      // 3. content
-      // 4. lastSavedContent
-      // 5. fileLastModified
-      return [null, vi.fn()];
-    });
+    (useFileSystem as ReturnType<typeof vi.fn>).mockReturnValue({ saveFile });
+    const states = new Map<any, any>([
+      [atom_activeFileHandle, [fileHandle]],
+      [atom_fileConflict, [{ remoteContent: "incoming change" }, setConflict]],
+      [atom_content, ["current change", setContent]],
+      [atom_lastSavedContent, ["base content", setLastSavedContent]],
+      [atom_fileLastModified, [100, setFileLastModified]],
+      [atom_activeFilePath, ["test.md"]],
+      [atom_openFiles, [{ "test.md": { content: "current change" } }, setOpenFiles]],
+    ]);
+    (useAtom as ReturnType<typeof vi.fn>).mockImplementation((atom) => states.get(atom) ?? [null, vi.fn()]);
   });
 
-  it("renders conflict message when there is a conflict", () => {
-    // Manually control return values for this test to be sure
-    let callIdx = 0;
-    (useAtom as any).mockImplementation(() => {
-      callIdx++;
-      if (callIdx === 1) return [mockActiveFileHandle];
-      if (callIdx === 2) return [{ remoteContent: "remote content" }, setConflict];
-      if (callIdx === 3) return [{}, vi.fn()];
-      if (callIdx === 4) return ["test.md", vi.fn()];
-      if (callIdx === 5) return ["local content", setContent];
-      if (callIdx === 6) return ["original content", setLastSavedContent];
-      if (callIdx === 7) return [100000000, setFileLastModified];
-      return [null, vi.fn()];
-    });
-
+  it("offers incoming, current, and merge-editor choices", () => {
     render(<ConflictDialog />);
 
-    expect(screen.getByText(/External Modification/i)).toBeInTheDocument();
-    expect(screen.getByText(/This file was modified externally/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /accept incoming/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /keep current/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /resolve in merge editor/i })).toBeInTheDocument();
   });
 
-  it("does not render when there is no conflict", () => {
-    let callIdx = 0;
-    (useAtom as any).mockImplementation(() => {
-      callIdx++;
-      if (callIdx === 1) return [mockActiveFileHandle];
-      if (callIdx === 2) return [null, setConflict];
-      if (callIdx === 3) return [{}, vi.fn()];
-      if (callIdx === 4) return ["test.md", vi.fn()];
-      return [null, vi.fn()];
-    });
-
-    const { container } = render(<ConflictDialog />);
-    expect(container).toBeEmptyDOMElement();
-  });
-
-  it("calls setContent and updates state when 'Reload External Changes' is clicked", async () => {
-    let callIdx = 0;
-    (useAtom as any).mockImplementation(() => {
-      callIdx++;
-      if (callIdx === 1) return [mockActiveFileHandle];
-      if (callIdx === 2) return [{ remoteContent: "remote content" }, setConflict];
-      if (callIdx === 3) return [{}, vi.fn()];
-      if (callIdx === 4) return ["test.md", vi.fn()];
-      if (callIdx === 5) return ["local content", setContent];
-      if (callIdx === 6) return ["original content", setLastSavedContent];
-      if (callIdx === 7) return [100000000, setFileLastModified];
-      return [null, vi.fn()];
-    });
-
+  it("reloads incoming content when accepting incoming changes", async () => {
     render(<ConflictDialog />);
+    fireEvent.click(screen.getByRole("button", { name: /accept incoming/i }));
 
-    const reloadButton = screen.getByText(/Reload External Changes/i);
-    fireEvent.click(reloadButton);
-
-    await vi.waitFor(() => {
-      expect(setContent).toHaveBeenCalledWith("remote content");
-      expect(setLastSavedContent).toHaveBeenCalledWith("remote content");
-      expect(setFileLastModified).toHaveBeenCalledWith(123456789);
+    await waitFor(() => {
+      expect(setContent).toHaveBeenCalledWith("incoming change");
+      expect(setLastSavedContent).toHaveBeenCalledWith("incoming change");
+      expect(setFileLastModified).toHaveBeenCalledWith(200);
       expect(setConflict).toHaveBeenCalledWith(null);
     });
   });
 
-  it("updates timestamp and closes when 'Keep My Local Edits' is clicked", async () => {
-    let callIdx = 0;
-    (useAtom as any).mockImplementation(() => {
-      callIdx++;
-      if (callIdx === 1) return [mockActiveFileHandle];
-      if (callIdx === 2) return [{ remoteContent: "remote content" }, setConflict];
-      if (callIdx === 3) return [{}, vi.fn()];
-      if (callIdx === 4) return ["test.md", vi.fn()];
-      if (callIdx === 5) return ["local content", setContent];
-      if (callIdx === 6) return ["original content", setLastSavedContent];
-      if (callIdx === 7) return [100000000, setFileLastModified];
-      return [null, vi.fn()];
-    });
-
+  it("requires resolving merge markers before completing the merge", () => {
     render(<ConflictDialog />);
+    fireEvent.click(screen.getByRole("button", { name: /resolve in merge editor/i }));
 
-    const keepButton = screen.getByText(/Keep My Local Edits/i);
-    fireEvent.click(keepButton);
+    expect(screen.getByText(/1 unresolved conflict/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /complete merge/i })).toBeDisabled();
 
-    await vi.waitFor(() => {
-      expect(setFileLastModified).toHaveBeenCalledWith(123456789);
+    fireEvent.click(screen.getByRole("button", { name: /accept all current/i }));
+    expect(screen.getByText(/all conflicts resolved/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /complete merge/i })).toBeEnabled();
+  });
+
+  it("saves the resolved result and updates editor content", async () => {
+    saveFile.mockResolvedValue(true);
+    render(<ConflictDialog />);
+    fireEvent.click(screen.getByRole("button", { name: /resolve in merge editor/i }));
+    fireEvent.click(screen.getByRole("button", { name: /accept all incoming/i }));
+    fireEvent.click(screen.getByRole("button", { name: /complete merge/i }));
+
+    await waitFor(() => {
+      expect(saveFile).toHaveBeenCalledWith("incoming change", fileHandle);
+      expect(setContent).toHaveBeenCalledWith("incoming change");
+      expect(setLastSavedContent).toHaveBeenCalledWith("incoming change");
       expect(setConflict).toHaveBeenCalledWith(null);
-      expect(setContent).not.toHaveBeenCalled();
     });
   });
 });

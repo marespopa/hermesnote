@@ -2,6 +2,7 @@ import { atom } from "jotai";
 import { atom_openFiles, atom_liveHandles } from "./file-atoms";
 import { atom_workspaceLayout } from "./workspace-atoms";
 import { removePathsFromLayout } from "./utils";
+import type { GitHubVaultDescriptor } from "@/app/services/github-vault-workspace";
 
 // Vault / Local File System
 export const atom_vaultHandle = atom<FileSystemDirectoryHandle | null>(null);
@@ -13,6 +14,12 @@ export const atom_isVaultPending = atom<boolean>(false);
 export const atom_hasLoadedVault = atom<boolean>(false);
 export const atom_isCloudVault = atom<boolean>(false);
 export const atom_fileSystemVersion = atom<number>(0);
+
+export type VaultDescriptor =
+  | { kind: "local" }
+  | GitHubVaultDescriptor;
+
+export const atom_vaultDescriptor = atom<VaultDescriptor | null>(null);
 
 export type VaultSetupStatus = 'idle' | 'checking' | 'needs_setup' | 'configured' | 'skipped';
 export const atom_vaultSetupStatus = atom<VaultSetupStatus>('idle');

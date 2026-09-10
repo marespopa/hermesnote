@@ -1,0 +1,72 @@
+name: CD
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-release
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    env:
+      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      NETLIFY_CLI_VERSION: 27.5.2
+
+    steps:
+      - name: Check out release
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Verify tag matches application version
+        working-directory: next-client
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          test "$TAG" = "v$version"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 22
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Deploy Netlify production site
+        run: npx --yes netlify-cli@$NETLIFY_CLI_VERSION deploy --prod --build --json > deploy.json
+
+      - name: Smoke-test production deployment
+        run: |
+          url="$(node -p "require('./deploy.json').url")"
+          curl --fail --retry 5 --retry-all-errors --retry-delay 5 "$url"
+
+      - name: Publish deployment summary
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          url="$(node -p "require('./deploy.json').url")"
+          deploy_id="$(node -p "require('./deploy.json').id")"
+          {
+            echo "## Production deployment"
+            echo
+            echo "| Field | Value |"
+            echo "| --- | --- |"
+            echo "| Release | $TAG |"
+            echo "| Commit | $(git rev-parse HEAD) |"
+            echo "| Deploy ID | $deploy_id |"
+            echo "| URL | [$url]($url) |"
+          } >> "$GITHUB_STEP_SUMMARY"

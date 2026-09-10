@@ -121,6 +121,8 @@ export const atom_vaultCreationParentHandle = atom<FileSystemDirectoryHandle | n
 export const atom_vaultCreationError = atom<string | null>(null);
 // Post-onboarding trigger: set true to open the NewVaultDialog
 export const atom_newVaultFlowOpen = atom<boolean>(false);
+// GitHub selection is intentionally transient: repository credentials stay server-side.
+export const atom_githubVaultDialogOpen = atom<boolean>(false);
 export const atom_keyboardShortcutsOpen = atom<boolean>(false);
 export const atom_workspaceBuilderRequest = atom<number>(0);
 export const atom_selectedWorkspaceId = atom<string | null>(null);

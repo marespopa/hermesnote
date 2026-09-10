@@ -743,20 +743,57 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* 5. Privacy */}
+        {/* 5. GitHub Vaults */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
+          <div className="space-y-6">
+            <div className="h-px w-12 bg-slate-500" />
+            <h2 className="text-3xl font-bold tracking-tight">
+              Optional GitHub backup, on your terms
+            </h2>
+            <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              GitHub is entirely optional. If you want it, connect an existing repository or create
+              a new private GitHub vault directly from HermesMarkdown. Markdown notes and{" "}
+              <code className="text-[0.8em] bg-neutral-100 dark:bg-neutral-800 px-1 py-0.5 rounded">.hermes</code>{" "}
+              metadata stay in a repository you control.
+            </p>
+            <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              Review added, modified, and deleted notes in the Source Control panel, write a
+              commit message, and sync changes to the selected branch. GitHub access is optional;
+              local folders remain fully local.
+            </p>
+            <Link href="/documentation#github-vaults" className="inline-flex text-sage font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage rounded">
+              Learn about GitHub vaults <span aria-hidden="true" className="ml-1">→</span>
+            </Link>
+          </div>
+          <div aria-hidden="true" className="aspect-video rounded-2xl border border-black/5 dark:border-white/5 bg-paper-light dark:bg-neutral-900 p-6 flex items-center justify-center">
+            <div className="w-full max-w-[280px] overflow-hidden rounded-xl border border-black/10 dark:border-white/10 bg-surface font-mono text-[11px] shadow-sm">
+              <div className="flex items-center justify-between border-b border-black/5 dark:border-white/10 px-3 py-2 text-fg-muted">
+                <span>Source Control</span>
+                <span>main</span>
+              </div>
+              <div className="space-y-2 px-3 py-3 text-fg-muted">
+                <div className="flex gap-2"><span className="text-emerald-500 font-bold">A</span><span>daily/2026-06-25.md</span></div>
+                <div className="flex gap-2"><span className="text-amber-500 font-bold">M</span><span>projects/roadmap.md</span></div>
+                <div className="rounded-md bg-sage px-2 py-1.5 text-center font-sans font-semibold text-white">Commit &amp; Sync</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 6. Privacy */}
         <section className="space-y-10 text-center">
           <div className="space-y-3 max-w-2xl mx-auto">
             <div className="h-px w-12 bg-neutral-500 mx-auto" />
             <h2 className="text-3xl font-bold tracking-tight">
-              No cloud. Your notes stay yours.
+              No cloud required. Your notes stay yours.
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 max-w-4xl mx-auto text-left md:text-center">
             <div className="space-y-1.5">
-              <p className="font-bold text-lg">Nothing uploaded.</p>
+              <p className="font-bold text-lg">Nothing uploaded by default.</p>
               <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                No account or sync required — your vault is a folder on
-                your disk.
+                No account or sync required — local vaults stay in a folder
+                on your disk. GitHub sync is always optional.
               </p>
             </div>
             <div className="space-y-1.5">

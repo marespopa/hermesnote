@@ -1,0 +1,81 @@
+name: Create release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: write
+
+concurrency:
+  group: release-creation
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Tag and publish release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out trunk
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          ref: trunk
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 22
+          cache: yarn
+          cache-dependency-path: next-client/yarn.lock
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        working-directory: next-client
+        run: corepack yarn install --immutable
+
+      - name: Verify release candidate
+        working-directory: next-client
+        run: |
+          corepack yarn tsc --noEmit
+          corepack yarn lint
+          corepack yarn test --run
+          corepack yarn build
+
+      - name: Read release version
+        id: version
+        working-directory: next-client
+        run: echo "value=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Ensure release tag is new
+        env:
+          TAG: v${{ steps.version.outputs.value }}
+        run: |
+          if git rev-parse --verify --quiet "refs/tags/$TAG"; then
+            echo "Release tag $TAG already exists." >&2
+            exit 1
+          fi
+
+      - name: Create annotated tag
+        env:
+          TAG: v${{ steps.version.outputs.value }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag --annotate "$TAG" --message "Release $TAG"
+          git push origin "$TAG"
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v${{ steps.version.outputs.value }}
+        run: gh release create "$TAG" --title "$TAG" --generate-notes
+
+      - name: Deploy tagged release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v${{ steps.version.outputs.value }}
+        run: gh workflow run deploy-production.yml --ref "$TAG"

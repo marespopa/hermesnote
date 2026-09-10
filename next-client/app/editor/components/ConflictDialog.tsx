@@ -1,206 +1,184 @@
 "use client";
 
 import { useAtom } from "jotai";
+import { useState } from "react";
+import toast from "react-hot-toast";
 import {
   atom_activeFileHandle,
-  atom_content,
-  atom_lastSavedContent,
-  atom_fileLastModified,
-  atom_fileConflict,
-  atom_openFiles,
   atom_activeFilePath,
+  atom_content,
+  atom_fileConflict,
+  atom_fileLastModified,
+  atom_lastSavedContent,
+  atom_openFiles,
 } from "@/app/atoms/atoms";
-import DialogModal from "@/app/components/DialogModal/DialogModal";
 import Button from "@/app/components/Button";
-import toast from "react-hot-toast";
-import { useState } from "react";
+import DialogModal from "@/app/components/DialogModal/DialogModal";
+import Textarea from "@/app/components/Input/Textarea.component";
 import { useFileSystem } from "@/app/hooks/use-file-system";
-
-interface SaveMergedButtonProps {
-  activeFileHandle: FileSystemFileHandle | null;
-  mergedText: string;
-  onSaved: (lastModified: number) => void;
-}
-
-function SaveMergedButton({
-  activeFileHandle,
-  mergedText,
-  onSaved,
-}: SaveMergedButtonProps) {
-  const { saveFile } = useFileSystem();
-
-  const handleSave = async () => {
-    if (!activeFileHandle) return;
-    try {
-      const ok = await saveFile(mergedText, activeFileHandle, 0, false, undefined);
-      if (ok) {
-        const file = await activeFileHandle.getFile();
-        onSaved(file.lastModified);
-        toast.success("Merged changes saved");
-      } else {
-        toast.error("Failed to save merged content");
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to save merged content");
-    }
-  };
-
-  return <Button variant="primary" onClick={handleSave}>Save merged</Button>;
-}
+import {
+  countMergeConflicts,
+  resolveMergeConflicts,
+  threeWayMerge,
+} from "../utils/three-way-merge";
 
 export default function ConflictDialog() {
   const [activeFileHandle] = useAtom(atom_activeFileHandle);
   const [conflict, setConflict] = useAtom(atom_fileConflict);
-  const [openFiles, setOpenFiles] = useAtom(atom_openFiles);
-  const [activePath] = useAtom(atom_activeFilePath);
-  const [, setContent] = useAtom(atom_content);
-  const [, setLastSavedContent] = useAtom(atom_lastSavedContent);
+  const [content, setContent] = useAtom(atom_content);
+  const [lastSavedContent, setLastSavedContent] = useAtom(atom_lastSavedContent);
   const [, setFileLastModified] = useAtom(atom_fileLastModified);
-  const [mergeOpen, setMergeOpen] = useState(false);
+  const [activePath] = useAtom(atom_activeFilePath);
+  const [, setOpenFiles] = useAtom(atom_openFiles);
+  const { saveFile } = useFileSystem();
+  const [isMergeOpen, setIsMergeOpen] = useState(false);
   const [mergedText, setMergedText] = useState("");
 
   if (!conflict) return null;
 
-  const snapshots = activePath ? openFiles[activePath!]?.snapshots ?? [] : [];
+  const startMerge = () => {
+    setMergedText(threeWayMerge(lastSavedContent, content, conflict.remoteContent));
+    setIsMergeOpen(true);
+  };
 
-  const handleReload = async () => {
+  const reload = async () => {
     if (!activeFileHandle) return;
     try {
       const file = await activeFileHandle.getFile();
-      const remoteContent = await file.text();
-      
-      setContent(remoteContent);
-      setLastSavedContent(remoteContent);
+      const incoming = await file.text();
+      setContent(incoming);
+      setLastSavedContent(incoming);
       setFileLastModified(file.lastModified);
       setConflict(null);
-      toast.success("Loaded external changes");
-    } catch (err) {
-      console.error(err);
+      toast.success("Loaded incoming changes");
+    } catch (error) {
+      console.error("Failed to reload externally modified file:", error);
       toast.error("Failed to reload file");
     }
   };
 
-  const handleKeepLocal = async () => {
+  const keepCurrent = async () => {
     if (!activeFileHandle) return;
     try {
       const file = await activeFileHandle.getFile();
       setFileLastModified(file.lastModified);
       setConflict(null);
-      toast.success("Local edits kept — will overwrite on next save");
-    } catch (err) {
-      console.error(err);
-      setConflict(null);
+      toast.success("Kept current changes");
+    } catch (error) {
+      console.error("Failed to keep current changes:", error);
+      toast.error("Failed to access file");
     }
   };
 
-  const openMergeEditor = () => {
-    // Default merged editor: start with local content, but user can load any snapshot
-    const local = activePath ? openFiles[activePath!]?.content || "" : "";
-    setMergedText(local || conflict?.remoteContent || "");
-    setMergeOpen(true);
-  };
+  const saveMerged = async () => {
+    if (!activeFileHandle) return;
+    if (countMergeConflicts(mergedText) > 0) {
+      toast.error("Resolve every conflict before saving");
+      return;
+    }
 
-  const handleMergedSaved = (lastModified: number) => {
-    setFileLastModified(lastModified);
+    const saved = await saveFile(mergedText, activeFileHandle);
+    if (!saved) return;
+
+    setContent(mergedText);
     setLastSavedContent(mergedText);
     setConflict(null);
-    setMergeOpen(false);
-    // Clear snapshots for this file now that merge resolved
+    setIsMergeOpen(false);
     if (activePath) {
-      setOpenFiles(prev => {
-        if (!prev[activePath!]) return prev;
-        return { ...prev, [activePath!]: { ...prev[activePath!], snapshots: [] } };
-      });
+      setOpenFiles((files) => ({
+        ...files,
+        [activePath]: { ...files[activePath], snapshots: [] },
+      }));
     }
+    toast.success("Merged changes saved");
   };
 
-  const loadSnapshotIntoMerged = (content: string) => {
-    setMergedText(content);
-    setMergeOpen(true);
-  };
+  const unresolvedCount = countMergeConflicts(mergedText);
 
   return (
     <DialogModal
-      isOpened={!!conflict}
-      onClose={() => {}}
-      onConfirm={handleReload}
-      styles="max-w-2xl"
+      isOpened
+      onClose={() => undefined}
+      hideCloseButton
+      styles="max-w-6xl"
+      ariaLabelledBy="conflict-dialog-title"
     >
       <div className="space-y-4">
-        <h3 className="text-xl font-semibold">External Modification Detected</h3>
-        <p className="text-ui-footnote">
-          This file was modified externally, but you have unsaved local changes in HermesMarkdown.
-
-          How would you like to proceed?
-        </p>
-
-        <div className="flex flex-col gap-3 pt-4">
-          <Button variant="primary" onClick={handleReload} className="w-full text-left flex flex-col items-start py-4">
-            <span className="font-bold">Reload External Changes</span>
-            <span className="text-ui-footnote font-normal mt-0.5">Discard my local edits and use the file on disk.</span>
-          </Button>
-
-          <Button variant="secondary" onClick={handleKeepLocal} className="w-full text-left flex flex-col items-start py-4">
-            <span className="font-bold">Keep My Local Edits</span>
-            <span className="text-ui-footnote font-normal mt-0.5">I will overwrite the disk version when I save.</span>
-          </Button>
-
-          <Button variant="secondary" onClick={openMergeEditor} className="w-full text-left flex flex-col items-start py-4">
-            <span className="font-bold">Open Merge Editor</span>
-            <span className="text-ui-footnote font-normal mt-0.5">Manually merge remote and local changes, then save.</span>
-          </Button>
+        <div>
+          <h3 id="conflict-dialog-title" className="text-xl font-semibold">
+            File changed on disk
+          </h3>
+          <p className="text-ui-footnote">
+            Your current edits and incoming changes diverged. Choose a version or resolve both in the merge editor.
+          </p>
         </div>
 
-        {snapshots.length > 0 && (
-          <div className="pt-4">
-            <h4 className="text-sm font-semibold">Available snapshots</h4>
-            <p className="text-ui-footnote">Saved automatically when the conflict was detected. Use them to inspect and merge.</p>
-            <div className="mt-2 grid gap-2">
-              {snapshots.map((s, idx) => (
-                <div key={idx} className="flex items-center justify-between p-2 border rounded">
-                  <div>
-                    <div className="text-sm font-medium">{s.type === "local" ? "Local" : "Remote"}</div>
-                    <div className="text-xs text-ui-footnote">{new Date(s.timestamp).toLocaleString()}</div>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button variant="tertiary" onClick={() => loadSnapshotIntoMerged(s.content)}>Load into merge</Button>
-                    <Button variant="tertiary" onClick={() => {
-                      // Open ephemeral side preview: copy to clipboard as a quick inspect affordance
-                      try {
-                        navigator.clipboard.writeText(s.content || "");
-                        toast("Snapshot copied to clipboard for quick inspection.");
-                      } catch {
-                        // noop
-                      }
-                    }}>Copy</Button>
-                  </div>
-                </div>
-              ))}
-            </div>
+        {!isMergeOpen ? (
+          <div className="grid gap-3 sm:grid-cols-3">
+            <Button variant="secondary" onClick={reload} className="min-h-24 text-left">
+              <span className="block font-bold">Accept Incoming</span>
+              <span className="text-ui-footnote font-normal">Discard current edits and reload the file on disk.</span>
+            </Button>
+            <Button variant="secondary" onClick={keepCurrent} className="min-h-24 text-left">
+              <span className="block font-bold">Keep Current</span>
+              <span className="text-ui-footnote font-normal">Keep edits and overwrite the disk version on the next save.</span>
+            </Button>
+            <Button variant="primary" onClick={startMerge} className="min-h-24 text-left">
+              <span className="block font-bold">Resolve in Merge Editor</span>
+              <span className="text-ui-footnote font-normal">Review current, incoming, and merged result side by side.</span>
+            </Button>
           </div>
-        )}
-
-        {mergeOpen && (
-          <div className="pt-4">
-            <h4 className="text-sm font-semibold">Merge Editor</h4>
-            <p className="text-ui-footnote">Edit the merged text below. When ready, save to resolve the conflict.</p>
-            <textarea
+        ) : (
+          <>
+            <div className="grid gap-3 lg:grid-cols-3">
+              <Preview label="Current change" content={content} />
+              <Preview label="Incoming change" content={conflict.remoteContent} />
+              <Preview label="Common base" content={lastSavedContent} />
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-ui-footnote">
+                {unresolvedCount === 0 ? "All conflicts resolved" : `${unresolvedCount} unresolved conflict${unresolvedCount === 1 ? "" : "s"}`}
+              </span>
+              {unresolvedCount > 0 && (
+                <>
+                  <Button variant="tertiary" onClick={() => setMergedText((text) => resolveMergeConflicts(text, "current"))}>
+                    Accept All Current
+                  </Button>
+                  <Button variant="tertiary" onClick={() => setMergedText((text) => resolveMergeConflicts(text, "incoming"))}>
+                    Accept All Incoming
+                  </Button>
+                </>
+              )}
+            </div>
+            <Textarea
+              name="merged-content"
+              label="Result"
               value={mergedText}
-              onChange={(e) => setMergedText(e.target.value)}
-              className="w-full h-48 mt-2 p-2 font-mono text-sm border rounded"
+              handleChange={(event) => setMergedText(event.target.value)}
+              className="font-mono"
+              rows={16}
+              spellCheck={false}
             />
-            <div className="flex gap-2 mt-2">
-              <SaveMergedButton
-                activeFileHandle={activeFileHandle}
-                mergedText={mergedText}
-                onSaved={handleMergedSaved}
-              />
-              <Button variant="secondary" onClick={() => setMergeOpen(false)}>Cancel</Button>
+            <div className="flex gap-2">
+              <Button variant="primary" onClick={saveMerged} disabled={unresolvedCount > 0}>
+                Complete Merge
+              </Button>
+              <Button variant="secondary" onClick={() => setIsMergeOpen(false)}>
+                Back
+              </Button>
             </div>
-          </div>
+          </>
         )}
       </div>
     </DialogModal>
+  );
+}
+
+function Preview({ label, content }: { label: string; content: string }) {
+  return (
+    <section aria-label={label} className="min-w-0 rounded-lg border border-edge-subtle">
+      <h4 className="border-b border-edge-subtle px-3 py-2 text-sm font-semibold">{label}</h4>
+      <pre className="max-h-40 overflow-auto whitespace-pre-wrap break-words p-3 text-xs">{content}</pre>
+    </section>
   );
 }

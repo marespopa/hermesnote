@@ -18,6 +18,7 @@ import {
   atom_geminiKey,
   atom_vimMode,
 } from "@/app/atoms/atoms";
+import { atom_githubVaultDialogOpen } from "@/app/atoms/ui-atoms";
 import {
   atom_vaultHandle
 } from "@/app/atoms/vault-atoms";
@@ -47,6 +48,7 @@ import {
   HiOutlineFolderAdd,
   HiOutlineLightningBolt,
   HiOutlineDesktopComputer,
+  HiOutlineCloudUpload,
 } from "react-icons/hi";
 import { useCreateVault } from "@/app/hooks/file-system/use-create-vault";
 import CreateVaultSubSteps from "./CreateVaultSubSteps";
@@ -65,6 +67,7 @@ const WelcomeWizard = ({ initialStep = 0 }: { initialStep?: number }) => {
   const [step, setStep] = useAtom(atom_welcomeWizardStep);
   const [userName, setUserName] = useAtom(atom_userName);
   const [isMounted, setIsMounted] = useState(false);
+  const [, setGitHubVaultDialogOpen] = useAtom(atom_githubVaultDialogOpen);
 
   const { openVault, isVaultSupported } = useFileSystem();
   const createVaultFlow = useCreateVault();
@@ -98,12 +101,48 @@ const WelcomeWizard = ({ initialStep = 0 }: { initialStep?: number }) => {
 
   const showWizard = isMounted && (!hasCompleted || isWizardOpen);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Enter" || event.isComposing) return;
+      const target = event.target;
+      if (
+        target instanceof HTMLButtonElement ||
+        target instanceof HTMLSelectElement ||
+        target instanceof HTMLTextAreaElement
+      ) {
+        return;
+      }
+
+      if (step === 0) {
+        if (!userName.trim()) return;
+        event.preventDefault();
+        setUserName(userName.trim());
+        setStep(1);
+      } else if (step >= 2 && step < TOTAL_STEPS) {
+        event.preventDefault();
+        setStep(step + 1);
+      } else if (step === TOTAL_STEPS) {
+        event.preventDefault();
+        setHasCompleted(true);
+        setIsWizardOpen(false);
+        setStep(0);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [setHasCompleted, setIsWizardOpen, setStep, setUserName, step, userName]);
+
   if (!showWizard) return null;
 
   const handleFinish = () => {
     setHasCompleted(true);
     setIsWizardOpen(false);
     setStep(0);
+  };
+
+  const connectGitHubVault = () => {
+    setGitHubVaultDialogOpen(true);
   };
 
   const renderStep = () => {
@@ -202,6 +241,22 @@ const WelcomeWizard = ({ initialStep = 0 }: { initialStep?: number }) => {
                   <div className="text-left">
                     <div className="font-bold text-ui-footnote">Open Existing Vault</div>
                     <div className="text-[10px] opacity-50 uppercase tracking-wider font-bold">Offline · No upload</div>
+                  </div>
+                </div>
+                <HiOutlineChevronRight opacity={0.3} />
+              </Button>
+
+              <Button
+                variant="secondary"
+                onClick={connectGitHubVault}
+                aria-label="Connect GitHub Vault"
+                className="flex items-center justify-between px-5 h-14 rounded-2xl border border-edge bg-paper-light dark:bg-paper-dark"
+              >
+                <div className="flex items-center gap-3">
+                  <HiOutlineCloudUpload className="text-sage" size={24} />
+                  <div className="text-left">
+                    <div className="font-bold text-ui-footnote">Connect GitHub Vault</div>
+                    <div className="text-[10px] opacity-50 uppercase tracking-wider font-bold">GitHub · Manual sync</div>
                   </div>
                 </div>
                 <HiOutlineChevronRight opacity={0.3} />
