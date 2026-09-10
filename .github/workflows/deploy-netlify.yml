@@ -1,6 +1,9 @@
 name: Deploy to Netlify
 
 on:
+  push:
+    branches:
+      - trunk
   workflow_dispatch:
 
 permissions:
