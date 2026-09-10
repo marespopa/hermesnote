@@ -35,4 +35,7 @@ yarn-error.log*
 next-env.d.ts
 
 # yarn
-/.yarn/
+/.yarn/*
+!/.yarn/releases/
+/.yarn/releases/*
+!/.yarn/releases/yarn-4.18.0.cjs
