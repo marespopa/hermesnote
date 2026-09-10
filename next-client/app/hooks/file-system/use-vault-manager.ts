@@ -367,7 +367,7 @@ export function useVaultManager() {
 
       if (!isSame) {
         setCurrentDirectoryHandle(targetHandle);
-        await scanVault(targetHandle);
+        await scanVault(vaultHandle);
       }
     },
     [vaultHandle, currentDirectoryHandle, setCurrentDirectoryHandle, scanVault],

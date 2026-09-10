@@ -1,6 +1,6 @@
 {
   "name": "hermesmarkdown",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "private": true,
   "scripts": {
     "dev": "next dev --port 3000",
@@ -10,6 +10,7 @@
     "lint": "node --max-old-space-size=2048 ./node_modules/eslint/bin/eslint.js .",
     "check": "node --max-old-space-size=2048 ./node_modules/typescript/bin/tsc --noEmit && npm run lint",
     "test": "vitest",
+    "version": "node scripts/bump-version.mjs",
     "prepare": "husky"
   },
   "dependencies": {

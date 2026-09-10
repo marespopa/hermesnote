@@ -2,7 +2,14 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook } from "@testing-library/react";
 import { useFileSystem } from "./use-file-system";
 import { useAtom, useSetAtom, useAtomValue } from "jotai";
-import { atom_vaultHandle, atom_openFiles, atom_workspaceLayout, atom_fileSystemVersion, atom_vaultFiles } from "@/app/atoms/atoms";
+import {
+  atom_currentDirectoryHandle,
+  atom_fileSystemVersion,
+  atom_openFiles,
+  atom_vaultFiles,
+  atom_vaultHandle,
+  atom_workspaceLayout,
+} from "@/app/atoms/atoms";
 
 vi.hoisted(() => {
   if (typeof global !== 'undefined') {
@@ -45,11 +52,13 @@ vi.mock("react-hot-toast", () => ({
 }));
 
 describe("useFileSystem - createFile conflict resolution", () => {
+  const setVaultFiles = vi.fn();
   const mockVaultHandle = {
+    getDirectoryHandle: vi.fn(),
     getFileHandle: vi.fn(),
-    values: async function* () {
+    values: vi.fn(async function* () {
       yield* [];
-    },
+    }),
     isSameEntry: vi.fn().mockResolvedValue(true),
   };
 
@@ -62,6 +71,8 @@ describe("useFileSystem - createFile conflict resolution", () => {
     vi.clearAllMocks();
     (useAtom as any).mockImplementation((atom: any) => {
       if (atom === atom_vaultHandle) return [mockVaultHandle, vi.fn()];
+      if (atom === atom_currentDirectoryHandle) return [mockVaultHandle, vi.fn()];
+      if (atom === atom_vaultFiles) return [[], setVaultFiles];
       if (atom === atom_openFiles) return [{}, vi.fn()];
       if (atom === atom_workspaceLayout) return [{ rootContainer: { id: "p1", activeFilePath: "draft" } }, vi.fn()];
       if (atom === atom_fileSystemVersion) return [0, vi.fn()];
@@ -108,6 +119,25 @@ describe("useFileSystem - createFile conflict resolution", () => {
     
     expect(handle).toBe(mockFileHandle);
     expect(mockWritable.write).toHaveBeenCalledWith("hello world");
+  });
+
+  it("retains root folders when synchronizing to a nested file", async () => {
+    const nestedDirectory = {
+      name: "nested",
+      values: vi.fn(async function* () {
+        yield* [];
+      }),
+    };
+    mockVaultHandle.getDirectoryHandle = vi.fn().mockResolvedValue(nestedDirectory);
+
+    const { result } = renderHook(() => useFileSystem());
+
+    await result.current.syncSidebarToPath("nested/note.md");
+
+    expect(mockVaultHandle.getDirectoryHandle).toHaveBeenCalledWith("nested");
+    expect(mockVaultHandle.values).toHaveBeenCalledOnce();
+    expect(nestedDirectory.values).not.toHaveBeenCalled();
+    expect(setVaultFiles).toHaveBeenCalledOnce();
   });
 
   it("handles creating a file that doesn't conflict initially", async () => {
