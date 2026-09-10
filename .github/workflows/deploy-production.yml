@@ -5,6 +5,11 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      release_ref:
+        description: Immutable version tag to deploy, for example v5.2.2
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -15,7 +20,7 @@ concurrency:
 
 jobs:
   deploy:
-    name: Deploy ${{ github.ref_name }}
+    name: Deploy ${{ inputs.release_ref || github.ref_name }}
     runs-on: ubuntu-latest
     environment:
       name: production
@@ -28,12 +33,13 @@ jobs:
       - name: Check out release
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
+          ref: ${{ inputs.release_ref || github.ref }}
           fetch-depth: 0
 
       - name: Verify tag matches application version
         working-directory: next-client
         env:
-          TAG: ${{ github.ref_name }}
+          TAG: ${{ inputs.release_ref || github.ref_name }}
         run: |
           version="$(node -p "require('./package.json').version")"
           test "$TAG" = "v$version"
@@ -56,7 +62,7 @@ jobs:
 
       - name: Publish deployment summary
         env:
-          TAG: ${{ github.ref_name }}
+          TAG: ${{ inputs.release_ref || github.ref_name }}
         run: |
           url="$(node -p "require('./deploy.json').url")"
           deploy_id="$(node -p "require('./deploy.json').id")"
