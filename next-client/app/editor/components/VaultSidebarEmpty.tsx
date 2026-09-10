@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Button from "@/app/components/Button";
 import {
   HiOutlineDocumentText,
   HiOutlineDatabase,
@@ -16,6 +17,7 @@ interface VaultSidebarEmptyProps {
   onCreateVault?: () => void;
   onImport?: () => void;
   onExport?: () => void;
+  onConnectGitHub?: () => void;
   setActiveFilePath: (path: string) => void;
   activeFilePath: string | null;
   onClose?: () => void;
@@ -27,6 +29,7 @@ export default function VaultSidebarEmpty({
   onCreateVault,
   onImport,
   onExport,
+  onConnectGitHub,
   setActiveFilePath,
   activeFilePath,
   onClose,
@@ -35,6 +38,16 @@ export default function VaultSidebarEmpty({
     <div className="space-y-6">
       <div className="space-y-1">
         <SidebarHeader title="Locations" isExpanded={true} onToggle={() => {}} />
+
+        <Button
+          variant="menu-item"
+          onClick={onConnectGitHub}
+          aria-label="Connect GitHub Vault"
+          className="px-4 py-3"
+        >
+          <HiOutlineCloudUpload size={18} />
+          <span>Connect GitHub Vault</span>
+        </Button>
 
         {isVaultSupported ? (
           <>

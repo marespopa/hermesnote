@@ -5,7 +5,7 @@ import { HiChevronRight, HiOutlineViewGrid } from "react-icons/hi";
 import Button from "@/app/components/Button";
 import DialogModal from "@/app/components/DialogModal/DialogModal";
 import ConflictDialog from "./components/ConflictDialog";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
   atom_fileName,
   atom_content,
@@ -16,6 +16,9 @@ import {
   atom_activePaneId,
   atom_isFileLoading,
   atom_sidebarWidth,
+  atom_vaultDescriptor,
+  atom_openFiles,
+  atom_rebindHandles,
   findLeaf,
   getFirstLeaf,
 } from "@/app/atoms/atoms";
@@ -23,6 +26,7 @@ import useIsMobileChrome from "@/app/hooks/use-mobile-chrome";
 import VaultSidebar from "./components/VaultSidebar";
 import WelcomeWizard from "./components/WelcomeWizard";
 import NewVaultDialog from "./components/NewVaultDialog";
+import GitHubVaultDialog from "./components/GitHubVaultDialog";
 import WorkspaceSplitter from "./components/WorkspaceSplitter";
 import PaneLeaf from "./components/PaneLeaf";
 import VaultPendingOverlay from "./components/VaultPendingOverlay";
@@ -57,6 +61,7 @@ import { atom_isAiConfigured, atom_aiBuilderRequest, atom_railPanel, atom_lastSi
 import { generateFileFromPrompt } from "@/app/services/ai";
 import { withRetry } from "@/app/hooks/file-system/shared";
 import { formatShortcut } from "@/app/utils/platform";
+import { pullGitHubVault, syncGitHubVault } from "@/app/services/github-vault-sync";
 
 function CollapsedSidebarControls({ onShowSidebar }: { onShowSidebar: () => void }) {
   const { open: openCommandPalette } = useCommandPalette();
@@ -93,9 +98,14 @@ export default function LiteEditor() {
   const [isMounting, setIsMounting] = useState(true);
   const [navigatingLabel, setNavigatingLabel] = useState<string | null>(null);
   const [content, setContent] = useAtom(atom_content);
+  const openFiles = useAtomValue(atom_openFiles);
+  const setOpenFiles = useSetAtom(atom_openFiles);
+  const rebindHandles = useSetAtom(atom_rebindHandles);
   const lastSavedContent = useAtomValue(atom_lastSavedContent);
   const [fileName, setFileName] = useAtom(atom_fileName);
   const [activeFilePath, setActiveFilePath] = useAtom(atom_activeFilePath);
+  const vaultDescriptor = useAtomValue(atom_vaultDescriptor);
+  const setVaultDescriptor = useSetAtom(atom_vaultDescriptor);
   const [, setActiveFileHandle] = useAtom(atom_activeFileHandle);
   const workspaceLayout = useAtomValue(atom_workspaceLayout);
   const activePaneId = useAtomValue(atom_activePaneId);
@@ -241,6 +251,72 @@ export default function LiteEditor() {
       await exportFile(content, fileName);
     }
   }, [content, activeFileHandle, vaultHandle, saveFile, exportFile, fileName, dialog, createFile]);
+
+  const handleSyncGitHub = useCallback(async (message: string) => {
+    if (!vaultHandle || vaultDescriptor?.kind !== "github") {
+      throw new Error("Open a GitHub vault before committing.");
+    }
+    if (activeFileHandle && content !== lastSavedContent) {
+      const saved = await saveFile(content);
+      if (!saved) throw new Error("Save the active note before committing.");
+    }
+    const result = await syncGitHubVault(vaultHandle, vaultDescriptor, message.trim());
+    setVaultDescriptor(result.descriptor);
+    return result;
+  }, [activeFileHandle, content, dialog, lastSavedContent, saveFile, setVaultDescriptor, vaultDescriptor, vaultHandle]);
+
+  const runGitHubPullCommand = useCallback(async () => {
+    if (!vaultHandle || vaultDescriptor?.kind !== "github") return;
+    try {
+      const inactiveUnsavedFile = Object.entries(openFiles).find(([path, file]) =>
+        path !== activeFilePath && path !== "draft" && file.content !== file.lastSavedContent,
+      );
+      if (inactiveUnsavedFile) {
+        throw new Error(`Save ${inactiveUnsavedFile[0]} before pulling remote changes.`);
+      }
+      if (activeFileHandle && content !== lastSavedContent && !await saveFile(content)) {
+        throw new Error("Save the active note before pulling.");
+      }
+      const result = await pullGitHubVault(vaultHandle, vaultDescriptor);
+      setVaultDescriptor(result.descriptor);
+      await rebindHandles(vaultHandle);
+      if (result.files.length) {
+        const updates = new Map(result.files.map((file) => [file.path, file.content]));
+        setOpenFiles((previous) => Object.fromEntries(Object.entries(previous).map(([path, file]) => {
+          const nextContent = updates.get(path);
+          return nextContent === undefined || nextContent === null
+            ? [path, file]
+            : [path, { ...file, content: nextContent, lastSavedContent: nextContent }];
+        })));
+      }
+      handleRefreshVault();
+      toast.success(result.conflicts
+        ? `Merged remote changes with ${result.conflicts} conflict${result.conflicts === 1 ? "" : "s"} to resolve.`
+        : result.changes ? `Merged ${result.changes} remote file${result.changes === 1 ? "" : "s"}.` : "GitHub vault is already up to date.");
+    } catch (caught) {
+      toast.error(caught instanceof Error ? caught.message : "GitHub pull failed.");
+    }
+  }, [activeFileHandle, activeFilePath, content, handleRefreshVault, lastSavedContent, openFiles, rebindHandles, saveFile, setOpenFiles, setVaultDescriptor, vaultDescriptor, vaultHandle]);
+
+  const runGitHubCommitCommand = useCallback(async () => {
+    if (vaultDescriptor?.kind !== "github") return;
+    const response = await dialog.textarea(
+      "Describe this set of note changes.",
+      "",
+      "Commit & Sync",
+      `Commits directly to ${vaultDescriptor.branch}.`,
+    );
+    const message = typeof response === "string"
+      ? response
+      : typeof response?.text === "string" ? response.text : "";
+    if (!message.trim()) return;
+    try {
+      const result = await handleSyncGitHub(message);
+      toast.success(result?.changes ? `Committed ${result.changes} change${result.changes === 1 ? "" : "s"}.` : "GitHub vault is already up to date.");
+    } catch (caught) {
+      toast.error(caught instanceof Error ? caught.message : "GitHub vault sync failed.");
+    }
+  }, [dialog, handleSyncGitHub, vaultDescriptor]);
 
   // Shortcut Listener with Ref Pattern for stability
   const handleSaveRef = useRef(handleSave);
@@ -464,6 +540,11 @@ export default function LiteEditor() {
       <EditorCommands
         onNewFile={handleNewFile}
         onExport={handleExport}
+        githubVault={vaultDescriptor?.kind === "github"}
+        onGitHubCommit={() => void runGitHubCommitCommand()}
+        onGitHubPush={() => void runGitHubCommitCommand()}
+        onGitHubSync={() => void runGitHubCommitCommand()}
+        onGitHubPull={() => void runGitHubPullCommand()}
         onSave={() => handleSaveRef.current()}
         isMobileChrome={isMobileChrome}
         onOpenMobileFiles={() => setIsMobileFileOverlayOpen(true)}
@@ -487,6 +568,7 @@ export default function LiteEditor() {
         {/* Modals */}
         <WelcomeWizard />
         <NewVaultDialog />
+        <GitHubVaultDialog />
         <ConflictDialog />
         <RepurposeNoteWizard />
         {isVaultPending && <VaultPendingOverlay restoreVault={restoreVault} />}
@@ -534,6 +616,8 @@ export default function LiteEditor() {
                   onNewAIFile={isAiConfigured ? handleNewAIFile : undefined}
                   onImport={handleImport}
                   onExport={handleExport}
+                  onSyncGitHub={handleSyncGitHub}
+                  onPullGitHub={() => void runGitHubPullCommand()}
                   onSettings={() => navigateWithGuard("/editor/settings", "Settings")}
                   onDocumentation={() => navigateWithGuard("/documentation", "Documentation")}
                   onClose={() => setRailPanel(null)}

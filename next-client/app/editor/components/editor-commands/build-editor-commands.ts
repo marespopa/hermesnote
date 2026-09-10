@@ -3,11 +3,13 @@ import { buildDocumentVaultCommandGroups } from "./document-vault-commands";
 import { buildEditorAiVoiceCommandGroups } from "./editor-ai-voice-commands";
 import type { EditorCommandContext } from "./use-editor-command-context";
 import { buildWorkspaceTaskViewCommandGroups } from "./workspace-task-view-commands";
+import { buildGitHubVaultCommands } from "./github-vault-commands";
 
 export function buildEditorCommands(context: EditorCommandContext): Command[] {
   const documentVault = buildDocumentVaultCommandGroups(context);
   const editorAiVoice = buildEditorAiVoiceCommandGroups(context);
   const workspaceTasksViews = buildWorkspaceTaskViewCommandGroups(context);
+  const githubVault = buildGitHubVaultCommands(context);
 
   return [
     ...documentVault.lifecycle,
@@ -17,6 +19,7 @@ export function buildEditorCommands(context: EditorCommandContext): Command[] {
     ...workspaceTasksViews.paneClosure,
     ...workspaceTasksViews.preferencesAndNavigation,
     ...documentVault.vaultActions,
+    ...githubVault,
     ...editorAiVoice.aiEntryPoints,
     ...editorAiVoice.focusAndHistory,
     ...workspaceTasksViews.tabClosure,

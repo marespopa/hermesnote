@@ -81,6 +81,49 @@ describe("WelcomeWizard", () => {
     expect(window.localStorage.getItem("userName")).toBe(JSON.stringify("Ada"));
   });
 
+  it("advances when Enter is pressed after entering a name", () => {
+    render(
+      <TestProvider initialValues={defaultInitialValues}>
+        <WelcomeWizard />
+      </TestProvider>
+    );
+
+    fireEvent.change(screen.getByLabelText("welcome-user-name"), { target: { value: "Ada" } });
+    fireEvent.keyDown(window, { key: "Enter" });
+
+    expect(screen.getByText("Connect Your Vault")).toBeInTheDocument();
+    expect(window.localStorage.getItem("userName")).toBe(JSON.stringify("Ada"));
+  });
+
+  it("advances preference steps when Enter is pressed", () => {
+    render(
+      <TestProvider initialValues={defaultInitialValues}>
+        <WelcomeWizard initialStep={2} />
+      </TestProvider>
+    );
+
+    fireEvent.keyDown(window, { key: "Enter" });
+
+    expect(screen.getByText("Pick your writing font")).toBeInTheDocument();
+  });
+
+  it("offers GitHub vault connection during vault setup", () => {
+    render(
+      <TestProvider initialValues={defaultInitialValues}>
+        <WelcomeWizard initialStep={1} />
+      </TestProvider>
+    );
+
+    expect(screen.getByRole("button", { name: "Connect GitHub Vault" })).toBeInTheDocument();
+    expect(screen.getAllByRole("button").slice(-3).map((button) => button.textContent))
+      .toEqual(expect.arrayContaining([
+        expect.stringContaining("Create New Vault"),
+        expect.stringContaining("Open Existing Vault"),
+        expect.stringContaining("Connect GitHub Vault"),
+      ]));
+    expect(screen.getAllByRole("button").at(-1)).toHaveAccessibleName("Connect GitHub Vault");
+  });
+
   it("advances to the theme step automatically if vault is already connected in step 1", async () => {
     const connectedValues = [
       ...defaultInitialValues.filter(([a]: any) => a !== atom_vaultHandle),

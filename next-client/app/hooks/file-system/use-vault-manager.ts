@@ -17,6 +17,8 @@ import {
   atom_isCloudVault,
   atom_fileSystemVersion,
   atom_indexerState,
+  atom_vaultDescriptor,
+  type VaultDescriptor,
 } from "@/app/atoms/atoms";
 import { atom_fileMetadata } from "@/app/atoms/metadata";
 import {
@@ -25,7 +27,17 @@ import {
   clearVaultHandle,
   verifyPermission,
   queryPermission,
+  saveGitHubVaultDescriptor,
+  loadGitHubVaultDescriptor,
+  saveGitHubVaultManifest,
 } from "@/app/services/idb";
+import {
+  getGitHubVaultWorkspace,
+  materializeGitHubVault,
+  createGitHubVaultManifestFromFiles,
+  type GitHubVaultDescriptor,
+  type GitHubVaultRemoteFile,
+} from "@/app/services/github-vault-workspace";
 import { metadataWorker, withPickerLock, isVaultSupported, isIdbSupported } from "./shared";
 import { atom_showHiddenFiles } from "@/app/atoms/ui-atoms";
 
@@ -41,6 +53,7 @@ export function useVaultManager() {
   const [, setOpenFiles] = useAtom(atom_openFiles);
   const [, setWorkspaceLayout] = useAtom(atom_workspaceLayout);
   const [, setIsCloudVault] = useAtom(atom_isCloudVault);
+  const [, setVaultDescriptor] = useAtom(atom_vaultDescriptor);
   const [, setFileSystemVersion] = useAtom(atom_fileSystemVersion);
   const [showHiddenFiles] = useAtom(atom_showHiddenFiles);
   const rebindHandles = useSetAtom(atom_rebindHandles);
@@ -264,9 +277,17 @@ export function useVaultManager() {
     handle: FileSystemDirectoryHandle,
     options?: {
       isNewVault?: boolean;
+      descriptor?: VaultDescriptor;
+      persist?: boolean;
+      announce?: boolean;
     }
   ) => {
-    const { isNewVault = false } = options ?? {};
+    const {
+      isNewVault = false,
+      descriptor = { kind: "local" },
+      persist = true,
+      announce = true,
+    } = options ?? {};
 
     setFileMetadata({});
     setOpenFiles({});
@@ -280,16 +301,35 @@ export function useVaultManager() {
       },
     });
     setVaultHandle(handle);
+    setVaultDescriptor(descriptor);
     setCurrentDirectoryHandle(handle);
     setIsVaultPending(false);
-    detectCloudVault(handle);
-    await saveVaultHandle(handle);
+    setIsCloudVault(false);
+    if (descriptor.kind === "local") {
+      detectCloudVault(handle);
+      if (persist) await saveVaultHandle(handle);
+    } else if (persist) {
+      await saveGitHubVaultDescriptor(descriptor);
+    }
     await scanVault(handle);
     await indexVaultTags(handle);
     await rebindHandles(handle);
 
-    toast.success(isNewVault ? `Vault created: ${handle.name}` : `Vault opened: ${handle.name}`);
-  }, [setVaultHandle, setCurrentDirectoryHandle, setIsVaultPending, setFileMetadata, setOpenFiles, setWorkspaceLayout, scanVault, indexVaultTags, rebindHandles, detectCloudVault]);
+    if (announce) {
+      const vaultName = descriptor.kind === "github" ? descriptor.displayName : handle.name;
+      toast.success(isNewVault ? `Vault created: ${vaultName}` : `Vault opened: ${vaultName}`);
+    }
+  }, [setVaultHandle, setVaultDescriptor, setCurrentDirectoryHandle, setIsVaultPending, setFileMetadata, setOpenFiles, setWorkspaceLayout, setIsCloudVault, scanVault, indexVaultTags, rebindHandles, detectCloudVault]);
+
+  const initGitHubVault = useCallback(async (
+    descriptor: GitHubVaultDescriptor,
+    files: readonly GitHubVaultRemoteFile[] = [],
+  ) => {
+    // Materialize before opening so scan/index never observes a partial remote vault.
+    const workspace = await materializeGitHubVault(descriptor, files);
+    await saveGitHubVaultManifest(descriptor, createGitHubVaultManifestFromFiles(descriptor.baseHeadSha, files));
+    await initVaultFromHandle(workspace, { descriptor });
+  }, [initVaultFromHandle]);
 
   const openVault = useCallback(async () => {
     if (!isVaultSupported) {
@@ -324,6 +364,7 @@ export function useVaultManager() {
       if (granted) {
         setIsVaultPending(false);
         setCurrentDirectoryHandle(vaultHandle);
+        setIsCloudVault(false);
         detectCloudVault(vaultHandle);
         await scanVault(vaultHandle);
         await indexVaultTags(vaultHandle);
@@ -334,7 +375,7 @@ export function useVaultManager() {
       console.error("File System Error:", err?.message || err);
       toast.error("Failed to restore vault");
     }
-  }, [vaultHandle, setIsVaultPending, setCurrentDirectoryHandle, scanVault, indexVaultTags, rebindHandles, detectCloudVault]);
+  }, [vaultHandle, setIsVaultPending, setCurrentDirectoryHandle, setIsCloudVault, scanVault, indexVaultTags, rebindHandles, detectCloudVault]);
 
   const syncSidebarToPath = useCallback(
     async (path: string) => {
@@ -402,6 +443,7 @@ export function useVaultManager() {
     setActiveFilePath("draft");
     setIsVaultPending(false);
     setIsCloudVault(false);
+    setVaultDescriptor(null);
     
     setOpenFiles({
       draft: {
@@ -424,7 +466,7 @@ export function useVaultManager() {
 
     clearVaultHandle();
     toast.success("Vault closed");
-  }, [setVaultHandle, setCurrentDirectoryHandle, setVaultFiles, setFileMetadata, setActiveFileHandle, setActiveFilePath, setIsVaultPending, setOpenFiles, setWorkspaceLayout, setIsCloudVault]);
+  }, [setVaultHandle, setCurrentDirectoryHandle, setVaultFiles, setFileMetadata, setActiveFileHandle, setActiveFilePath, setIsVaultPending, setOpenFiles, setWorkspaceLayout, setIsCloudVault, setVaultDescriptor]);
 
   // Worker Message Listener
   useEffect(() => {
@@ -459,6 +501,7 @@ export function useVaultManager() {
       const savedHandle = await loadVaultHandle();
       if (savedHandle) {
         setVaultHandle(savedHandle);
+        setVaultDescriptor({ kind: "local" });
         // Only query permission on mount — requestPermission requires a user
         // gesture and will throw a SecurityError if called automatically.
         const granted = await queryPermission(savedHandle);
@@ -471,10 +514,26 @@ export function useVaultManager() {
         } else {
           setIsVaultPending(true);
         }
+        return;
+      }
+
+      const githubDescriptor = await loadGitHubVaultDescriptor();
+      if (githubDescriptor) {
+        try {
+          const workspace = await getGitHubVaultWorkspace(githubDescriptor);
+          await initVaultFromHandle(workspace, {
+            descriptor: githubDescriptor,
+            persist: false,
+            announce: false,
+          });
+        } catch (err) {
+          console.error("Failed to restore GitHub vault workspace:", err);
+          toast.error("Failed to restore the GitHub vault workspace.");
+        }
       }
     }
     init();
-  }, [setVaultHandle, setIsVaultPending, hasLoadedVault, setHasLoadedVault, setCurrentDirectoryHandle, scanVault, indexVaultTags, rebindHandles, detectCloudVault]);
+  }, [setVaultHandle, setVaultDescriptor, setIsVaultPending, hasLoadedVault, setHasLoadedVault, setCurrentDirectoryHandle, scanVault, indexVaultTags, rebindHandles, detectCloudVault, initVaultFromHandle]);
 
   return {
     vaultHandle,
@@ -483,6 +542,7 @@ export function useVaultManager() {
     scanVault,
     indexVaultTags,
     initVaultFromHandle,
+    initGitHubVault,
     openVault,
     restoreVault,
     closeVault,

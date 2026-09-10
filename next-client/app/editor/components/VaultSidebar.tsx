@@ -10,8 +10,9 @@ import {
   atom_activePaneId,
   atom_isCloudVault,
   atom_splitPane,
+  atom_vaultDescriptor,
 } from "@/app/atoms/atoms";
-import { atom_railPanel, atom_lastSidebarPanel, atom_newVaultFlowOpen, atom_pendingScrollTarget, atom_selectedFileTags, atom_userName, RailPanel } from "@/app/atoms/ui-atoms";
+import { atom_githubVaultDialogOpen, atom_railPanel, atom_lastSidebarPanel, atom_newVaultFlowOpen, atom_pendingScrollTarget, atom_selectedFileTags, atom_userName, RailPanel } from "@/app/atoms/ui-atoms";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import SmartFolders from "./SmartFolders";
 import VaultSidebarTasks from "./VaultSidebarTasks";
@@ -25,6 +26,7 @@ import VaultSidebarHeader from "./VaultSidebarHeader";
 import VaultSidebarNavigator from "./VaultSidebarNavigator";
 import { useSidebarResize } from "../hooks/useSidebarResize";
 import { version } from "@/package.json";
+import GitHubSourceControl from "./GitHubSourceControl";
 
 // The rail (SidebarRail.tsx) is always visible at a fixed width, so this
 // panel's own floor is just whatever its content needs — the search input
@@ -39,6 +41,8 @@ interface VaultSidebarProps {
   onDocumentation?: () => void;
   onImport?: () => void;
   onExport?: () => void;
+  onSyncGitHub?: (message: string) => Promise<{ changes: number }>;
+  onPullGitHub?: () => void;
 }
 
 export default function VaultSidebar({
@@ -49,6 +53,8 @@ export default function VaultSidebar({
   onDocumentation,
   onImport,
   onExport,
+  onSyncGitHub,
+  onPullGitHub,
 }: VaultSidebarProps) {
   const {
     openFile,
@@ -67,6 +73,7 @@ export default function VaultSidebar({
 
   const dialog = useDialog();
   const setNewVaultFlowOpen = useSetAtom(atom_newVaultFlowOpen);
+  const setGitHubVaultDialogOpen = useSetAtom(atom_githubVaultDialogOpen);
   const setPendingScrollTarget = useSetAtom(atom_pendingScrollTarget);
   // Resolves a directory handle for an arbitrary nested path (e.g. "a/b/c").
   // Tree nodes only carry path strings (built from the flat indexed file list),
@@ -89,6 +96,7 @@ export default function VaultSidebar({
   const activePaneId = useAtomValue(atom_activePaneId);
   const [, splitPane] = useAtom(atom_splitPane);
   const isCloudVault = useAtomValue(atom_isCloudVault);
+  const vaultDescriptor = useAtomValue(atom_vaultDescriptor);
   const userName = useAtomValue(atom_userName);
   const setRailPanel = useSetAtom(atom_railPanel);
   const setLastSidebarPanel = useSetAtom(atom_lastSidebarPanel);
@@ -119,6 +127,10 @@ export default function VaultSidebar({
     onClose?.();
   }, [activePaneId, onClose, openFile, splitPane]);
 
+  const connectGitHubVault = useCallback(() => {
+    setGitHubVaultDialogOpen(true);
+  }, [setGitHubVaultDialogOpen]);
+
   if (!isMounted) return null;
 
   return (
@@ -137,7 +149,7 @@ export default function VaultSidebar({
       />
 
       <VaultSidebarHeader
-        vaultName={vaultHandle?.name}
+        vaultName={vaultDescriptor?.kind === "github" ? vaultDescriptor.displayName : vaultHandle?.name}
         userName={userName}
         isCloudVault={isCloudVault}
         hasVault={Boolean(vaultHandle)}
@@ -155,6 +167,7 @@ export default function VaultSidebar({
               onCreateVault={() => setNewVaultFlowOpen(true)}
               onImport={onImport}
               onExport={onExport}
+              onConnectGitHub={connectGitHubVault}
               setActiveFilePath={setActiveFilePath}
               activeFilePath={activeFilePath}
               onClose={onClose}
@@ -264,6 +277,14 @@ export default function VaultSidebar({
             </VaultSidebarNavigator>
         )}
       </div>
+      {vaultHandle && vaultDescriptor?.kind === "github" && onSyncGitHub && (
+        <GitHubSourceControl
+          workspace={vaultHandle}
+          descriptor={vaultDescriptor}
+          onCommit={onSyncGitHub}
+          onPull={onPullGitHub}
+        />
+      )}
       <div className="shrink-0 border-t border-edge-subtle px-3 py-2 flex items-center justify-between gap-3">
         <span className="text-[10px] font-mono select-none text-fg-faint">
           HermesMarkdown v{version}
