@@ -8,7 +8,7 @@ Internal pull requests also create a Netlify deploy preview and smoke-test its d
 
 ## Releasing
 
-After the desired version has been committed to `trunk`, run the `Create release` workflow. It checks out and validates `trunk`, then creates the annotated `vX.Y.Z` tag and its GitHub Release before dispatching `Deploy production`. Deployments also run when a maintainer pushes a matching `v*` tag. Both paths require approval from the protected `production` environment.
+After the desired version has been committed to `trunk`, run the `Create release` workflow. It checks out and validates `trunk`, then creates the annotated `vX.Y.Z` tag and its GitHub Release before dispatching `CD`. Deployments also run when a maintainer pushes a matching `v*` tag. Both paths require approval from the protected `production` environment.
 
 Create the `production` environment with required reviewers and place `NETLIFY_AUTH_TOKEN` and `NETLIFY_SITE_ID` in that environment. The deployment workflows use the pinned Netlify CLI version declared in their workflow files.
 
